@@ -597,7 +597,7 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
             nonce,
             ctx.attributes.suggested_fee_recipient,
             gas_limit,
-            value.to(),
+            value,
         )?;
         // payout tx has no blobs so it's safe to unwrap
         let tx = TransactionSignedEcRecoveredWithBlobs::new_no_blobs(tx).unwrap();

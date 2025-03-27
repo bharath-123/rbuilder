@@ -15,7 +15,7 @@ pub fn create_payout_tx(
     nonce: u64,
     to: Address,
     gas_limit: u64,
-    value: u128,
+    value: U256,
 ) -> Result<Recovered<TransactionSigned>, secp256k1::Error> {
     let tx = Transaction::Eip1559(TxEip1559 {
         chain_id: chain_spec.chain.id(),
@@ -24,7 +24,7 @@ pub fn create_payout_tx(
         max_fee_per_gas: basefee as u128,
         max_priority_fee_per_gas: 0,
         to: TransactionKind::Call(to),
-        value: U256::from(value),
+        value,
         ..Default::default()
     });
 
@@ -53,10 +53,7 @@ pub fn insert_test_payout_tx(
 
     let nonce = state.nonce(builder_signer.address)?;
 
-    let mut cfg = ctx.evm_env.cfg_env.clone();
-    // disable balance check so we can estimate the gas cost without having any funds
-    cfg.disable_balance_check = true;
-
+    let tx_value = 10u128.pow(18); // 10 ether
     let tx = create_payout_tx(
         ctx.chain_spec.as_ref(),
         ctx.evm_env.block_env.basefee,
@@ -64,11 +61,15 @@ pub fn insert_test_payout_tx(
         nonce,
         to,
         gas_limit,
-        0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
+        U256::from(tx_value),
     )?;
 
     let mut db = state.new_db_ref();
     let mut evm = ctx.evm_factory.create_evm(db.as_mut(), ctx.evm_env.clone());
+
+    let cache_account = evm.db_mut().load_cache_account(builder_signer.address)?;
+    cache_account.increment_balance(tx_value * 2); // double to cover tx value and fee
+
     let res = evm.transact(&tx)?;
     match res.result {
         ExecutionResult::Success {
@@ -128,5 +129,68 @@ pub fn estimate_payout_gas_limit(
         } else {
             left = mid;
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::building::builders::mock_block_building_helper::MockRootHasher;
+    use alloy_eips::eip1559::INITIAL_BASE_FEE;
+    use alloy_primitives::B256;
+    use assert_matches::assert_matches;
+    use reth_chainspec::{EthereumHardfork, MAINNET};
+    use reth_db::{tables, transaction::DbTxMut};
+    use reth_primitives::Account;
+    use reth_provider::test_utils::create_test_provider_factory_with_chain_spec;
+    use revm::primitives::hardfork::SpecId;
+    use std::sync::Arc;
+
+    #[test]
+    fn estimate_payout_tx_gas_limit() {
+        let signer = Signer::random();
+        let proposer = Address::random();
+        let chain_spec = MAINNET.clone();
+        let spec_id = SpecId::CANCUN;
+        let cancun_timestamp = chain_spec
+            .fork(EthereumHardfork::Cancun)
+            .as_timestamp()
+            .unwrap();
+
+        // Insert proposer
+        let provider_factory = create_test_provider_factory_with_chain_spec(chain_spec.clone());
+        let provider_rw = provider_factory.provider_rw().unwrap();
+        provider_rw
+            .tx_ref()
+            .put::<tables::PlainAccountState>(
+                proposer,
+                Account {
+                    balance: U256::ZERO,
+                    nonce: 1,
+                    bytecode_hash: Some(B256::random()),
+                },
+            )
+            .unwrap();
+        provider_rw.commit().unwrap();
+
+        let mut block: alloy_rpc_types::Block = Default::default();
+        block.header.base_fee_per_gas = Some(INITIAL_BASE_FEE);
+        block.header.timestamp = cancun_timestamp + 1;
+        block.header.gas_limit = 30_000_000;
+        let ctx = BlockBuildingContext::from_onchain_block(
+            block,
+            chain_spec,
+            Some(spec_id),
+            Default::default(),
+            signer.address,
+            proposer,
+            Some(signer),
+            Arc::new(MockRootHasher {}),
+        );
+        let mut state = BlockState::new(provider_factory.latest().unwrap());
+
+        let estimate_result = estimate_payout_gas_limit(proposer, &ctx, &mut state, 0);
+        assert_matches!(estimate_result, Ok(_));
+        assert_eq!(estimate_result.unwrap(), 21_000);
     }
 }

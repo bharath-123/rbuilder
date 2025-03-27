@@ -142,6 +142,7 @@ built = { version = "0.7.1", features = ["git2", "chrono"] }
 
 [dev-dependencies]
 tempfile = "3.8"
+assert_matches = "1.5.0"
 criterion = { version = "0.5.1", features = ["html_reports", "async_tokio"] }
 
 [features]

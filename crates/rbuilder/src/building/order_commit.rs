@@ -593,7 +593,7 @@ impl<'a, 'b, Tracer: SimulationTracer> PartialBlockFork<'a, 'b, Tracer> {
             nonce,
             to,
             payout.gas_limit,
-            payout.tx_value.to(),
+            payout.tx_value,
         ) {
             // payout tx has no blobs so it's safe to unwrap
             Ok(tx) => TransactionSignedEcRecoveredWithBlobs::new_no_blobs(tx).unwrap(),
