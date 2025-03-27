@@ -29,8 +29,10 @@ use std::{
     cmp::{max, min},
     sync::Arc,
 };
-use tracing::{debug, info, info_span, trace, warn};
+use tracing::{debug, error, info, info_span, trace, warn};
 use uuid::Uuid;
+
+use super::OrderFilteredReason;
 
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -130,7 +132,13 @@ where
     let _block_span = info_span!("block", block = block_data.block_number).entered();
     let protect_signers = config.base_config().backtest_protect_bundle_signers.clone();
 
-    let (onchain_block_profit, block_data, built_block_data) = prepare_block_data(block_data)?;
+    info!(?protect_signers, "Protect signers");
+    if protect_signers.is_empty() {
+        warn!("Protect signers are not set");
+    }
+
+    let (onchain_block_profit, block_data, built_block_data) =
+        prepare_block_data(config, block_data)?;
 
     let included_orders_available =
         get_available_orders(&block_data, &built_block_data, distribute_to_mempool_txs);
@@ -216,15 +224,29 @@ where
     Ok(result)
 }
 
-fn prepare_block_data(
+fn prepare_block_data<ConfigType>(
+    config: &ConfigType,
     mut block_data: BlockData,
-) -> eyre::Result<(U256, BlockData, BuiltBlockData)> {
+) -> eyre::Result<(U256, BlockData, BuiltBlockData)>
+where
+    ConfigType: LiveBuilderConfig,
+{
     let built_block_data = if let Some(block_data) = block_data.built_block_data.clone() {
         block_data
     } else {
-        warn!(block = block_data.block_number, "Block data not found");
+        error!(block = block_data.block_number, "Block data not found");
         eyre::bail!("Included block data not found");
     };
+
+    let config_coinbase_signer = config.base_config().coinbase_signer()?.address;
+    let block_coinbase = block_data.onchain_block.header.beneficiary;
+    if config_coinbase_signer != block_coinbase {
+        warn!(
+            ?block_coinbase,
+            ?config_coinbase_signer,
+            "Onchain block coinbase does not match config coinbase signer"
+        );
+    }
 
     let orders_before_filtering = block_data.available_orders.len();
 
@@ -237,23 +259,36 @@ fn prepare_block_data(
 
     let mut txs = 0;
     let mut bundles = 0;
-    let mut sbundles = 0;
+    let mut share_bundles = 0;
     for ts_order in &block_data.available_orders {
         match &ts_order.order {
             Order::Bundle(_) => bundles += 1,
             Order::Tx(_) => txs += 1,
-            Order::ShareBundle(_) => sbundles += 1,
+            Order::ShareBundle(_) => share_bundles += 1,
         }
     }
-    let total = txs + bundles + sbundles;
+    let total = txs + bundles + share_bundles;
 
-    info!(total, txs, bundles, sbundles, filtered, "Available orders");
+    info!(
+        total,
+        txs, bundles, share_bundles, filtered, "Available orders"
+    );
+    if txs == 0 {
+        error!("Block has no mempool txs");
+    }
+    if bundles == 0 {
+        warn!("Block has no bundles");
+    }
+    if share_bundles == 0 {
+        warn!("Block has no share bundles");
+    }
 
     let block_profit = if built_block_data.profit.is_positive() {
         built_block_data.profit.into_sign_and_abs().1
     } else {
         U256::ZERO
     };
+
     Ok((block_profit, block_data, built_block_data))
 }
 
@@ -274,13 +309,17 @@ fn get_available_orders(
             Some(order) => {
                 included_orders_available.insert(order.order.id(), order.clone());
             }
-            None => {
-                if let Some(reason) = block_data.filtered_orders.get(id) {
-                    info!(order = ?id, ?reason, "Included order was filtered from available orders");
-                } else {
-                    warn!(order = ?id, "Included order not found in available orders");
+            None => match block_data.filtered_orders.get(id) {
+                Some(OrderFilteredReason::MempoolTxs) => {
+                    info!(order = ?id, "Included order was filtered because all txs are from mempool");
                 }
-            }
+                Some(reason) => {
+                    error!(order = ?id, ?reason, "Included order was filtered from available orders");
+                }
+                None => {
+                    error!(order = ?id, "Included order not found in available orders");
+                }
+            },
         }
     }
     if distribute_to_mempool_txs {
@@ -293,6 +332,7 @@ fn get_available_orders(
     }
     let mut included_orders_available = included_orders_available.into_values().collect::<Vec<_>>();
     included_orders_available.sort_by_key(|order| order.order.id());
+
     included_orders_available
 }
 
@@ -417,10 +457,17 @@ fn split_orders_by_identities(
     let mut bundle_hash_by_id = HashMap::default();
     let mut order_sender_by_id = HashMap::default();
 
+    let mut protect_signer_seen = false;
+
     for order in &included_orders_available {
         let order_id = order.order.id();
         let address = match order_redistribution_address(&order.order, protect_signers) {
-            Some(address) => address,
+            Some((address, protect_signer)) => {
+                if protect_signer {
+                    protect_signer_seen = true;
+                }
+                address
+            }
             None => {
                 warn!(order = ?order_id, "Included order redistribution address not found");
                 continue;
@@ -439,7 +486,12 @@ fn split_orders_by_identities(
         };
         order_sender_by_id.insert(id, order_sender(&order.order));
         let address = match order_redistribution_address(&order.order, protect_signers) {
-            Some(address) => address,
+            Some((address, protect_signer)) => {
+                if protect_signer {
+                    protect_signer_seen = true;
+                }
+                address
+            }
             None => {
                 warn!(order = ?id, "Available order redistribution address not found");
                 continue;
@@ -461,6 +513,10 @@ fn split_orders_by_identities(
         let orders = all_orders_by_address.entry(address).or_default();
         orders.push(id);
         orders_id_to_address.insert(id, address);
+    }
+
+    if !protect_signer_seen {
+        warn!("No orders from protect signer");
     }
 
     let mut included_orders_by_address: Vec<(Address, Vec<OrderId>)> =
@@ -688,7 +744,7 @@ where
                 .expect("order address not found");
             if address1 != address2 {
                 joint_contribution_todo.push((min(address1, address2), max(address1, address2)));
-                warn!(address1 = ?address1, order1 = ?order, address2 = ?address2, order2 = ?new_failed_order, "Possible identity conflict");
+                info!(address1 = ?address1, order1 = ?order, address2 = ?address2, order2 = ?new_failed_order, "Possible identity conflict");
             }
         }
     }
@@ -733,7 +789,7 @@ where
             .identity_exclusion(address2)
             .block_value_delta;
         if bvd1 + bvd2 > block_value_delta {
-            warn!(address1 = ?address1, address2 = ?address2, sum = format_ether(bvd1 + bvd2), joint=format_ether(block_value_delta), "Joint block value delta is smaller than sum of individual block value deltas");
+            info!(address1 = ?address1, address2 = ?address2, sum = format_ether(bvd1 + bvd2), joint=format_ether(block_value_delta), "Joint block value delta is smaller than sum of individual block value deltas");
         }
     }
 
@@ -1057,12 +1113,16 @@ where
     })
 }
 
-fn order_redistribution_address(order: &Order, protect_signers: &[Address]) -> Option<Address> {
+// returns true if signer is from protect
+fn order_redistribution_address(
+    order: &Order,
+    protect_signers: &[Address],
+) -> Option<(Address, bool)> {
     let signer = match order.signer() {
         Some(signer) => signer,
         None => {
             return if order.is_tx() {
-                Some(order.list_txs().first()?.0.signer())
+                Some((order.list_txs().first()?.0.signer(), false))
             } else {
                 None
             }
@@ -1070,14 +1130,14 @@ fn order_redistribution_address(order: &Order, protect_signers: &[Address]) -> O
     };
 
     if !protect_signers.contains(&signer) {
-        return Some(signer);
+        return Some((signer, false));
     }
 
     match order {
         Order::Bundle(bundle) => {
             // if its just a bundle we take origin tx of the first transaction
             let tx = bundle.txs.first()?;
-            Some(tx.signer())
+            Some((tx.signer(), true))
         }
         Order::ShareBundle(bundle) => {
             // if it is a share bundle we take either
@@ -1085,12 +1145,12 @@ fn order_redistribution_address(order: &Order, protect_signers: &[Address]) -> O
             // 2. origin of the first tx
 
             if let Some(first_refund) = bundle.inner_bundle().refund_config.first() {
-                return Some(first_refund.address);
+                return Some((first_refund.address, true));
             }
 
             let txs = bundle.list_txs();
             let (first_tx, _) = txs.first()?;
-            Some(first_tx.signer())
+            Some((first_tx.signer(), true))
         }
         Order::Tx(_) => {
             unreachable!("Mempool tx order can't have signer");
