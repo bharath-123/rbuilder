@@ -136,6 +136,11 @@ crossbeam = "0.8.4"
 parking_lot.workspace = true
 dashmap = "6.1.0"
 
+# IPC state provider deps
+reipc = { git = "https://github.com/nethermindeth/reipc.git", rev = "8a9c31f7a4b7dfdd828020222ae1ccdff802cbc9" }
+quick_cache = "0.6.11"
+
+
 
 [build-dependencies]
 built = { version = "0.7.1", features = ["git2", "chrono"] }

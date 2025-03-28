@@ -3,7 +3,10 @@
 use crate::{
     building::builders::UnfinishedBlockBuildingSinkFactory,
     live_builder::{order_input::OrderInputConfig, LiveBuilder},
-    provider::StateProviderFactory,
+    provider::{
+        ipc_state_provider::{IpcProviderConfig, IpcStateProviderFactory},
+        StateProviderFactory,
+    },
     roothash::RootHashContext,
     telemetry::{setup_reloadable_tracing_subscriber, LoggerConfig},
     utils::{
@@ -131,6 +134,9 @@ pub struct BaseConfig {
 
     /// List of `builders` to be used for live building
     pub live_builders: Vec<String>,
+
+    /// Config for IPC state provider
+    pub ipc_provider: Option<IpcProviderConfig>,
 
     // backtest config
     backtest_fetch_mempool_data_dir: EnvOrValue<String>,
@@ -271,7 +277,7 @@ impl BaseConfig {
 
     /// Open reth db and DB should be opened once per process but it can be cloned and moved to different threads.
     /// skip_root_hash -> will create a mock roothasher. Used on backtesting since reth can't compute roothashes on the past.
-    pub fn create_provider_factory(
+    pub fn create_reth_provider_factory(
         &self,
         skip_root_hash: bool,
     ) -> eyre::Result<ProviderFactoryReopener<NodeTypesWithDBAdapter<EthereumNode, Arc<DatabaseEnv>>>>
@@ -288,6 +294,19 @@ impl BaseConfig {
                 Some(self.live_root_hash_config()?)
             },
         )
+    }
+
+    /// Opens IPC connection to node that will provide the sate
+    pub fn create_ipc_provider_factory(&self) -> eyre::Result<IpcStateProviderFactory> {
+        let ipc_provider_config = self
+            .ipc_provider
+            .as_ref()
+            .ok_or_else(|| eyre::eyre!("IPC provider not configured"))?;
+
+        Ok(IpcStateProviderFactory::new(
+            &ipc_provider_config.ipc_path,
+            Duration::from_millis(ipc_provider_config.request_timeout_ms),
+        ))
     }
 
     /// live_root_hash_config creates a root hash thread pool
@@ -554,6 +573,7 @@ impl Default for BaseConfig {
             sbundle_mergeable_signers: None,
             sbundle_mergeabe_signers: None,
             require_non_empty_blocklist: Some(DEFAULT_REQUIRE_NON_EMPTY_BLOCKLIST),
+            ipc_provider: None,
         }
     }
 }

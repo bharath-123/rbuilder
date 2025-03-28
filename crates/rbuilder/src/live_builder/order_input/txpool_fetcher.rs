@@ -1,4 +1,4 @@
-use super::{OrderInputConfig, ReplaceableOrderPoolCommand};
+use super::{MempoolSource, OrderInputConfig, ReplaceableOrderPoolCommand};
 use crate::{
     primitives::{MempoolTx, Order, TransactionSignedEcRecoveredWithBlobs},
     telemetry::{add_txfetcher_time_to_query, mark_command_received},
@@ -24,11 +24,20 @@ pub async fn subscribe_to_txpool_with_blobs(
     results: mpsc::Sender<ReplaceableOrderPoolCommand>,
     global_cancel: CancellationToken,
 ) -> eyre::Result<JoinHandle<()>> {
-    let ipc_path = config
-        .ipc_path
-        .ok_or_else(|| eyre::eyre!("No IPC path configured"))?;
-    let ipc = IpcConnect::new(ipc_path);
-    let provider = ProviderBuilder::new().on_ipc(ipc).await?;
+    let mempool = config
+        .mempool_source
+        .ok_or_else(|| eyre::eyre!("No txpool source configured"))?;
+
+    let provider = match mempool {
+        MempoolSource::Ipc(path) => {
+            let ipc = IpcConnect::new(path);
+            ProviderBuilder::new().on_ipc(ipc).await?
+        }
+        MempoolSource::Ws(url) => {
+            let ws_conn = alloy_provider::WsConnect::new(url);
+            ProviderBuilder::new().on_ws(ws_conn).await?
+        }
+    };
 
     let handle = tokio::spawn(async move {
         info!("Subscribe to txpool with blobs: started");
@@ -55,7 +64,7 @@ pub async fn subscribe_to_txpool_with_blobs(
                     continue;
                 }
                 Err(err) => {
-                    error!(?tx_hash, ?err, "Failed to get tx pool");
+                    error!(?tx_hash, ?err, "Failed to get tx from pool");
                     continue;
                 }
             };
@@ -127,7 +136,7 @@ mod test {
         let (sender, mut receiver) = mpsc::channel(10);
         subscribe_to_txpool_with_blobs(
             OrderInputConfig {
-                ipc_path: Some(PathBuf::from("/tmp/anvil.ipc")),
+                mempool_source: Some(MempoolSource::Ipc(PathBuf::from("/tmp/anvil.ipc"))),
                 ..OrderInputConfig::default_e2e()
             },
             sender,
