@@ -614,7 +614,10 @@ mod test {
     use crate::{
         backtest::RawOrdersWithTimestamp,
         mev_boost::BuilderBlockReceived,
-        primitives::serialize::{RawBundle, RawTx},
+        primitives::{
+            serialize::{RawBundle, RawTx},
+            LAST_BUNDLE_VERSION,
+        },
     };
     use alloy_consensus::{EthereumTxEnvelope, Signed, TxEip1559};
     use alloy_primitives::{hex, Address, PrimitiveSignature, B256, U256, U64};
@@ -660,6 +663,7 @@ mod test {
                     refund_recipient: None,
                     refund_tx_hashes: None,
                     first_seen_at: None,
+                    version: Some(RawBundle::encode_version(LAST_BUNDLE_VERSION)),
                 }),
             }
             .decode(TxEncoding::WithBlobData)
