@@ -61,8 +61,11 @@ pub struct RelayConfig {
     pub submit_config: Option<RelaySubmitConfig>,
     /// Deprecated field that is not used
     pub priority: Option<usize>,
+    /// critical blocks go only to fast relays. None -> true
+    pub is_fast: Option<bool>,
 }
 
+const IS_FAST_DEFAULT: bool = true;
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq, Default)]
 #[serde(deny_unknown_fields)]
 pub struct RelaySubmitConfig {
@@ -91,6 +94,10 @@ impl RelayConfig {
             ..self
         }
     }
+
+    pub fn is_fast(&self) -> bool {
+        self.is_fast.unwrap_or(IS_FAST_DEFAULT)
+    }
 }
 
 /// Wrapper in RelayClient to submit blocks.
@@ -112,6 +119,7 @@ pub struct MevBoostRelayBidSubmitter {
     test_relay: bool,
     /// Parameter for the relay
     cancellations: bool,
+    is_fast: bool,
 }
 
 impl MevBoostRelayBidSubmitter {
@@ -120,6 +128,7 @@ impl MevBoostRelayBidSubmitter {
         id: String,
         config: &RelaySubmitConfig,
         test_relay: bool,
+        is_fast: bool,
     ) -> Self {
         let submission_rate_limiter = config.interval_between_submissions_ms.map(|d| {
             Arc::new(RateLimiter::direct(
@@ -135,7 +144,12 @@ impl MevBoostRelayBidSubmitter {
             submission_rate_limiter,
             test_relay,
             cancellations: true,
+            is_fast,
         }
+    }
+
+    pub fn is_fast(&self) -> bool {
+        self.is_fast
     }
 
     pub fn test_relay(&self) -> bool {
