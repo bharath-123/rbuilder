@@ -332,9 +332,10 @@ async fn run_submit_to_relays_job(
         submission_span.in_scope(|| {
             // NOTE: we only notify normal submission here because they have the same contents but different pubkeys
             config.bid_observer.block_submitted(
-                block.sealed_block,
-                normal_signed_submission.submission,
-                block.trace,
+                &slot_data,
+                &block.sealed_block,
+                &normal_signed_submission.submission,
+                &block.trace,
                 builder_name,
                 bid_metadata.value.top_competitor_bid.unwrap_or_default(),
             );
