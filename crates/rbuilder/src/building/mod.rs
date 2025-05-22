@@ -22,7 +22,7 @@ use alloy_eips::{
     merge::BEACON_NONCE,
 };
 use alloy_evm::{block::system_calls::SystemCaller, env::EvmEnv, eth::eip6110};
-use alloy_primitives::{utils::format_ether, Address, Bytes, B256, I256, U256};
+use alloy_primitives::{Address, Bytes, B256, I256, U256};
 use alloy_rpc_types_beacon::events::PayloadAttributesEvent;
 use cached_reads::{LocalCachedReads, SharedCachedReads};
 use evm::EthCachedEvmFactory;
@@ -950,12 +950,10 @@ pub fn create_sim_value(
             .filter(|tx_info| !mempool_detector.is_mempool(&tx_info.tx))
             .map(|tx_info| tx_info.coinbase_profit)
             .sum::<I256>();
-        if non_mempool_coinbase_profit.is_positive() {
+        if non_mempool_coinbase_profit.is_zero() || non_mempool_coinbase_profit.is_positive() {
             non_mempool_coinbase_profit.unsigned_abs()
         } else {
-            error!(
-            non_mempool_coinbase_profit = format_ether(non_mempool_coinbase_profit),
-            "Non mempool orders have always positive profit but a negative value was found on a OrderOk");
+            // This could be a bundle which was positive thanks to the inclusion of mempool txs.
             U256::ZERO
         }
     };
