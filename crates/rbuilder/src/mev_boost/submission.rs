@@ -4,11 +4,15 @@ use alloy_rpc_types_beacon::{
     requests::ExecutionRequestsV4,
     BlsSignature,
 };
-use alloy_rpc_types_engine::{BlobsBundleV1, ExecutionPayloadV3};
+use alloy_rpc_types_beacon::relay::SignedBidSubmissionV5;
+use alloy_rpc_types_engine::{BlobsBundleV1, BlobsBundleV2, ExecutionPayloadV3};
 use serde::{Deserialize, Serialize};
 use ssz::{Decode, DecodeError, Encode};
 
 use crate::primitives::OrderId;
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct FuluSubmitBlockRequest(pub SignedBidSubmissionV5);
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ElectraSubmitBlockRequest(pub SignedBidSubmissionV4);
@@ -28,6 +32,7 @@ pub struct CapellaSubmitBlockRequest(pub SignedBidSubmissionV2);
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum SubmitBlockRequest {
+    Fulu(FuluSubmitBlockRequest),
     Capella(CapellaSubmitBlockRequest),
     Deneb(DenebSubmitBlockRequest),
     Electra(ElectraSubmitBlockRequest),
@@ -36,6 +41,7 @@ pub enum SubmitBlockRequest {
 impl SubmitBlockRequest {
     pub fn bid_trace(&self) -> &BidTrace {
         match self {
+            SubmitBlockRequest::Fulu(req) => &req.0.message,
             SubmitBlockRequest::Capella(req) => &req.0.message,
             SubmitBlockRequest::Deneb(req) => &req.0.message,
             SubmitBlockRequest::Electra(req) => &req.0.message,
@@ -43,6 +49,11 @@ impl SubmitBlockRequest {
     }
 
     pub fn from_ssz_bytes(bytes: &[u8]) -> Result<Self, DecodeError> {
+        if let Ok(result) = SignedBidSubmissionV5::from_ssz_bytes(bytes) {
+            return Ok(SubmitBlockRequest::Fulu(FuluSubmitBlockRequest(
+                result,
+            )));
+        }
         if let Ok(result) = SignedBidSubmissionV4::from_ssz_bytes(bytes) {
             return Ok(SubmitBlockRequest::Electra(ElectraSubmitBlockRequest(
                 result,
@@ -125,6 +136,26 @@ impl serde::Serialize for SubmitBlockRequestNoBlobs<'_> {
                     execution_requests: &v4.0.execution_requests,
                 }
                 .serialize(serializer)
+            },
+            SubmitBlockRequest::Fulu(v5) => {
+                #[derive(serde::Serialize)]
+                struct SignedBidSubmissionV5Ref<'a> {
+                    message: &'a BidTrace,
+                    #[serde(with = "alloy_rpc_types_beacon::payload::beacon_payload_v3")]
+                    execution_payload: &'a ExecutionPayloadV3,
+                    blobs_bundle: &'a BlobsBundleV2,
+                    execution_requests: &'a ExecutionRequestsV4,
+                    signature: &'a BlsSignature,
+                }
+
+                SignedBidSubmissionV5Ref {
+                    message: &v5.0.message,
+                    execution_payload: &v5.0.execution_payload,
+                    blobs_bundle: &BlobsBundleV2::new([]), // override blobs bundle with empty one
+                    signature: &v5.0.signature,
+                    execution_requests: &v5.0.execution_requests,
+                }
+                    .serialize(serializer)
             }
         }
     }

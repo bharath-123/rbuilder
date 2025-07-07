@@ -34,6 +34,7 @@ use revm::{
     Database, DatabaseCommit,
 };
 use std::{collections::HashMap, sync::Arc};
+use alloy_eips::eip7594::BlobTransactionSidecarVariant;
 use thiserror::Error;
 
 #[derive(Clone)]
@@ -424,7 +425,12 @@ impl<'a, 'b, 'c, 'd, Tracer: SimulationTracer> PartialBlockFork<'a, 'b, 'c, 'd, 
     ) -> Result<Result<TransactionOk, TransactionErr>, CriticalCommitOrderError> {
         let coinbase_balance_before = I256::try_from(self.coinbase_balance()?)?;
         // Use blobs.len() instead of checking for tx type just in case in the future some other new txs have blobs
-        let blob_gas_used = tx_with_blobs.blobs_sidecar.blobs.len() as u64 * DATA_GAS_PER_BLOB;
+        // let blob_gas_used = tx_with_blobs.blobs_sidecar.blobs.len() as u64 * DATA_GAS_PER_BLOB;
+        let blob_gas_used = match tx_with_blobs.blobs_sidecar.as_ref() {
+            BlobTransactionSidecarVariant::Eip4844(eip4844_sidecar) => eip4844_sidecar.blobs.len() as u64 * DATA_GAS_PER_BLOB,
+            BlobTransactionSidecarVariant::Eip7594(eip7594_sidecar) => eip7594_sidecar.blobs.len() as u64 * DATA_GAS_PER_BLOB
+        };
+
         if cumulative_blob_gas_used + blob_gas_used > self.ctx.max_blob_gas_per_block() {
             return Ok(Err(TransactionErr::BlobGasLeft));
         }

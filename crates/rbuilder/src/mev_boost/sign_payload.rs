@@ -12,9 +12,7 @@ use alloy_rpc_types_beacon::{
     relay::{BidTrace, SignedBidSubmissionV2, SignedBidSubmissionV3, SignedBidSubmissionV4},
     BlsPublicKey,
 };
-use alloy_rpc_types_engine::{
-    BlobsBundleV1, ExecutionPayloadV1, ExecutionPayloadV2, ExecutionPayloadV3,
-};
+use alloy_rpc_types_engine::{BlobsBundleV1, BlobsBundleV2, ExecutionPayloadV1, ExecutionPayloadV2, ExecutionPayloadV3};
 use alloy_rpc_types_eth::Withdrawal;
 use ethereum_consensus::{
     crypto::SecretKey,
@@ -27,6 +25,7 @@ use reth_chainspec::{ChainSpec, EthereumHardforks};
 use reth_primitives::SealedBlock;
 use serde_with::{serde_as, DisplayFromStr};
 use std::sync::Arc;
+use alloy_eips::eip7594::{BlobTransactionSidecarEip7594, BlobTransactionSidecarVariant};
 
 /// Object to sign blocks to be sent to relays.
 #[derive(Debug, Clone)]
@@ -120,7 +119,7 @@ fn a2e_address(a: &Address) -> ExecutionAddress {
 pub fn sign_block_for_relay(
     signer: &BLSBlockSigner,
     sealed_block: &SealedBlock,
-    blobs_bundle: &[Arc<BlobTransactionSidecar>],
+    blobs_bundle: &[Arc<BlobTransactionSidecarVariant>],
     execution_requests: &[Bytes], // The Pectra execution requests for this bid.
     chain_spec: &ChainSpec,
     attrs: &PayloadAttributesData,
@@ -235,12 +234,32 @@ fn flatten_marshal<Source>(
     flatten_data.collect::<Vec<Source>>()
 }
 
+fn flatten_marshal_eip7549<Source>(
+    txs_blobs_sidecars: &[Arc<BlobTransactionSidecarEip7594>],
+    vec_getter: impl Fn(&Arc<BlobTransactionSidecarEip7594>) -> Vec<Source>,
+) -> Vec<Source> {
+    let flatten_data = txs_blobs_sidecars.iter().flat_map(vec_getter);
+    flatten_data.collect::<Vec<Source>>()
+}
+
 fn marshal_txs_blobs_sidecars(txs_blobs_sidecars: &[Arc<BlobTransactionSidecar>]) -> BlobsBundleV1 {
     let rpc_commitments = flatten_marshal(txs_blobs_sidecars, |t| t.commitments.clone());
     let rpc_proofs = flatten_marshal(txs_blobs_sidecars, |t| t.proofs.clone());
     let rpc_blobs = flatten_marshal(txs_blobs_sidecars, |t| t.blobs.clone());
 
     BlobsBundleV1 {
+        commitments: rpc_commitments,
+        proofs: rpc_proofs,
+        blobs: rpc_blobs,
+    }
+}
+
+fn marshall_txs_blobs_sidecars_v2(txs_blobs_sidecars: &[Arc<BlobTransactionSidecarEip7594>]) -> BlobsBundleV2 {
+    let rpc_commitments = flatten_marshal_eip7549(txs_blobs_sidecars, |t| t.commitments.clone());
+    let rpc_proofs = flatten_marshal_eip7549(txs_blobs_sidecars, |t| t.proofs.clone());
+    let rpc_blobs = flatten_marshal_eip7549(txs_blobs_sidecars, |t| t.blobs.clone());
+
+    BlobsBundleV2 {
         commitments: rpc_commitments,
         proofs: rpc_proofs,
         blobs: rpc_blobs,

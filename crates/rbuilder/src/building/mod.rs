@@ -58,6 +58,7 @@ use std::{
     sync::Arc,
     time::{Duration, Instant},
 };
+use alloy_eips::eip7594::BlobTransactionSidecarVariant;
 use thiserror::Error;
 use time::OffsetDateTime;
 use tracing::{error, trace};
@@ -502,7 +503,7 @@ impl ExecutionError {
 pub struct FinalizeResult {
     pub sealed_block: SealedBlock,
     // sidecars for all txs in SealedBlock
-    pub txs_blob_sidecars: Vec<Arc<BlobTransactionSidecar>>,
+    pub txs_blob_sidecars: Vec<Arc<BlobTransactionSidecarVariant>>,
     /// The Pectra execution requests for this bid.
     pub execution_requests: Vec<Bytes>,
 
@@ -812,8 +813,23 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
             .is_cancun_active_at_timestamp(ctx.attributes.timestamp)
         {
             for tx_with_blob in self.executed_tx_infos.iter().map(|info| &info.tx) {
-                if !tx_with_blob.blobs_sidecar.blobs.is_empty() {
-                    txs_blob_sidecars.push(tx_with_blob.blobs_sidecar.clone());
+                let eip4844_sidecar = tx_with_blob.blobs_sidecar.as_eip4844();
+
+                if eip4844_sidecar.is_some() {
+                    if !eip4844_sidecar.unwrap().blobs.is_empty() {
+                        txs_blob_sidecars.push(tx_with_blob.blobs_sidecar.clone());
+                    }
+                }
+            }
+            (ctx.excess_blob_gas, Some(self.blob_gas_used))
+        } else if ctx.chain_spec.is_osaka_active_at_timestamp(ctx.attributes.timestamp) {
+            for tx_with_blob in self.executed_tx_infos.iter().map(|info| &info.tx) {
+                let eip7594_sidecar = tx_with_blob.blobs_sidecar.as_eip7594();
+
+                if eip7594_sidecar.is_some() {
+                    if !eip7594_sidecar.unwrap().blobs.is_empty() {
+                        txs_blob_sidecars.push(tx_with_blob.blobs_sidecar.clone());
+                    }
                 }
             }
             (ctx.excess_blob_gas, Some(self.blob_gas_used))

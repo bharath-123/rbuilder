@@ -20,6 +20,7 @@ use alloy_primitives::{Address, Bytes};
 use block_building_helper::BiddableUnfinishedBlock;
 use reth::primitives::SealedBlock;
 use std::{fmt::Debug, sync::Arc};
+use alloy_eips::eip7594::BlobTransactionSidecarVariant;
 use tokio::sync::{
     broadcast,
     broadcast::error::{RecvError, TryRecvError},
@@ -35,7 +36,7 @@ pub struct Block {
     pub trace: BuiltBlockTrace,
     pub sealed_block: SealedBlock,
     /// Sidecars for the txs included in SealedBlock
-    pub txs_blobs_sidecars: Vec<Arc<BlobTransactionSidecar>>,
+    pub txs_blobs_sidecars: Vec<Arc<BlobTransactionSidecarVariant>>,
     /// The Pectra execution requests for this bid.
     pub execution_requests: Vec<Bytes>,
     pub builder_name: String,
