@@ -107,9 +107,9 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "alloy-chains"
-version = "0.2.4"
+version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19a9cc9d81ace3da457883b0bdf76776e55f1b84219a9e9d55c27ad308548d3f"
+checksum = "5674914c2cfdb866c21cb0c09d82374ee39a1395cf512e7515f4c014083b3fff"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rlp",
@@ -144,8 +144,7 @@ dependencies = [
 [[package]]
 name = "alloy-consensus"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e9c6ad411efe0f49e0e99b9c7d8749a1eb55f6dbf74a1bc6953ab285b02c4f67"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -184,8 +183,7 @@ dependencies = [
 [[package]]
 name = "alloy-consensus-any"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0bf397edad57b696501702d5887e4e14d7d0bbae9fbb6439e148d361f7254f45"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -316,8 +314,7 @@ dependencies = [
 [[package]]
 name = "alloy-eips"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "749b8449e4daf7359bdf1dabdba6ce424ff8b1bdc23bdb795661b2e991a08d87"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-eip2124 0.2.0",
  "alloy-eip2930 0.2.1",
@@ -358,8 +355,7 @@ dependencies = [
 [[package]]
 name = "alloy-genesis"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5fcbae2107f3f2df2b02bb7d9e81e8aa730ae371ca9dd7fd0c81c3d0cb78a452"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -371,9 +367,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-hardforks"
-version = "0.2.7"
+version = "0.2.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "977d2492ce210e34baf7b36afaacea272c96fbe6774c47e23f97d14033c0e94f"
+checksum = "819a3620fe125e0fff365363315ee5e24c23169173b19747dfd6deba33db8990"
 dependencies = [
  "alloy-chains",
  "alloy-eip2124 0.2.0",
@@ -424,8 +420,7 @@ dependencies = [
 [[package]]
 name = "alloy-json-rpc"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc30b0e20fcd0843834ecad2a716661c7b9d5aca2486f8e96b93d5246eb83e06"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-sol-types 1.2.1",
@@ -439,8 +434,7 @@ dependencies = [
 [[package]]
 name = "alloy-network"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eaeb681024cf71f5ca14f3d812c0a8d8b49f13f7124713538e66d74d3bfe6aff"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-consensus-any 1.0.17",
@@ -478,8 +472,7 @@ dependencies = [
 [[package]]
 name = "alloy-network-primitives"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a03ad273e1c55cc481889b4130e82860e33624e6969e9a08854e0f3ebe659295"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -490,9 +483,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-node-bindings"
-version = "1.0.17"
+version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d4f3ab81744547ab8283aa94c9670d3880ac826642e52739e3c4ecbfa84857a"
+checksum = "0d17165a7f049283bcc047720cb97e152f188dc1b5a40f9d50fbee1a0dfb4e21"
 dependencies = [
  "alloy-genesis",
  "alloy-hardforks",
@@ -544,7 +537,7 @@ dependencies = [
  "derive_more 2.0.1",
  "foldhash",
  "hashbrown 0.15.4",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "itoa",
  "k256 0.13.4",
  "keccak-asm",
@@ -574,7 +567,7 @@ dependencies = [
  "foldhash",
  "getrandom 0.3.3",
  "hashbrown 0.15.4",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "itoa",
  "k256 0.13.4",
  "keccak-asm",
@@ -592,8 +585,7 @@ dependencies = [
 [[package]]
 name = "alloy-provider"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "abc164acf8c41c756e76c7aea3be8f0fb03f8a3ef90a33e3ddcea5d1614d8779"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-chains",
  "alloy-consensus 1.0.17",
@@ -622,7 +614,7 @@ dependencies = [
  "lru 0.13.0",
  "parking_lot",
  "pin-project",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "serde",
  "serde_json",
  "thiserror 2.0.12",
@@ -635,8 +627,7 @@ dependencies = [
 [[package]]
 name = "alloy-pubsub"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "670d155c3e35bcaa252ca706a2757a456c56aa71b80ad1539d07d49b86304e78"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-json-rpc 1.0.17",
  "alloy-primitives 1.2.1",
@@ -672,14 +663,13 @@ checksum = "64b728d511962dda67c1bc7ea7c03736ec275ed2cf4c35d9585298ac9ccf3b73"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
 name = "alloy-rpc-client"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03c44d31bcb9afad460915fe1fba004a2af5a07a3376c307b9bdfeec3678c209"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-json-rpc 1.0.17",
  "alloy-primitives 1.2.1",
@@ -691,7 +681,7 @@ dependencies = [
  "async-stream",
  "futures",
  "pin-project",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "serde",
  "serde_json",
  "tokio",
@@ -706,8 +696,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2ba2cf3d3c6ece87f1c6bb88324a997f28cf0ad7e98d5e0b6fa91c4003c30916"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rpc-types-engine",
@@ -719,8 +708,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types-admin"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4ce874dde17cc749f1aa8883e0c1431ddda6ba6dd9c9eb9b31d1fb0a6023830"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-genesis",
  "alloy-primitives 1.2.1",
@@ -731,8 +719,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types-anvil"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "65e80e2ffa56956a92af375df1422b239fde6552bd222dfeaeb39f07949060fa"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rpc-types-eth 1.0.17",
@@ -743,8 +730,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types-any"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ef5b22062142ce3b2ed3374337d4b343437e5de6959397f55d2c9fe2c2ce0162"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-consensus-any 1.0.17",
  "alloy-rpc-types-eth 1.0.17",
@@ -754,8 +740,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types-beacon"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "438a7a3a5c5d11877787e324dd1ffd9ab82314ca145513ebe8d12257cbfefb5b"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -772,8 +757,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types-debug"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1f53a2a78b44582e0742ab96d5782842d9b90cebf6ef6ccd8be864ae246fdd0f"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-primitives 1.2.1",
  "serde",
@@ -782,8 +766,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types-engine"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7041c3fd4dcd7af95e86280944cc33b4492ac2ddbe02f84079f8019742ec2857"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -822,8 +805,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types-eth"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "391e59f81bacbffc7bddd2da3a26d6eec0e2058e9237c279e9b1052bdf21b49e"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-consensus-any 1.0.17",
@@ -843,8 +825,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types-mev"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "de3f327d4cd140eca2c6c27c82c381aba6fa6a32cbb697c146b5607532f82167"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -858,8 +839,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types-trace"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "29d96238f37e8a72dcf2cf6bead4c4f91dec1c0720b12be10558406e1633a804"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rpc-types-eth 1.0.17",
@@ -872,8 +852,7 @@ dependencies = [
 [[package]]
 name = "alloy-rpc-types-txpool"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e45d00db47a280d0a6e498b6e63344bccd9485d8860d2e2f06b680200c37ebc2"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rpc-types-eth 1.0.17",
@@ -895,8 +874,7 @@ dependencies = [
 [[package]]
 name = "alloy-serde"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ea08bc854235d4dff08fd57df8033285c11b8d7548b20c6da218194e7e6035f"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-primitives 1.2.1",
  "arbitrary",
@@ -907,8 +885,7 @@ dependencies = [
 [[package]]
 name = "alloy-signer"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bcb3759f85ef5f010a874d9ebd5ee6ce01cac65211510863124e0ebac6552db0"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-primitives 1.2.1",
  "async-trait",
@@ -922,8 +899,7 @@ dependencies = [
 [[package]]
 name = "alloy-signer-local"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "14d95902d29e1290809e1c967a1e974145b44b78f6e3e12fc07a60c1225e3df0"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-network",
@@ -946,7 +922,7 @@ dependencies = [
  "proc-macro-error2",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -960,7 +936,7 @@ dependencies = [
  "proc-macro-error2",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -972,11 +948,11 @@ dependencies = [
  "alloy-sol-macro-input 0.8.25",
  "const-hex",
  "heck 0.5.0",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "proc-macro-error2",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "syn-solidity 0.8.25",
  "tiny-keccak",
 ]
@@ -990,11 +966,11 @@ dependencies = [
  "alloy-sol-macro-input 1.2.1",
  "const-hex",
  "heck 0.5.0",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "proc-macro-error2",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "syn-solidity 1.2.1",
  "tiny-keccak",
 ]
@@ -1011,7 +987,7 @@ dependencies = [
  "macro-string",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "syn-solidity 0.8.25",
 ]
 
@@ -1027,7 +1003,7 @@ dependencies = [
  "macro-string",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "syn-solidity 1.2.1",
 ]
 
@@ -1079,8 +1055,7 @@ dependencies = [
 [[package]]
 name = "alloy-transport"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dcdf4b7fc58ebb2605b2fc5a33dae5cf15527ea70476978351cc0db1c596ea93"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-json-rpc 1.0.17",
  "alloy-primitives 1.2.1",
@@ -1102,12 +1077,11 @@ dependencies = [
 [[package]]
 name = "alloy-transport-http"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c4b0f3a9c28bcd3761504d9eb3578838d6d115c8959fc1ea05f59a3a8f691af"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-json-rpc 1.0.17",
  "alloy-transport",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "serde_json",
  "tower 0.5.2",
  "tracing",
@@ -1117,8 +1091,7 @@ dependencies = [
 [[package]]
 name = "alloy-transport-ipc"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "758edb7c266374374e001c50fb1ea89cb5ed48d47ffbf297599f2a557804dd3b"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-json-rpc 1.0.17",
  "alloy-pubsub",
@@ -1137,8 +1110,7 @@ dependencies = [
 [[package]]
 name = "alloy-transport-ws"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c5596b913d1299ee37a9c1bb5118b2639bf253dc1088957bdf2073ae63a6fdfa"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-pubsub",
  "alloy-transport",
@@ -1180,7 +1152,7 @@ dependencies = [
  "arrayvec",
  "derive_arbitrary",
  "derive_more 2.0.1",
- "nybbles 0.4.0",
+ "nybbles 0.4.1",
  "proptest",
  "proptest-derive",
  "serde",
@@ -1191,14 +1163,13 @@ dependencies = [
 [[package]]
 name = "alloy-tx-macros"
 version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "79bf2869e66904b2148c809e7a75e23ca26f5d7b46663a149a1444fb98a69d1d"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"
 dependencies = [
  "alloy-primitives 1.2.1",
  "darling 0.20.11",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -1289,7 +1260,7 @@ dependencies = [
  "proc-macro-error2",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -1440,7 +1411,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "62945a2f7e6de02a31fe400aa489f0e0f5b2502e69f95f853adb82a96c7a6b60"
 dependencies = [
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -1478,7 +1449,7 @@ dependencies = [
  "num-traits",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -1567,7 +1538,7 @@ checksum = "213888f660fddcca0d257e88e54ac05bca01885f258ccdf695bafd77031bb69d"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -1754,7 +1725,7 @@ checksum = "c7c24de15d275a1ecfd47a380fb4d5ec9bfe0933f309ed5e705b775596a3574d"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -1765,7 +1736,7 @@ checksum = "e539d3fca749fcee5236ab05e93a52867dd549cc157c8cb7f99595f3cedffdb5"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -1823,7 +1794,7 @@ checksum = "ffdcb70bdbc4d478427380519163274ac86e52916e10f0a8889adf0f96d3fee7"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -2037,7 +2008,7 @@ dependencies = [
  "regex",
  "rustc-hash 1.1.0",
  "shlex",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -2176,7 +2147,7 @@ dependencies = [
  "boa_interner",
  "boa_macros",
  "boa_string",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "num-bigint",
  "rustc-hash 2.1.1",
 ]
@@ -2202,7 +2173,7 @@ dependencies = [
  "fast-float2",
  "hashbrown 0.15.4",
  "icu_normalizer 1.5.0",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "intrusive-collections",
  "itertools 0.13.0",
  "num-bigint",
@@ -2248,7 +2219,7 @@ dependencies = [
  "boa_gc",
  "boa_macros",
  "hashbrown 0.15.4",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "once_cell",
  "phf 0.11.3",
  "rustc-hash 2.1.1",
@@ -2263,7 +2234,7 @@ checksum = "9fd3f870829131332587f607a7ff909f1af5fc523fd1b192db55fbbdf52e8d3c"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "synstructure 0.13.2",
 ]
 
@@ -2395,9 +2366,9 @@ dependencies = [
 
 [[package]]
 name = "bumpalo"
-version = "3.18.1"
+version = "3.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "793db76d6187cd04dff33004d8e6c9cc4e05cd330500379d2394209271b4aeee"
+checksum = "46c5e41b57b8bba42a04676d81cb89e9ee8e859a1a66f80a5a72e1cb76b34d43"
 
 [[package]]
 name = "byte-slice-cast"
@@ -2428,7 +2399,7 @@ checksum = "7ecc273b49b3205b83d648f0690daa588925572cc5063745bfe547fe7ec8e1a1"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -2724,7 +2695,7 @@ dependencies = [
  "heck 0.5.0",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3171,9 +3142,9 @@ dependencies = [
 
 [[package]]
 name = "crunchy"
-version = "0.2.3"
+version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43da5946c66ffcc7745f48db692ffbb10a83bfe0afd96235c5c2a4fb23994929"
+checksum = "460fbee9c2c2f33933d720630a6a0bac33ba7053db5344fac858d4b8952d77d5"
 
 [[package]]
 name = "crypto-bigint"
@@ -3230,7 +3201,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "13b588ba4ac1a99f7f2964d24b3d896ddc6bf847ee3855dbd4366f058cfcd331"
 dependencies = [
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3261,7 +3232,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32a2785755761f3ddc1492979ce1e48d2c00d09311c39e4466429188f3dd6501"
 dependencies = [
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3297,7 +3268,7 @@ checksum = "f46882e17999c6cc590af592290432be3bce0428cb0d5f8b6715e4dc7b383eb3"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3345,7 +3316,7 @@ dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
  "strsim 0.11.1",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3367,7 +3338,7 @@ checksum = "fc34b93ccb385b40dc71c6fceac4b2ad23662c7eeb248cf10d529b7e055b6ead"
 dependencies = [
  "darling_core 0.20.11",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3421,7 +3392,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8d162beedaa69905488a8da94f5ac3edb4dd4788b732fadb7bd120b2625c1976"
 dependencies = [
  "data-encoding",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3491,7 +3462,7 @@ checksum = "510c292c8cf384b1a340b816a9a6cf2599eb8f566a44949024af88418000c50b"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3502,7 +3473,7 @@ checksum = "30542c1ad912e0e3d22a1935c290e12e8a29d704a420177a31faad4a601a0800"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3523,7 +3494,7 @@ dependencies = [
  "darling 0.20.11",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3533,7 +3504,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ab63b0e2bf4d5928aff72e83a7dace85d7bba5fe12dcc3c5a572d78caffd3f3c"
 dependencies = [
  "derive_builder_core",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3546,7 +3517,7 @@ dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
  "rustc_version 0.4.1",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3575,7 +3546,7 @@ checksum = "cb7330aeadfbe296029522e6c40f315320aba36fc43a5b3632f3795348f3bd22"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3587,7 +3558,7 @@ dependencies = [
  "convert_case 0.7.1",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "unicode-xid 0.2.6",
 ]
 
@@ -3722,7 +3693,7 @@ checksum = "97369cbbc041bc366949bc74d34658d6cda5621039731c6310521892a3a20ae0"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3831,7 +3802,7 @@ dependencies = [
  "enum-ordinalize",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3979,7 +3950,7 @@ dependencies = [
  "heck 0.5.0",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -3999,7 +3970,7 @@ checksum = "0d28318a75d4aead5c4db25382e8ef717932d0346600cacae6357eb5941bc5ff"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -4011,7 +3982,7 @@ dependencies = [
  "once_cell",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -4274,7 +4245,7 @@ dependencies = [
  "darling 0.20.11",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -4343,7 +4314,7 @@ dependencies = [
  "reqwest 0.11.27",
  "serde",
  "serde_json",
- "syn 2.0.103",
+ "syn 2.0.104",
  "toml 0.8.23",
  "walkdir",
 ]
@@ -4361,7 +4332,7 @@ dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
  "serde_json",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -4387,7 +4358,7 @@ dependencies = [
  "serde",
  "serde_json",
  "strum 0.26.3",
- "syn 2.0.103",
+ "syn 2.0.104",
  "tempfile",
  "thiserror 1.0.69",
  "tiny-keccak",
@@ -4913,7 +4884,7 @@ checksum = "162ee34ebcb7c64a8abebc059ce0fee27c2262618d7b60ed8faf72fef13c3650"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -5245,7 +5216,7 @@ dependencies = [
  "futures-sink",
  "futures-util",
  "http 0.2.12",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "slab",
  "tokio",
  "tokio-util",
@@ -5254,9 +5225,9 @@ dependencies = [
 
 [[package]]
 name = "h2"
-version = "0.4.10"
+version = "0.4.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a9421a676d1b147b16b82c9225157dc629087ef8ec4d5e2960f9437a90dac0a5"
+checksum = "17da50a276f1e01e0ba6c029e47b7100754904ee8a278f886546e98575380785"
 dependencies = [
  "atomic-waker",
  "bytes",
@@ -5264,7 +5235,7 @@ dependencies = [
  "futures-core",
  "futures-sink",
  "http 1.3.1",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "slab",
  "tokio",
  "tokio-util",
@@ -5684,7 +5655,7 @@ dependencies = [
  "bytes",
  "futures-channel",
  "futures-util",
- "h2 0.4.10",
+ "h2 0.4.11",
  "http 1.3.1",
  "http-body 1.0.1",
  "httparse",
@@ -5762,9 +5733,9 @@ dependencies = [
 
 [[package]]
 name = "hyper-util"
-version = "0.1.14"
+version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc2fdfdbff08affe55bb779f33b053aa1fe5dd5b54c257343c17edfa55711bdb"
+checksum = "7f66d5bd4c6f02bf0542fad85d626775bab9258cf795a4256dcaf3161114d1df"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -6011,7 +5982,7 @@ checksum = "1ec89e9337638ecdc08744df490b221a7399bf8d164eb52a665454e60e075ad6"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -6086,7 +6057,7 @@ checksum = "a0eb5a3343abf848c0984fe4604b2b105da9539376e24fc0a3b0007411ae4fd9"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -6127,9 +6098,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.9.0"
+version = "2.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cea70ddb795996207ad57735b50c5982d8844f38ba9ee5f1aedcfb708a2aa11e"
+checksum = "fe4cd85333e22411419a0bcae1297d25e58c9443848b11dc6a86fefe8c78a661"
 dependencies = [
  "arbitrary",
  "equivalent",
@@ -6202,7 +6173,7 @@ dependencies = [
  "indoc",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -6251,6 +6222,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "189d0897e4cbe8c75efedf3502c18c887b05046e59d28404d4d8e46cbc4d1e86"
 dependencies = [
  "memoffset",
+]
+
+[[package]]
+name = "io-uring"
+version = "0.7.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b86e202f00093dcba4275d4636b93ef9dd75d025ae560d2521b45ea28ab49013"
+dependencies = [
+ "bitflags 2.9.1",
+ "cfg-if",
+ "libc",
 ]
 
 [[package]]
@@ -6586,7 +6568,7 @@ dependencies = [
  "proc-macro-crate 3.3.0",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -6930,9 +6912,9 @@ checksum = "1171693293099992e19cddea4e8b849964e9846f4acee11b3948bcc337be8776"
 
 [[package]]
 name = "libgit2-sys"
-version = "0.18.1+1.9.0"
+version = "0.18.2+1.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e1dcb20f84ffcdd825c7a311ae347cce604a6f084a767dec4a4929829645290e"
+checksum = "1c42fe03df2bd3c53a3a9c7317ad91d80c81cd1fb0caec8d7cc4cd2bfa10c222"
 dependencies = [
  "cc",
  "libc",
@@ -6958,9 +6940,9 @@ checksum = "f9fbbcab51052fe104eb5e5d351cf728d30a5be1fe14d9be8a3b097481fb97de"
 
 [[package]]
 name = "libp2p-identity"
-version = "0.2.11"
+version = "0.2.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fbb68ea10844211a59ce46230909fd0ea040e8a192454d4cc2ee0d53e12280eb"
+checksum = "3104e13b51e4711ff5738caa1fb54467c8604c2e94d607e27745bcf709068774"
 dependencies = [
  "asn1_der",
  "bs58 0.5.1",
@@ -6988,9 +6970,9 @@ dependencies = [
 
 [[package]]
 name = "libredox"
-version = "0.1.3"
+version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c0ff37bd590ca25063e35af745c343cb7a0271906fb7b37e4813e8f79f00268d"
+checksum = "1580801010e535496706ba011c15f8532df6b42297d2e471fec38ceadd8c0638"
 dependencies = [
  "bitflags 2.9.1",
  "libc",
@@ -7205,9 +7187,9 @@ checksum = "c41e0c4fef86961ac6d6f8a82609f55f31b05e4fce149ac5710e439df7619ba4"
 
 [[package]]
 name = "mach2"
-version = "0.4.2"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19b955cdeb2a02b9117f121ce63aa52d08ade45de53e48fe6a38b39c10f6f709"
+checksum = "d640282b302c0bb0a2a8e0233ead9035e3bed871f0b7e81fe4a1ec829765db44"
 dependencies = [
  "libc",
 ]
@@ -7220,7 +7202,7 @@ checksum = "1b27834086c65ec3f9387b096d66e99f221cf081c2b738042aa252bcd41204e3"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -7329,7 +7311,7 @@ dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
  "regex",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -7339,7 +7321,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dd7399781913e5393588a8d8c6a2867bf85fb38eaf2502fdce465aad2dc6f034"
 dependencies = [
  "base64 0.22.1",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "metrics",
  "metrics-util",
  "quanta",
@@ -7384,7 +7366,7 @@ version = "0.1.0"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -7488,7 +7470,7 @@ dependencies = [
  "cfg-if",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -7718,12 +7700,11 @@ checksum = "38bf9645c8b145698bb0b18a4637dcacbc421ea49bef2317e4fd8065a387cf21"
 
 [[package]]
 name = "notify"
-version = "8.0.0"
+version = "8.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2fee8403b3d66ac7b26aee6e40a897d85dc5ce26f44da36b8b73e987cc52e943"
+checksum = "3163f59cd3fa0e9ef8c32f242966a7b9994fd7378366099593e0e73077cd8c97"
 dependencies = [
  "bitflags 2.9.1",
- "filetime",
  "fsevent-sys",
  "inotify",
  "kqueue",
@@ -7732,7 +7713,7 @@ dependencies = [
  "mio",
  "notify-types",
  "walkdir",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -7879,23 +7860,24 @@ dependencies = [
 
 [[package]]
 name = "num_enum"
-version = "0.7.3"
+version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e613fc340b2220f734a8595782c551f1250e969d87d3be1ae0579e8d4065179"
+checksum = "a973b4e44ce6cad84ce69d797acf9a044532e4184c4f267913d1b546a0727b7a"
 dependencies = [
  "num_enum_derive",
+ "rustversion",
 ]
 
 [[package]]
 name = "num_enum_derive"
-version = "0.7.3"
+version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "af1844ef2428cc3e1cb900be36181049ef3d3193c63e43026cfe202983b27a56"
+checksum = "77e878c846a8abae00dd069496dbe8751b16ac1c3d6bd2a7283a938e8228f90d"
 dependencies = [
  "proc-macro-crate 3.3.0",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -7928,12 +7910,13 @@ dependencies = [
 
 [[package]]
 name = "nybbles"
-version = "0.4.0"
+version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11d51b0175c49668a033fe7cc69080110d9833b291566cdf332905f3ad9c68a0"
+checksum = "675b3a54e5b12af997abc8b6638b0aee51a28caedab70d4967e0d5db3a3f1d06"
 dependencies = [
  "alloy-rlp",
  "arbitrary",
+ "cfg-if",
  "proptest",
  "ruint",
  "serde",
@@ -8011,7 +7994,7 @@ dependencies = [
 [[package]]
 name = "op-revm"
 version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "auto_impl",
  "once_cell",
@@ -8073,7 +8056,7 @@ checksum = "a948666b637a0f465e8564c73e89d4dde00d72d4d473cc972f390fc3dcee7d9c"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -8161,7 +8144,7 @@ dependencies = [
  "proc-macro-crate 3.3.0",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -8318,7 +8301,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4c5cc86750666a3ed20bdaf5ca2a0344f9c67674cae0515bec2da16fbaa47db"
 dependencies = [
  "fixedbitset",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
 ]
 
 [[package]]
@@ -8391,7 +8374,7 @@ dependencies = [
  "phf_shared 0.11.3",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -8429,7 +8412,7 @@ checksum = "6e918e4ff8c4549eb882f14b3a4bc8c8bc93de829416eacf579f1207a8fbf861"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -8571,7 +8554,7 @@ dependencies = [
  "comfy-table",
  "either",
  "hashbrown 0.14.5",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "num-traits",
  "once_cell",
  "polars-arrow",
@@ -8662,7 +8645,7 @@ dependencies = [
  "argminmax",
  "arrow2",
  "either",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "memchr",
  "polars-arrow",
  "polars-core",
@@ -8868,12 +8851,12 @@ dependencies = [
 
 [[package]]
 name = "prettyplease"
-version = "0.2.34"
+version = "0.2.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6837b9e10d61f45f987d50808f83d1ee3d206c66acf650c3e4ae2e1f6ddedf55"
+checksum = "061c1221631e079b26479d25bbf2275bfe5917ae8419cd7e34f13bfc2aa7539a"
 dependencies = [
  "proc-macro2 1.0.95",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -8907,7 +8890,7 @@ checksum = "5676d703dda103cbb035b653a9f11448c0a7216c7926bd35fcb5865475d0c970"
 dependencies = [
  "autocfg 1.5.0",
  "equivalent",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
 ]
 
 [[package]]
@@ -8972,7 +8955,7 @@ dependencies = [
  "proc-macro-error-attr2",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -9071,7 +9054,7 @@ checksum = "4ee1c9ac207483d5e7db4940700de86a9aae46ef90c48b57f99fe7edb8345e49"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -9568,7 +9551,7 @@ dependencies = [
  "rand 0.8.5",
  "rayon",
  "reipc",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "reth",
  "reth-chainspec",
  "reth-db",
@@ -9587,7 +9570,7 @@ dependencies = [
  "reth-trie",
  "reth-trie-parallel",
  "revm 27.0.2",
- "revm-inspectors 0.23.0",
+ "revm-inspectors 0.25.0",
  "secp256k1 0.30.0",
  "serde",
  "serde_json",
@@ -9675,7 +9658,7 @@ checksum = "1165225c21bff1f3bbce98f5a1f889949bc902d3575308cc7b0de30b4f6d27c7"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -9797,9 +9780,9 @@ dependencies = [
 
 [[package]]
 name = "reqwest"
-version = "0.12.20"
+version = "0.12.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eabf4c97d9130e2bf606614eb937e86edac8292eaa6f422f995d7e8de1eb1813"
+checksum = "cbc931937e6ca3a06e3b6c0aa7841849b160a90351d6ab467a8b9b9959767531"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -9807,7 +9790,7 @@ dependencies = [
  "futures-channel",
  "futures-core",
  "futures-util",
- "h2 0.4.10",
+ "h2 0.4.11",
  "http 1.3.1",
  "http-body 1.0.1",
  "http-body-util",
@@ -9853,7 +9836,7 @@ checksum = "95325155c684b1c89f7765e30bc1c42e4a6da51ca513615660cb8a62ef9a88e3"
 [[package]]
 name = "reth"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-rpc-types",
  "aquamarine",
@@ -9899,7 +9882,7 @@ dependencies = [
 [[package]]
 name = "reth-basic-payload-builder"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -9923,7 +9906,7 @@ dependencies = [
 [[package]]
 name = "reth-chain-state"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -9954,7 +9937,7 @@ dependencies = [
 [[package]]
 name = "reth-chainspec"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-chains",
  "alloy-consensus 1.0.17",
@@ -9974,7 +9957,7 @@ dependencies = [
 [[package]]
 name = "reth-cli"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-genesis",
  "clap 4.5.40",
@@ -9988,7 +9971,7 @@ dependencies = [
 [[package]]
 name = "reth-cli-commands"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "ahash",
  "alloy-chains",
@@ -10007,7 +9990,7 @@ dependencies = [
  "itertools 0.14.0",
  "lz4",
  "ratatui",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "reth-chainspec",
  "reth-cli",
  "reth-cli-runner",
@@ -10059,7 +10042,7 @@ dependencies = [
 [[package]]
 name = "reth-cli-runner"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "reth-tasks",
  "tokio",
@@ -10069,7 +10052,7 @@ dependencies = [
 [[package]]
 name = "reth-cli-util"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -10087,7 +10070,7 @@ dependencies = [
 [[package]]
 name = "reth-codecs"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10107,18 +10090,18 @@ dependencies = [
 [[package]]
 name = "reth-codecs-derive"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "convert_case 0.7.1",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
 name = "reth-config"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "eyre",
  "humantime-serde",
@@ -10133,7 +10116,7 @@ dependencies = [
 [[package]]
 name = "reth-consensus"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-primitives 1.2.1",
@@ -10146,7 +10129,7 @@ dependencies = [
 [[package]]
 name = "reth-consensus-common"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10158,7 +10141,7 @@ dependencies = [
 [[package]]
 name = "reth-consensus-debug-client"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10170,7 +10153,7 @@ dependencies = [
  "derive_more 2.0.1",
  "eyre",
  "futures",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "reth-node-api",
  "reth-primitives-traits",
  "reth-tracing",
@@ -10182,7 +10165,7 @@ dependencies = [
 [[package]]
 name = "reth-db"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "derive_more 2.0.1",
@@ -10208,7 +10191,7 @@ dependencies = [
 [[package]]
 name = "reth-db-api"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-genesis",
@@ -10236,7 +10219,7 @@ dependencies = [
 [[package]]
 name = "reth-db-common"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-genesis",
@@ -10265,7 +10248,7 @@ dependencies = [
 [[package]]
 name = "reth-db-models"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -10280,7 +10263,7 @@ dependencies = [
 [[package]]
 name = "reth-discv4"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rlp",
@@ -10306,7 +10289,7 @@ dependencies = [
 [[package]]
 name = "reth-discv5"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rlp",
@@ -10330,7 +10313,7 @@ dependencies = [
 [[package]]
 name = "reth-dns-discovery"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "data-encoding",
@@ -10354,7 +10337,7 @@ dependencies = [
 [[package]]
 name = "reth-downloaders"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10384,7 +10367,7 @@ dependencies = [
 [[package]]
 name = "reth-ecies"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "aes",
  "alloy-primitives 1.2.1",
@@ -10415,7 +10398,7 @@ dependencies = [
 [[package]]
 name = "reth-engine-local"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-primitives 1.2.1",
@@ -10437,7 +10420,7 @@ dependencies = [
 [[package]]
 name = "reth-engine-primitives"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10462,7 +10445,7 @@ dependencies = [
 [[package]]
 name = "reth-engine-service"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "futures",
  "pin-project",
@@ -10485,7 +10468,7 @@ dependencies = [
 [[package]]
 name = "reth-engine-tree"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10522,7 +10505,7 @@ dependencies = [
  "reth-trie-parallel",
  "reth-trie-sparse",
  "revm 27.0.2",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "schnellru",
  "thiserror 2.0.12",
  "tokio",
@@ -10532,7 +10515,7 @@ dependencies = [
 [[package]]
 name = "reth-engine-util"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-rpc-types-engine",
@@ -10559,7 +10542,7 @@ dependencies = [
 [[package]]
 name = "reth-era"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10575,13 +10558,13 @@ dependencies = [
 [[package]]
 name = "reth-era-downloader"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "bytes",
  "eyre",
  "futures-util",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "reth-fs-util",
  "sha2 0.10.9",
  "tokio",
@@ -10590,7 +10573,7 @@ dependencies = [
 [[package]]
 name = "reth-era-utils"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-primitives 1.2.1",
@@ -10614,7 +10597,7 @@ dependencies = [
 [[package]]
 name = "reth-errors"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "reth-consensus",
  "reth-execution-errors",
@@ -10625,7 +10608,7 @@ dependencies = [
 [[package]]
 name = "reth-eth-wire"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-chains",
  "alloy-primitives 1.2.1",
@@ -10653,7 +10636,7 @@ dependencies = [
 [[package]]
 name = "reth-eth-wire-types"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-chains",
  "alloy-consensus 1.0.17",
@@ -10674,7 +10657,7 @@ dependencies = [
 [[package]]
 name = "reth-ethereum-cli"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10733,7 +10716,7 @@ dependencies = [
 [[package]]
 name = "reth-ethereum-consensus"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10749,7 +10732,7 @@ dependencies = [
 [[package]]
 name = "reth-ethereum-engine-primitives"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -10767,7 +10750,7 @@ dependencies = [
 [[package]]
 name = "reth-ethereum-forks"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eip2124 0.2.0",
  "alloy-hardforks",
@@ -10780,7 +10763,7 @@ dependencies = [
 [[package]]
 name = "reth-ethereum-payload-builder"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10809,7 +10792,7 @@ dependencies = [
 [[package]]
 name = "reth-ethereum-primitives"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10827,7 +10810,7 @@ dependencies = [
 [[package]]
 name = "reth-etl"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "rayon",
  "reth-db-api",
@@ -10837,7 +10820,7 @@ dependencies = [
 [[package]]
 name = "reth-evm"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10860,7 +10843,7 @@ dependencies = [
 [[package]]
 name = "reth-evm-ethereum"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10879,12 +10862,12 @@ dependencies = [
 [[package]]
 name = "reth-execution-errors"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-evm",
  "alloy-primitives 1.2.1",
  "alloy-rlp",
- "nybbles 0.4.0",
+ "nybbles 0.4.1",
  "reth-storage-errors",
  "thiserror 2.0.12",
 ]
@@ -10892,7 +10875,7 @@ dependencies = [
 [[package]]
 name = "reth-execution-types"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10910,7 +10893,7 @@ dependencies = [
 [[package]]
 name = "reth-exex"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -10948,7 +10931,7 @@ dependencies = [
 [[package]]
 name = "reth-exex-types"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -10962,7 +10945,7 @@ dependencies = [
 [[package]]
 name = "reth-fs-util"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "serde",
  "serde_json",
@@ -10972,7 +10955,7 @@ dependencies = [
 [[package]]
 name = "reth-invalid-block-hooks"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-primitives 1.2.1",
@@ -11000,7 +10983,7 @@ dependencies = [
 [[package]]
 name = "reth-ipc"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "bytes",
  "futures",
@@ -11020,13 +11003,13 @@ dependencies = [
 [[package]]
 name = "reth-libmdbx"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "bitflags 2.9.1",
  "byteorder",
  "dashmap 6.1.0",
  "derive_more 2.0.1",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "parking_lot",
  "reth-mdbx-sys",
  "smallvec",
@@ -11037,7 +11020,7 @@ dependencies = [
 [[package]]
 name = "reth-mdbx-sys"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "bindgen",
  "cc",
@@ -11046,7 +11029,7 @@ dependencies = [
 [[package]]
 name = "reth-metrics"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "futures",
  "metrics",
@@ -11058,7 +11041,7 @@ dependencies = [
 [[package]]
 name = "reth-net-banlist"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
 ]
@@ -11066,11 +11049,11 @@ dependencies = [
 [[package]]
 name = "reth-net-nat"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "futures-util",
  "if-addrs",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "serde_with",
  "thiserror 2.0.12",
  "tokio",
@@ -11080,7 +11063,7 @@ dependencies = [
 [[package]]
 name = "reth-network"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -11135,7 +11118,7 @@ dependencies = [
 [[package]]
 name = "reth-network-api"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rpc-types-admin",
@@ -11158,7 +11141,7 @@ dependencies = [
 [[package]]
 name = "reth-network-p2p"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -11180,7 +11163,7 @@ dependencies = [
 [[package]]
 name = "reth-network-peers"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rlp",
@@ -11195,7 +11178,7 @@ dependencies = [
 [[package]]
 name = "reth-network-types"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eip2124 0.2.0",
  "humantime-serde",
@@ -11209,7 +11192,7 @@ dependencies = [
 [[package]]
 name = "reth-nippy-jar"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "anyhow",
  "bincode",
@@ -11226,7 +11209,7 @@ dependencies = [
 [[package]]
 name = "reth-node-api"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-rpc-types-engine",
  "eyre",
@@ -11250,7 +11233,7 @@ dependencies = [
 [[package]]
 name = "reth-node-builder"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -11314,7 +11297,7 @@ dependencies = [
 [[package]]
 name = "reth-node-core"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -11365,7 +11348,7 @@ dependencies = [
 [[package]]
 name = "reth-node-ethereum"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-rpc-types-engine",
@@ -11401,7 +11384,7 @@ dependencies = [
 [[package]]
 name = "reth-node-events"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -11425,7 +11408,7 @@ dependencies = [
 [[package]]
 name = "reth-node-metrics"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "eyre",
  "http 1.3.1",
@@ -11446,7 +11429,7 @@ dependencies = [
 [[package]]
 name = "reth-node-types"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "reth-chainspec",
  "reth-db-api",
@@ -11459,7 +11442,7 @@ dependencies = [
 [[package]]
 name = "reth-optimism-primitives"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -11478,7 +11461,7 @@ dependencies = [
 [[package]]
 name = "reth-payload-builder"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-rpc-types",
@@ -11498,7 +11481,7 @@ dependencies = [
 [[package]]
 name = "reth-payload-builder-primitives"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "pin-project",
  "reth-payload-primitives",
@@ -11510,7 +11493,7 @@ dependencies = [
 [[package]]
 name = "reth-payload-primitives"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -11529,7 +11512,7 @@ dependencies = [
 [[package]]
 name = "reth-payload-validator"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-rpc-types-engine",
@@ -11539,7 +11522,7 @@ dependencies = [
 [[package]]
 name = "reth-primitives"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "c-kzg",
@@ -11553,7 +11536,7 @@ dependencies = [
 [[package]]
 name = "reth-primitives-traits"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -11575,7 +11558,7 @@ dependencies = [
  "rayon",
  "reth-codecs",
  "revm-bytecode 6.0.1",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "revm-state 7.0.1",
  "secp256k1 0.30.0",
  "serde",
@@ -11586,7 +11569,7 @@ dependencies = [
 [[package]]
 name = "reth-provider"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -11631,7 +11614,7 @@ dependencies = [
 [[package]]
 name = "reth-prune"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -11659,7 +11642,7 @@ dependencies = [
 [[package]]
 name = "reth-prune-types"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "arbitrary",
@@ -11692,7 +11675,7 @@ dependencies = [
 [[package]]
 name = "reth-ress-protocol"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-primitives 1.2.1",
@@ -11711,7 +11694,7 @@ dependencies = [
 [[package]]
 name = "reth-ress-provider"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-primitives 1.2.1",
@@ -11738,7 +11721,7 @@ dependencies = [
 [[package]]
 name = "reth-revm"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "reth-primitives-traits",
@@ -11751,7 +11734,7 @@ dependencies = [
 [[package]]
 name = "reth-rpc"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-dyn-abi",
@@ -11812,7 +11795,7 @@ dependencies = [
  "reth-trie-common",
  "revm 27.0.2",
  "revm-inspectors 0.26.5",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "serde",
  "serde_json",
  "sha2 0.10.9",
@@ -11827,7 +11810,7 @@ dependencies = [
 [[package]]
 name = "reth-rpc-api"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-genesis",
@@ -11855,7 +11838,7 @@ dependencies = [
 [[package]]
 name = "reth-rpc-builder"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-network",
  "alloy-provider",
@@ -11893,7 +11876,7 @@ dependencies = [
 [[package]]
 name = "reth-rpc-convert"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-json-rpc 1.0.17",
@@ -11910,7 +11893,7 @@ dependencies = [
 [[package]]
 name = "reth-rpc-engine-api"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -11940,7 +11923,7 @@ dependencies = [
 [[package]]
 name = "reth-rpc-eth-api"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-dyn-abi",
@@ -11985,7 +11968,7 @@ dependencies = [
 [[package]]
 name = "reth-rpc-eth-types"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -12028,7 +12011,7 @@ dependencies = [
 [[package]]
 name = "reth-rpc-layer"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-rpc-types-engine",
  "http 1.3.1",
@@ -12042,7 +12025,7 @@ dependencies = [
 [[package]]
 name = "reth-rpc-server-types"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -12058,7 +12041,7 @@ dependencies = [
 [[package]]
 name = "reth-stages"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -12070,7 +12053,7 @@ dependencies = [
  "itertools 0.14.0",
  "num-traits",
  "rayon",
- "reqwest 0.12.20",
+ "reqwest 0.12.22",
  "reth-codecs",
  "reth-config",
  "reth-consensus",
@@ -12104,7 +12087,7 @@ dependencies = [
 [[package]]
 name = "reth-stages-api"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -12131,7 +12114,7 @@ dependencies = [
 [[package]]
 name = "reth-stages-types"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "arbitrary",
@@ -12145,7 +12128,7 @@ dependencies = [
 [[package]]
 name = "reth-static-file"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "parking_lot",
@@ -12165,7 +12148,7 @@ dependencies = [
 [[package]]
 name = "reth-static-file-types"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "clap 4.5.40",
@@ -12177,7 +12160,7 @@ dependencies = [
 [[package]]
 name = "reth-storage-api"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -12201,7 +12184,7 @@ dependencies = [
 [[package]]
 name = "reth-storage-errors"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-eips 1.0.17",
  "alloy-primitives 1.2.1",
@@ -12217,7 +12200,7 @@ dependencies = [
 [[package]]
 name = "reth-tasks"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "auto_impl",
  "dyn-clone",
@@ -12235,7 +12218,7 @@ dependencies = [
 [[package]]
 name = "reth-tokio-util"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "tokio",
  "tokio-stream",
@@ -12245,7 +12228,7 @@ dependencies = [
 [[package]]
 name = "reth-tracing"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "clap 4.5.40",
  "eyre",
@@ -12260,7 +12243,7 @@ dependencies = [
 [[package]]
 name = "reth-transaction-pool"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -12284,7 +12267,7 @@ dependencies = [
  "reth-storage-api",
  "reth-tasks",
  "revm-interpreter 23.0.1",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "rustc-hash 2.1.1",
  "schnellru",
  "serde",
@@ -12298,7 +12281,7 @@ dependencies = [
 [[package]]
 name = "reth-trie"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-eips 1.0.17",
@@ -12323,7 +12306,7 @@ dependencies = [
 [[package]]
 name = "reth-trie-common"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-consensus 1.0.17",
  "alloy-primitives 1.2.1",
@@ -12336,7 +12319,7 @@ dependencies = [
  "derive_more 2.0.1",
  "hash-db",
  "itertools 0.14.0",
- "nybbles 0.4.0",
+ "nybbles 0.4.1",
  "plain_hasher",
  "rayon",
  "reth-codecs",
@@ -12349,7 +12332,7 @@ dependencies = [
 [[package]]
 name = "reth-trie-db"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "reth-db-api",
@@ -12362,7 +12345,7 @@ dependencies = [
 [[package]]
 name = "reth-trie-parallel"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rlp",
@@ -12387,7 +12370,7 @@ dependencies = [
 [[package]]
 name = "reth-trie-sparse"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rlp",
@@ -12405,34 +12388,34 @@ dependencies = [
 [[package]]
 name = "reth-zstd-compressors"
 version = "1.5.0"
-source = "git+file:///Users/vedabharath/ef-work/reth?branch=fusaka-devnet-2#fce4cc1c51df9bda7c4abf1079c83fa0b4935786"
+source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#ad1c87fafced4f51cf24db6e56b0d7b653d991af"
 dependencies = [
  "zstd 0.13.3",
 ]
 
 [[package]]
 name = "revm"
-version = "24.0.1"
+version = "26.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "01d277408ff8d6f747665ad9e52150ab4caf8d5eaf0d787614cf84633c8337b4"
+checksum = "7b2a493c73054a0f6635bad6e840cdbef34838e6e6186974833c901dff7dd709"
 dependencies = [
- "revm-bytecode 4.1.0",
- "revm-context 5.0.1",
- "revm-context-interface 5.0.0",
- "revm-database 4.0.1",
- "revm-database-interface 4.0.1",
- "revm-handler 5.0.1",
- "revm-inspector 5.0.1",
- "revm-interpreter 20.0.0",
- "revm-precompile 21.0.0",
- "revm-primitives 19.2.0",
- "revm-state 4.0.1",
+ "revm-bytecode 5.0.0",
+ "revm-context 7.0.1",
+ "revm-context-interface 7.0.1",
+ "revm-database 6.0.0",
+ "revm-database-interface 6.0.0",
+ "revm-handler 7.0.1",
+ "revm-inspector 7.0.1",
+ "revm-interpreter 22.0.1",
+ "revm-precompile 23.0.0",
+ "revm-primitives",
+ "revm-state 6.0.0",
 ]
 
 [[package]]
 name = "revm"
 version = "27.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "revm-bytecode 6.0.1",
  "revm-context 8.0.2",
@@ -12443,162 +12426,163 @@ dependencies = [
  "revm-inspector 8.0.2",
  "revm-interpreter 23.0.1",
  "revm-precompile 24.0.0",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "revm-state 7.0.1",
 ]
 
 [[package]]
 name = "revm-bytecode"
-version = "4.1.0"
+version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "942fe4724cf552fd28db6b0a2ca5b79e884d40dd8288a4027ed1e9090e0c6f49"
+checksum = "b395ee2212d44fcde20e9425916fee685b5440c3f8e01fabae8b0f07a2fd7f08"
 dependencies = [
  "bitvec",
  "once_cell",
- "revm-primitives 19.2.0",
+ "revm-primitives",
 ]
 
 [[package]]
 name = "revm-bytecode"
 version = "6.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "bitvec",
  "once_cell",
  "phf 0.11.3",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "serde",
 ]
 
 [[package]]
 name = "revm-context"
-version = "5.0.1"
+version = "7.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b01aad49e1233f94cebda48a4e5cef022f7c7ed29b4edf0d202b081af23435ef"
+checksum = "7b97b69d05651509b809eb7215a6563dc64be76a941666c40aabe597ab544d38"
 dependencies = [
  "cfg-if",
  "derive-where",
- "revm-bytecode 4.1.0",
- "revm-context-interface 5.0.0",
- "revm-database-interface 4.0.1",
- "revm-primitives 19.2.0",
- "revm-state 4.0.1",
+ "revm-bytecode 5.0.0",
+ "revm-context-interface 7.0.1",
+ "revm-database-interface 6.0.0",
+ "revm-primitives",
+ "revm-state 6.0.0",
 ]
 
 [[package]]
 name = "revm-context"
 version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "cfg-if",
  "derive-where",
  "revm-bytecode 6.0.1",
  "revm-context-interface 8.0.1",
  "revm-database-interface 7.0.1",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "revm-state 7.0.1",
  "serde",
 ]
 
 [[package]]
 name = "revm-context-interface"
-version = "5.0.0"
+version = "7.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b844f48a411e62c7dde0f757bf5cce49c85b86d6fc1d3b2722c07f2bec4c3ce"
+checksum = "9f8f4f06a1c43bf8e6148509aa06a6c4d28421541944842b9b11ea1a6e53468f"
 dependencies = [
  "alloy-eip2930 0.2.1",
  "alloy-eip7702 0.6.1",
  "auto_impl",
  "either",
- "revm-database-interface 4.0.1",
- "revm-primitives 19.2.0",
- "revm-state 4.0.1",
+ "revm-database-interface 6.0.0",
+ "revm-primitives",
+ "revm-state 6.0.0",
 ]
 
 [[package]]
 name = "revm-context-interface"
 version = "8.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "alloy-eip2930 0.2.1",
  "alloy-eip7702 0.6.1",
  "auto_impl",
  "either",
  "revm-database-interface 7.0.1",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "revm-state 7.0.1",
  "serde",
 ]
 
 [[package]]
 name = "revm-database"
-version = "4.0.1"
+version = "6.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ad3fbe34f6bb00a9c3155723b3718b9cb9f17066ba38f9eb101b678cd3626775"
+checksum = "763eb5867a109a85f8e47f548b9d88c9143c0e443ec056742052f059fa32f4f1"
 dependencies = [
- "revm-bytecode 4.1.0",
- "revm-database-interface 4.0.1",
- "revm-primitives 19.2.0",
- "revm-state 4.0.1",
+ "revm-bytecode 5.0.0",
+ "revm-database-interface 6.0.0",
+ "revm-primitives",
+ "revm-state 6.0.0",
 ]
 
 [[package]]
 name = "revm-database"
 version = "7.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "alloy-eips 1.0.17",
  "revm-bytecode 6.0.1",
  "revm-database-interface 7.0.1",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "revm-state 7.0.1",
  "serde",
 ]
 
 [[package]]
 name = "revm-database-interface"
-version = "4.0.1"
+version = "6.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b8acd36784a6d95d5b9e1b7be3ce014f1e759abb59df1fa08396b30f71adc2a"
+checksum = "cf5ecd19a5b75b862841113b9abdd864ad4b22e633810e11e6d620e8207e361d"
 dependencies = [
  "auto_impl",
- "revm-primitives 19.2.0",
- "revm-state 4.0.1",
+ "revm-primitives",
+ "revm-state 6.0.0",
 ]
 
 [[package]]
 name = "revm-database-interface"
 version = "7.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "auto_impl",
  "either",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "revm-state 7.0.1",
  "serde",
 ]
 
 [[package]]
 name = "revm-handler"
-version = "5.0.1"
+version = "7.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "481e8c3290ff4fa1c066592fdfeb2b172edfd14d12e6cade6f6f5588cad9359a"
+checksum = "17b61f992beaa7a5fc3f5fcf79f1093624fa1557dc42d36baa42114c2d836b59"
 dependencies = [
  "auto_impl",
- "revm-bytecode 4.1.0",
- "revm-context 5.0.1",
- "revm-context-interface 5.0.0",
- "revm-database-interface 4.0.1",
- "revm-interpreter 20.0.0",
- "revm-precompile 21.0.0",
- "revm-primitives 19.2.0",
- "revm-state 4.0.1",
+ "derive-where",
+ "revm-bytecode 5.0.0",
+ "revm-context 7.0.1",
+ "revm-context-interface 7.0.1",
+ "revm-database-interface 6.0.0",
+ "revm-interpreter 22.0.1",
+ "revm-precompile 23.0.0",
+ "revm-primitives",
+ "revm-state 6.0.0",
 ]
 
 [[package]]
 name = "revm-handler"
 version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "auto_impl",
  "derive-where",
@@ -12608,30 +12592,31 @@ dependencies = [
  "revm-database-interface 7.0.1",
  "revm-interpreter 23.0.1",
  "revm-precompile 24.0.0",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "revm-state 7.0.1",
  "serde",
 ]
 
 [[package]]
 name = "revm-inspector"
-version = "5.0.1"
+version = "7.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fdc1167ef8937d8867888e63581d8ece729a72073d322119ef4627d813d99ecb"
+checksum = "d7e4400a109a2264f4bf290888ac6d02432b6d5d070492b9dcf134b0c7d51354"
 dependencies = [
  "auto_impl",
- "revm-context 5.0.1",
- "revm-database-interface 4.0.1",
- "revm-handler 5.0.1",
- "revm-interpreter 20.0.0",
- "revm-primitives 19.2.0",
- "revm-state 4.0.1",
+ "either",
+ "revm-context 7.0.1",
+ "revm-database-interface 6.0.0",
+ "revm-handler 7.0.1",
+ "revm-interpreter 22.0.1",
+ "revm-primitives",
+ "revm-state 6.0.0",
 ]
 
 [[package]]
 name = "revm-inspector"
 version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "auto_impl",
  "either",
@@ -12639,7 +12624,7 @@ dependencies = [
  "revm-database-interface 7.0.1",
  "revm-handler 8.0.2",
  "revm-interpreter 23.0.1",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "revm-state 7.0.1",
  "serde",
  "serde_json",
@@ -12647,16 +12632,16 @@ dependencies = [
 
 [[package]]
 name = "revm-inspectors"
-version = "0.23.0"
+version = "0.25.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b50ef375dbacefecfdacf8f02afc31df98acc5d8859a6f2b24d121ff2a740a8"
+checksum = "2aabdffc06bdb434d9163e2d63b6fae843559afd300ea3fbeb113b8a0d8ec728"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rpc-types-eth 1.0.17",
  "alloy-rpc-types-trace",
  "alloy-sol-types 1.2.1",
  "colorchoice",
- "revm 24.0.1",
+ "revm 26.0.1",
  "serde_json",
  "thiserror 2.0.12",
 ]
@@ -12683,31 +12668,31 @@ dependencies = [
 
 [[package]]
 name = "revm-interpreter"
-version = "20.0.0"
+version = "22.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b5ee65e57375c6639b0f50555e92a4f1b2434349dd32f52e2176f5c711171697"
+checksum = "a2481ef059708772cec0ce6bc4c84b796a40111612efb73b01adf1caed7ff9ac"
 dependencies = [
- "revm-bytecode 4.1.0",
- "revm-context-interface 5.0.0",
- "revm-primitives 19.2.0",
+ "revm-bytecode 5.0.0",
+ "revm-context-interface 7.0.1",
+ "revm-primitives",
 ]
 
 [[package]]
 name = "revm-interpreter"
 version = "23.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "revm-bytecode 6.0.1",
  "revm-context-interface 8.0.1",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "serde",
 ]
 
 [[package]]
 name = "revm-precompile"
-version = "21.0.0"
+version = "23.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f9311e735123d8d53a02af2aa81877bba185be7c141be7f931bb3d2f3af449c"
+checksum = "6d581e78c8f132832bd00854fb5bf37efd95a52582003da35c25cd2cbfc63849"
 dependencies = [
  "ark-bls12-381",
  "ark-bn254",
@@ -12718,7 +12703,8 @@ dependencies = [
  "cfg-if",
  "k256 0.13.4",
  "once_cell",
- "revm-primitives 19.2.0",
+ "p256",
+ "revm-primitives",
  "ripemd",
  "sha2 0.10.9",
 ]
@@ -12726,7 +12712,7 @@ dependencies = [
 [[package]]
 name = "revm-precompile"
 version = "24.0.0"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "ark-bls12-381",
  "ark-bn254",
@@ -12742,7 +12728,7 @@ dependencies = [
  "libsecp256k1",
  "once_cell",
  "p256",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "ripemd",
  "rug",
  "secp256k1 0.31.1",
@@ -12751,18 +12737,8 @@ dependencies = [
 
 [[package]]
 name = "revm-primitives"
-version = "19.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1c1588093530ec4442461163be49c433c07a3235d1ca6f6799fef338dacc50d3"
-dependencies = [
- "alloy-primitives 1.2.1",
- "num_enum",
-]
-
-[[package]]
-name = "revm-primitives"
 version = "20.0.0"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "alloy-primitives 1.2.1",
  "num_enum",
@@ -12771,23 +12747,23 @@ dependencies = [
 
 [[package]]
 name = "revm-state"
-version = "4.0.1"
+version = "6.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0040c61c30319254b34507383ba33d85f92949933adf6525a2cede05d165e1fa"
+checksum = "8d6274928dd78f907103740b10800d3c0db6caeca391e75a159c168a1e5c78f8"
 dependencies = [
  "bitflags 2.9.1",
- "revm-bytecode 4.1.0",
- "revm-primitives 19.2.0",
+ "revm-bytecode 5.0.0",
+ "revm-primitives",
 ]
 
 [[package]]
 name = "revm-state"
 version = "7.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3184d8b8e9acccc9c4caf6823b32313a415672a1"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#3fc19c6183fd48cbf930652daeb6e18f5c7d1e27"
 dependencies = [
  "bitflags 2.9.1",
  "revm-bytecode 6.0.1",
- "revm-primitives 20.0.0",
+ "revm-primitives",
  "serde",
 ]
 
@@ -13293,7 +13269,7 @@ dependencies = [
  "proc-macro-crate 3.3.0",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -13310,6 +13286,18 @@ name = "schemars"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4cd191f9397d57d581cddd31014772520aa448f65ef991055d7f61582c65165f"
+dependencies = [
+ "dyn-clone",
+ "ref-cast",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "schemars"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "82d20c4491bc164fa2f6c5d44565947a52ad80b9505d8e36f8d54c27c739fcd0"
 dependencies = [
  "dyn-clone",
  "ref-cast",
@@ -13566,7 +13554,7 @@ checksum = "5b0276cf7f2c73365f7157c8123c21cd9a50fbbd844757af28ca1f5925fc2a00"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -13575,7 +13563,7 @@ version = "1.0.140"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "20068b6e96dc6c9bd23e01df8827e6c7e1f2fddd43c21810382803c136b99373"
 dependencies = [
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "itoa",
  "memchr",
  "ryu",
@@ -13616,16 +13604,17 @@ dependencies = [
 
 [[package]]
 name = "serde_with"
-version = "3.13.0"
+version = "3.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bf65a400f8f66fb7b0552869ad70157166676db75ed8181f8104ea91cf9d0b42"
+checksum = "f2c45cd61fefa9db6f254525d46e392b852e0e61d9a1fd36e5bd183450a556d5"
 dependencies = [
  "base64 0.22.1",
  "chrono",
  "hex",
  "indexmap 1.9.3",
- "indexmap 2.9.0",
- "schemars",
+ "indexmap 2.10.0",
+ "schemars 0.9.0",
+ "schemars 1.0.4",
  "serde",
  "serde_derive",
  "serde_json",
@@ -13635,14 +13624,14 @@ dependencies = [
 
 [[package]]
 name = "serde_with_macros"
-version = "3.13.0"
+version = "3.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "81679d9ed988d5e9a5e6531dc3f2c28efbd639cbd1dfb628df08edea6004da77"
+checksum = "de90945e6565ce0d9a25098082ed4ee4002e047cb59892c318d66821e14bb30f"
 dependencies = [
  "darling 0.20.11",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -14090,7 +14079,7 @@ dependencies = [
  "futures-util",
  "hashlink 0.8.4",
  "hex",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "log",
  "memchr",
  "native-tls",
@@ -14413,7 +14402,7 @@ dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
  "rustversion",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -14426,7 +14415,7 @@ dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
  "rustversion",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -14439,7 +14428,7 @@ dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
  "rustversion",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -14492,9 +14481,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.103"
+version = "2.0.104"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4307e30089d6fd6aff212f2da3a1f9e32f3223b1f010fb09b7c95f90f3ca1e8"
+checksum = "17b6f705963418cdb9927482fa304bc562ece2fdd4f616084c50b7023b435a40"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
@@ -14510,7 +14499,7 @@ dependencies = [
  "paste",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -14522,7 +14511,7 @@ dependencies = [
  "paste",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -14560,7 +14549,7 @@ checksum = "728a70f3dbaf5bab7f0c4b1ac8d7ae5ea60a4b5549c8a5914361c99147a709d2"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -14762,7 +14751,7 @@ dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
  "reqwest 0.11.27",
- "syn 2.0.103",
+ "syn 2.0.104",
  "which",
 ]
 
@@ -14804,7 +14793,7 @@ checksum = "4fee6c4efc90059e10f81e6d42c60a18f76588c3d74cb83a0b242a2b6c7504c1"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -14815,7 +14804,7 @@ checksum = "7f7cf42b4507d8ea322120659672cf1b9dbb93f8f2d4ecfd6e51350ff5b17a1d"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -14957,17 +14946,19 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.45.1"
+version = "1.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75ef51a33ef1da925cea3e4eb122833cb377c61439ca401b770f54902b806779"
+checksum = "0cc3a2344dafbe23a245241fe8b09735b521110d30fcefbbd5feb1797ca35d17"
 dependencies = [
  "backtrace",
  "bytes",
+ "io-uring",
  "libc",
  "mio",
  "parking_lot",
  "pin-project-lite",
  "signal-hook-registry",
+ "slab",
  "socket2",
  "tokio-macros",
  "windows-sys 0.52.0",
@@ -14981,7 +14972,7 @@ checksum = "6e06d43f1345a3bcd39f6a56dbb7dcab2ba47e68e8ac134855e7e2bdbaf8cab8"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -15135,7 +15126,7 @@ version = "0.22.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "41fe8c660ae4257887cf66394862d21dbca4a6ddd26f04a3560410406a2f819a"
 dependencies = [
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "serde",
  "serde_spanned",
  "toml_datetime",
@@ -15173,7 +15164,7 @@ dependencies = [
  "futures-core",
  "futures-util",
  "hdrhistogram",
- "indexmap 2.9.0",
+ "indexmap 2.10.0",
  "pin-project-lite",
  "slab",
  "sync_wrapper 1.0.2",
@@ -15259,7 +15250,7 @@ checksum = "81383ab64e72a7a8b8e13130c49e3dab29def6d0c7d76a03087b3cf71c5c6903"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -15391,7 +15382,7 @@ dependencies = [
  "darling 0.20.11",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -15811,7 +15802,7 @@ checksum = "d674d135b4a8c1d7e813e2f8d1c9a58308aee4a680323066025e53132218bd91"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -15926,7 +15917,7 @@ dependencies = [
  "log",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "wasm-bindgen-shared",
 ]
 
@@ -15961,7 +15952,7 @@ checksum = "8ae87ea40c9f689fc23f209965b6fb8a99ad69aeeb0231408be24920604395de"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
@@ -16232,7 +16223,7 @@ checksum = "9107ddc059d5b6fbfbffdfa7a7fe3e22a226def0b2608f72e9d552763d3e1ad7"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -16243,7 +16234,7 @@ checksum = "2bbd5b46c938e506ecbce286b6628a02171d56153ba733b6c741fc627ec9579b"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -16254,7 +16245,7 @@ checksum = "a47fddd13af08290e67f4acabf4b459f647552718f683a7b415d290ac744a836"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -16265,7 +16256,7 @@ checksum = "29bee4b38ea3cde66011baa44dba677c432a78593e202392d1e9070cf2a7fca7"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -16276,7 +16267,7 @@ checksum = "053c4c462dc91d3b1504c6fe5a726dd15e216ba718e84a0e46a88fbe5ded3515"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -16287,7 +16278,7 @@ checksum = "bd9211b69f8dcdfa817bfd14bf1c97c9188afa36f4750130fcdf3f400eca9fa8"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -16308,9 +16299,9 @@ dependencies = [
 
 [[package]]
 name = "windows-registry"
-version = "0.5.2"
+version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3bab093bdd303a1240bb99b8aba8ea8a69ee19d34c9e2ef9594e708a4878820"
+checksum = "5b8a9ed28765efc97bbc954883f4e6796c33a06546ebafacbabee9696967499e"
 dependencies = [
  "windows-link",
  "windows-result 0.3.4",
@@ -16735,9 +16726,9 @@ dependencies = [
 
 [[package]]
 name = "xattr"
-version = "1.5.0"
+version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d65cbf2f12c15564212d48f4e3dfb87923d25d611f2aed18f4cb23f0413d89e"
+checksum = "af3a19837351dc82ba89f8a125e22a3c475f05aba604acc023d62b2739ae2909"
 dependencies = [
  "libc",
  "rustix 1.0.7",
@@ -16802,7 +16793,7 @@ checksum = "2380878cad4ac9aac1e2435f3eb4020e8374b5f13c296cb75b4620ff8e229154"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "synstructure 0.13.2",
 ]
 
@@ -16814,7 +16805,7 @@ checksum = "38da3c9736e16c5d3c8c597a9aaa5d1fa565d0532ae05e27c24aa62fb32c0ab6"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "synstructure 0.13.2",
 ]
 
@@ -16835,7 +16826,7 @@ checksum = "9ecf5b4cc5364572d7f4c329661bcc82724222973f2cab6f050a4e5c22f75181"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -16855,7 +16846,7 @@ checksum = "d71e5d6e06ab090c67b5e44993ec16b72dcbaabc526db883a360057678b48502"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
  "synstructure 0.13.2",
 ]
 
@@ -16876,7 +16867,7 @@ checksum = "ce36e65b0d2999d2aafac989fb249189a141aee1f53c612c1f37d72631959f69"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -16920,7 +16911,7 @@ checksum = "6eafa6dfb17584ea3e2bd6e76e0cc15ad7af12b09abdd1ca55961bed9b1063c6"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -16931,7 +16922,7 @@ checksum = "5b96237efa0c878c64bd89c436f661be4e46b2f3eff1ebb976f7ef2321d2f58f"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "syn 2.0.103",
+ "syn 2.0.104",
 ]
 
 [[package]]
@@ -17019,3 +17010,8 @@ dependencies = [
  "cc",
  "pkg-config",
 ]
+
+[[patch.unused]]
+name = "alloy-contract"
+version = "1.0.17"
+source = "git+https://github.com/bharath-123/alloy?branch=fusaka%2Fdevnet2#9327426d15283ee2dae1ddf36bd2f5e6691d2e28"

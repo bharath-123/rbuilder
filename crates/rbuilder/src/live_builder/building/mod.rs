@@ -108,7 +108,13 @@ where
             );
         // sink removal is automatic via OrderSink::is_alive false
         let _block_sub = self.orderpool_subscriber.add_sink(
-            block_ctx.evm_env.block_env.number,
+            block_ctx
+                .evm_env
+                .block_env
+                .number
+                .to_string()
+                .parse::<u64>()
+                .unwrap(),
             Box::new(mempool_txs_detector_sniffer),
         );
 
@@ -142,7 +148,7 @@ where
         for builder in self.builders.iter() {
             let builder_name = builder.name();
             debug!(
-                block = block_number,
+                block = block_number.to_string(),
                 payload_id = ctx.payload_id,
                 builder_name,
                 "Spawning builder job"
@@ -158,7 +164,7 @@ where
             tokio::task::spawn_blocking(move || {
                 builder.build_blocks(input);
                 debug!(
-                    block = block_number,
+                    block = block_number.to_string(),
                     payload_id = ctx.payload_id,
                     builder_name,
                     "Stopped builder job"

@@ -49,51 +49,51 @@ codegen-units = 1
 incremental = false
 
 [workspace.dependencies]
-reth = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-chain-state = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-cli-util = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-db = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-db-common = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-errors = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-payload-builder = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-node-api = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-node-ethereum = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-trie = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-trie-parallel = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-basic-payload-builder = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-node-core = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-primitives = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-ethereum-primitives = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-primitives-traits = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-provider = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2", features = [
+reth = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-chain-state = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-cli-util = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-db = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-db-common = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-errors = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-payload-builder = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-node-api = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-node-ethereum = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-trie = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-trie-parallel = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-basic-payload-builder = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-node-core = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-primitives = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-ethereum-primitives = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-primitives-traits = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-provider = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix", features = [
     "test-utils",
 ] }
-reth-chainspec = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-evm = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-evm-ethereum = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-execution-errors = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-exex = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-metrics = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-trie-db = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-payload-primitives = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-transaction-pool = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-execution-types = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-revm = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-payload-builder-primitives = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-payload-util = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-rpc-layer = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-testing-utils = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
+reth-chainspec = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-evm = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-evm-ethereum = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-execution-errors = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-exex = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-metrics = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-trie-db = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-payload-primitives = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-transaction-pool = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-execution-types = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-revm = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-payload-builder-primitives = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-payload-util = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-rpc-layer = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-testing-utils = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
 
 # reth optimism
-reth-optimism-primitives = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-optimism-consensus = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-optimism-cli = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-optimism-forks = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-optimism-evm = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-optimism-node = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-optimism-payload-builder = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-optimism-chainspec = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
-reth-optimism-txpool = { git = "file:///Users/vedabharath/ef-work/reth", branch = "fusaka-devnet-2" }
+reth-optimism-primitives = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-optimism-consensus = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-optimism-cli = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-optimism-forks = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-optimism-evm = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-optimism-node = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-optimism-payload-builder = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-optimism-chainspec = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
+reth-optimism-txpool = { git = "https://github.com/bharath-123/reth", branch = "bharath/fusaka-revm-fix" }
 
 
 # compatible with reth v1.4.8 dependencies
@@ -102,7 +102,7 @@ revm = { version = "27.0.1", features = [
     "secp256k1",
     "optional_balance_check",
 ], default-features = false }
-revm-inspectors = { version = "0.23.0", default-features = false }
+revm-inspectors = { version = "0.25.0", default-features = false }
 revm-state = { version = "7.0.0", default-features = false }
 
 ethereum_ssz_derive = "0.9.0"
@@ -112,24 +112,24 @@ alloy-primitives = { version = "1.2.0", default-features = false }
 alloy-rlp = "0.3.10"
 alloy-chains = "0.2.0"
 alloy-evm = { version = "0.13", default-features = false }
-alloy-provider = { version = "1.0.17", features = ["ipc", "pubsub"] }
-alloy-pubsub = { version = "1.0.17" }
-alloy-eips = { version = "1.0.17" }
-alloy-rpc-types = { version = "1.0.17" }
-alloy-json-rpc = { version = "1.0.17" }
-alloy-transport-http = { version = "1.0.17" }
-alloy-network = { version = "1.0.17" }
-alloy-network-primitives = { version = "1.0.17" }
-alloy-transport = { version = "1.0.17" }
-alloy-node-bindings = { version = "1.0.17" }
-alloy-consensus = { version = "1.0.17", features = ["kzg"] }
-alloy-serde = { version = "1.0.17" }
-alloy-rpc-types-beacon = { version = "1.0.17", features = ["ssz"] }
-alloy-rpc-types-engine = { version = "1.0.17", features = ["ssz"] }
-alloy-rpc-types-eth = { version = "1.0.17" }
-alloy-signer-local = { version = "1.0.17" }
-alloy-rpc-client = { version = "1.0.17" }
-alloy-genesis = { version = "1.0.17" }
+alloy-provider = { version = "1.0.16", features = ["ipc", "pubsub"] }
+alloy-pubsub = { version = "1.0.16" }
+alloy-eips = { version = "1.0.16" }
+alloy-rpc-types = { version = "1.0.16" }
+alloy-json-rpc = { version = "1.0.16"  }
+alloy-transport-http = { version = "1.0.16"  }
+alloy-network = { version = "1.0.16"  }
+alloy-network-primitives = { version = "1.0.16"  }
+alloy-transport = { version = "1.0.16" }
+alloy-node-bindings = { version = "1.0.16"  }
+alloy-consensus = { version = "1.0.16" , features = ["kzg"] }
+alloy-serde = { version = "1.0.16"  }
+alloy-rpc-types-beacon = { version = "1.0.16" , features = ["ssz"] }
+alloy-rpc-types-engine = { version = "1.0.16" , features = ["ssz"] }
+alloy-rpc-types-eth = { version = "1.0.16"  }
+alloy-signer-local = { version = "1.0.16"  }
+alloy-rpc-client = { version = "1.0.16" }
+alloy-genesis = { version = "1.0.16"  }
 alloy-trie = { version = "0.9.0", default-features = false }
 
 async-trait = { version = "0.1.83" }
@@ -171,33 +171,33 @@ metrics_macros = { path = "crates/rbuilder/src/telemetry/metrics_macros"}
 
 
 [patch.crates-io]
-#alloy-consensus = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-contract = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-eips = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-genesis = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-json-rpc = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-network = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-network-primitives = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-provider = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-pubsub = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-client = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-types = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-types-admin = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-types-anvil = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-types-beacon = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-types-debug = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-types-engine = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-types-eth = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-types-mev = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-types-trace = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-rpc-types-txpool = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-serde = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-signer = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-signer-local = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-transport = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-transport-http = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-transport-ipc = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
-#alloy-transport-ws = { git = "https://github.com/alloy-rs/alloy", branch = "fusaka/devnet2" }
+alloy-consensus = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-contract = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-eips = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-genesis = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-json-rpc = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-network = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-network-primitives = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-provider = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-pubsub = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-client = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-types = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-types-admin = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-types-anvil = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-types-beacon = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-types-debug = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-types-engine = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-types-eth = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-types-mev = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-types-trace = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-rpc-types-txpool = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-serde = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-signer = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-signer-local = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-transport = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-transport-http = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-transport-ipc = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
+alloy-transport-ws = { git = "https://github.com/bharath-123/alloy", branch = "fusaka/devnet2" }
 
 alloy-evm = { git = "https://github.com/alloy-rs/evm", branch = "fusaka/devnet2"}
 

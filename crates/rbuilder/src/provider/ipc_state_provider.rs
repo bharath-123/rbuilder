@@ -18,7 +18,7 @@ use reipc::rpc_provider::RpcProvider;
 use reth_errors::{ProviderError, ProviderResult};
 use reth_primitives::{Account, Bytecode};
 use reth_provider::{
-    errors::any::AnyError, AccountReader, BlockHashReader, HashedPostStateProvider,
+    errors::any::AnyError, AccountReader, BlockHashReader, BytecodeReader, HashedPostStateProvider,
     StateProofProvider, StateProvider, StateProviderBox, StateRootProvider, StorageRootProvider,
 };
 use reth_trie::{
@@ -242,26 +242,7 @@ impl IpcStateProvider {
     }
 }
 
-impl StateProvider for IpcStateProvider {
-    /// Get storage of given account
-    fn storage(
-        &self,
-        account: Address,
-        storage_key: StorageKey,
-    ) -> ProviderResult<Option<StorageValue>> {
-        if let Some(storage) = self.storage_cache.get(&(account, storage_key)) {
-            return Ok(*storage);
-        }
-
-        let key: U256 = storage_key.into();
-        let storage = rpc_call(&self.ipc_provider, "eth_getStorageAt", (account, key))?;
-        self.storage_cache.insert((account, storage_key), storage);
-
-        Ok(storage)
-    }
-
-    /// Get account code by its hash
-    /// IMPORTANT: Assumes remote provider (node) has RPC call:"rbuilder_getCodeByHash"
+impl BytecodeReader for IpcStateProvider {
     fn bytecode_by_hash(&self, code_hash: &B256) -> ProviderResult<Option<Bytecode>> {
         let empty_hash = code_hash.is_zero() || *code_hash == KECCAK_EMPTY;
         if empty_hash {
@@ -285,6 +266,49 @@ impl StateProvider for IpcStateProvider {
 
         Ok(bytecode)
     }
+}
+
+impl StateProvider for IpcStateProvider {
+    /// Get storage of given account
+    fn storage(
+        &self,
+        account: Address,
+        storage_key: StorageKey,
+    ) -> ProviderResult<Option<StorageValue>> {
+        if let Some(storage) = self.storage_cache.get(&(account, storage_key)) {
+            return Ok(*storage);
+        }
+
+        let key: U256 = storage_key.into();
+        let storage = rpc_call(&self.ipc_provider, "eth_getStorageAt", (account, key))?;
+        self.storage_cache.insert((account, storage_key), storage);
+
+        Ok(storage)
+    }
+
+    // fn bytecode_by_hash(&self, code_hash: &B256) -> ProviderResult<Option<Bytecode>> {
+    //     let empty_hash = code_hash.is_zero() || *code_hash == KECCAK_EMPTY;
+    //     if empty_hash {
+    //         return Ok(None);
+    //     }
+    //
+    //     if let Some(bytecode) = self.code_cache.get(code_hash) {
+    //         return Ok(Some(bytecode.clone()));
+    //     }
+    //
+    //     let bytecode = rpc_call::<(&B256,), Option<Bytes>>(
+    //         &self.ipc_provider,
+    //         "rbuilder_getCodeByHash",
+    //         (code_hash,),
+    //     )?
+    //     .map(|b| {
+    //         let bytecode = Bytecode::new_raw(b);
+    //         self.code_cache.insert(*code_hash, bytecode.clone());
+    //         bytecode
+    //     });
+    //
+    //     Ok(bytecode)
+    // }
 }
 
 impl BlockHashReader for IpcStateProvider {

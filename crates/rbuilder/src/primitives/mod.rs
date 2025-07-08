@@ -9,6 +9,7 @@ mod test_data_generator;
 
 use crate::building::evm_inspector::UsedStateTrace;
 use alloy_consensus::Transaction as _;
+use alloy_eips::eip7594::{BlobTransactionSidecarEip7594, BlobTransactionSidecarVariant};
 use alloy_eips::{
     eip2718::{Decodable2718, Eip2718Error, Encodable2718},
     eip4844::{Blob, BlobTransactionSidecar, Bytes48},
@@ -21,6 +22,7 @@ use reth::transaction_pool::{
     BlobStore, BlobStoreError, EthPooledTransaction, Pool, TransactionOrdering, TransactionPool,
     TransactionValidator,
 };
+use reth_ethereum_primitives::PooledTransactionVariant;
 use reth_node_core::primitives::SignedTransaction;
 use reth_primitives::{
     kzg::{BYTES_PER_BLOB, BYTES_PER_COMMITMENT, BYTES_PER_PROOF},
@@ -30,8 +32,6 @@ use reth_primitives_traits::SignerRecoverable;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{cmp::Ordering, collections::HashMap, fmt::Display, hash::Hash, str::FromStr, sync::Arc};
-use alloy_eips::eip7594::{BlobTransactionSidecarEip7594, BlobTransactionSidecarVariant};
-use reth_ethereum_primitives::PooledTransactionVariant;
 pub use test_data_generator::TestDataGenerator;
 use thiserror::Error;
 use uuid::Uuid;
@@ -713,19 +713,32 @@ impl TransactionSignedEcRecoveredWithBlobs {
         } else if blob_sidecar.is_some() && tx.inner().blob_versioned_hashes().is_none() {
             Err(TxWithBlobsCreateError::BlobsMissingEip4844)
         // Groovy!
+        // No blob txs at all
+        } else if blob_sidecar.is_none() && tx.inner().blob_versioned_hashes().is_none() {
+            Ok(Self {
+                tx,
+                blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip4844(
+                    BlobTransactionSidecar::default(),
+                )),
+                metadata: metadata.unwrap_or_default(),
+            })
         } else {
-            let unwrapped_blob_sidecar = blob_sidecar.unwrap();
-            if unwrapped_blob_sidecar.is_eip4844() {
+            let b_sidecar = blob_sidecar.unwrap();
+            if b_sidecar.is_eip4844() {
                 Ok(Self {
                     tx,
-                    blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::from(unwrapped_blob_sidecar.into_eip4844().unwrap_or_default())),
-                    metadata: metadata.unwrap_or_default()
+                    blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::from(
+                        b_sidecar.into_eip4844().unwrap_or_default(),
+                    )),
+                    metadata: metadata.unwrap_or_default(),
                 })
             } else {
                 Ok(Self {
                     tx,
-                    blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::from(unwrapped_blob_sidecar.into_eip7594().unwrap_or_default())),
-                    metadata: metadata.unwrap_or_default()
+                    blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::from(
+                        b_sidecar.into_eip7594().unwrap_or_default(),
+                    )),
+                    metadata: metadata.unwrap_or_default(),
                 })
             }
         }
@@ -754,7 +767,8 @@ impl TransactionSignedEcRecoveredWithBlobs {
         S: BlobStore,
     {
         let blob_sidecar = pool
-            .get_blob(*tx.inner().hash())?.and_then(|arc| Arc::try_unwrap(arc).ok());
+            .get_blob(*tx.inner().hash())?
+            .and_then(|arc| Arc::try_unwrap(arc).ok());
         Self::new(tx, blob_sidecar, None)
     }
 
@@ -1039,10 +1053,12 @@ impl Order {
     pub fn has_blobs(&self) -> bool {
         self.list_txs()
             .iter()
-            .any(|(tx, _)| {
-                match tx.blobs_sidecar.as_ref() {
-                    BlobTransactionSidecarVariant::Eip4844(eip4844_sidecar) => !eip4844_sidecar.blobs.is_empty(),
-                    BlobTransactionSidecarVariant::Eip7594(eip7594_sidecar) => !eip7594_sidecar.blobs.is_empty()
+            .any(|(tx, _)| match tx.blobs_sidecar.as_ref() {
+                BlobTransactionSidecarVariant::Eip4844(eip4844_sidecar) => {
+                    !eip4844_sidecar.blobs.is_empty()
+                }
+                BlobTransactionSidecarVariant::Eip7594(eip7594_sidecar) => {
+                    !eip7594_sidecar.blobs.is_empty()
                 }
             })
     }

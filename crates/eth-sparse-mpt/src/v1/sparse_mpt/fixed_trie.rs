@@ -286,8 +286,12 @@ impl FixedTrie {
                             parent_child_idx = None;
 
                             let len = node.key.len();
-                            current_path.extend_from_slice_unchecked(&path_left[..len]);
-                            path_left.as_mut_vec_unchecked().drain(..len);
+                            current_path.extend_from_slice_unchecked(&path_left.to_vec()[..len]);
+                            // path_left.as_mut_vec_unchecked().drain(..len);
+                            let mut path_left_vec = path_left.to_vec();
+                            path_left_vec.drain(..len);
+                            path_left.clear();
+                            path_left.extend_from_slice_unchecked(path_left_vec.as_slice());
 
                             if path_left.is_empty() {
                                 break;
@@ -456,10 +460,14 @@ impl FixedTrie {
                                         // we stepped into child above so the path is the path of current child and orphan child differs
                                         // only in last nibble
                                         let mut path = c.current_path.clone();
-                                        path.as_mut_vec_unchecked()
-                                            .last_mut()
-                                            .map(|n| *n = orphan_nibble)
-                                            .unwrap();
+                                        // path.as_mut_vec_unchecked()
+                                        //     .last_mut()
+                                        //     .map(|n| *n = orphan_nibble)
+                                        //     .unwrap();
+                                        let mut path_vec = path.to_vec();
+                                        path_vec.last_mut().map(|n| *n = orphan_nibble).unwrap();
+                                        path.clear();
+                                        path.extend_from_slice_unchecked(path_vec.as_slice());
                                         missing_nodes.push(path);
                                     }
                                 }

@@ -1,10 +1,10 @@
 use alloy_primitives::U256;
+use alloy_rpc_types_beacon::relay::SignedBidSubmissionV5;
 use alloy_rpc_types_beacon::{
     relay::{BidTrace, SignedBidSubmissionV2, SignedBidSubmissionV3, SignedBidSubmissionV4},
     requests::ExecutionRequestsV4,
     BlsSignature,
 };
-use alloy_rpc_types_beacon::relay::SignedBidSubmissionV5;
 use alloy_rpc_types_engine::{BlobsBundleV1, BlobsBundleV2, ExecutionPayloadV3};
 use serde::{Deserialize, Serialize};
 use ssz::{Decode, DecodeError, Encode};
@@ -50,9 +50,7 @@ impl SubmitBlockRequest {
 
     pub fn from_ssz_bytes(bytes: &[u8]) -> Result<Self, DecodeError> {
         if let Ok(result) = SignedBidSubmissionV5::from_ssz_bytes(bytes) {
-            return Ok(SubmitBlockRequest::Fulu(FuluSubmitBlockRequest(
-                result,
-            )));
+            return Ok(SubmitBlockRequest::Fulu(FuluSubmitBlockRequest(result)));
         }
         if let Ok(result) = SignedBidSubmissionV4::from_ssz_bytes(bytes) {
             return Ok(SubmitBlockRequest::Electra(ElectraSubmitBlockRequest(
@@ -136,7 +134,7 @@ impl serde::Serialize for SubmitBlockRequestNoBlobs<'_> {
                     execution_requests: &v4.0.execution_requests,
                 }
                 .serialize(serializer)
-            },
+            }
             SubmitBlockRequest::Fulu(v5) => {
                 #[derive(serde::Serialize)]
                 struct SignedBidSubmissionV5Ref<'a> {
@@ -155,7 +153,7 @@ impl serde::Serialize for SubmitBlockRequestNoBlobs<'_> {
                     signature: &v5.0.signature,
                     execution_requests: &v5.0.execution_requests,
                 }
-                    .serialize(serializer)
+                .serialize(serializer)
             }
         }
     }

@@ -187,7 +187,7 @@ impl Trie {
         nibbles_key: &Nibbles,
         insert_value: InsertValue<'_>,
     ) -> Result<Option<Range<usize>>, NodeNotFound> {
-        let ins_key = nibbles_key.as_slice();
+        let ins_key = nibbles_key;
 
         let mut current_node = 0;
         let mut path_walked = 0;
@@ -204,7 +204,7 @@ impl Trie {
                 DiffTrieNode::Branch { children } => {
                     let children = *children;
 
-                    let n = ins_key[path_walked] as usize;
+                    let n = ins_key.to_vec()[path_walked] as usize;
                     path_walked += 1;
                     if let Some(child_ptr) = self.branch_node_children[children][n] {
                         current_node = child_ptr
@@ -212,7 +212,7 @@ impl Trie {
                             .ok_or_else(|| NodeNotFound(nibbles_key.clone()))?;
                         continue;
                     } else {
-                        let new_leaf_key = self.insert_key(&ins_key[path_walked..]);
+                        let new_leaf_key = self.insert_key(&ins_key.to_vec()[path_walked..]);
                         let leaf_value = self.insert_value(insert_value);
                         let leaf_ptr = self.push_node(DiffTrieNode::Leaf {
                             key: new_leaf_key,
@@ -225,7 +225,7 @@ impl Trie {
                     let key = key.clone();
                     let next_node = *next_node;
 
-                    if ins_key[path_walked..].starts_with(&self.keys[key.clone()]) {
+                    if ins_key.to_vec()[path_walked..].starts_with(&self.keys[key.clone()]) {
                         path_walked += key.len();
                         current_node = next_node
                             .local_ptr()
@@ -233,8 +233,8 @@ impl Trie {
                         continue;
                     }
 
-                    let (prefix, n1, suff1, n2, suff2) =
-                        self.extract_prefix_and_suffix(&ins_key[path_walked..], key);
+                    let t = &ins_key.to_vec()[path_walked..];
+                    let (prefix, n1, suff1, n2, suff2) = self.extract_prefix_and_suffix(t, key);
 
                     let has_extension_node = !prefix.is_empty();
                     if has_extension_node {
@@ -280,7 +280,7 @@ impl Trie {
                     let key = key.clone();
                     let value = value.clone();
 
-                    if self.keys[key.clone()] == ins_key[path_walked..] {
+                    if self.keys[key.clone()] == ins_key.to_vec()[path_walked..] {
                         // update leaf in place
                         old_value = Some(value.clone());
                         let new_value = self.insert_value(insert_value);
@@ -291,8 +291,9 @@ impl Trie {
                         break;
                     }
 
-                    let (prefix, n1, suff1, n2, suff2) =
-                        self.extract_prefix_and_suffix(&ins_key[path_walked..], key);
+                    let t = &ins_key.to_vec()[path_walked..];
+
+                    let (prefix, n1, suff1, n2, suff2) = self.extract_prefix_and_suffix(t, key);
 
                     let has_extension_node = !prefix.is_empty();
                     if has_extension_node {
@@ -332,7 +333,7 @@ impl Trie {
                     self.branch_node_children[branch_children][n2 as usize] = Some(second_leaf_ptr);
                 }
                 DiffTrieNode::Null => {
-                    let new_leaf_key = self.insert_key(&ins_key[path_walked..]);
+                    let new_leaf_key = self.insert_key(&ins_key.to_vec()[path_walked..]);
                     let new_leaf_value = self.insert_value(insert_value);
                     self.nodes[current_node] = DiffTrieNode::Leaf {
                         key: new_leaf_key,
@@ -365,7 +366,7 @@ impl Trie {
         &mut self,
         nibbles_key: &Nibbles,
     ) -> Result<Range<usize>, DeletionError> {
-        let del_key = nibbles_key.as_slice();
+        let del_key = nibbles_key;
 
         let mut current_node = 0;
         let mut path_walked = 0;
@@ -389,7 +390,7 @@ impl Trie {
 
                     let children = *children;
 
-                    let n = del_key[path_walked];
+                    let n = del_key.to_vec()[path_walked];
                     self.walk_path.push((current_node, n));
                     path_walked += 1;
 
@@ -411,9 +412,10 @@ impl Trie {
                                 .unwrap();
                             let orphan_ptr = orphan_ptr.unwrap();
                             if orphan_ptr.is_remote() {
-                                let mut orphan_path = Nibbles::with_capacity(path_walked);
-                                orphan_path
-                                    .extend_from_slice_unchecked(&del_key[..(path_walked - 1)]);
+                                let mut orphan_path = Nibbles::new();
+                                orphan_path.extend_from_slice_unchecked(
+                                    &del_key.to_vec()[..(path_walked - 1)],
+                                );
                                 orphan_path.push_unchecked(orphan_nibble as u8);
                                 return Err(NodeNotFound(orphan_path).into());
                             }
@@ -427,7 +429,7 @@ impl Trie {
                     let key = key.clone();
                     let next_node = *next_node;
 
-                    if del_key[path_walked..].starts_with(&self.keys[key.clone()]) {
+                    if del_key.to_vec()[path_walked..].starts_with(&self.keys[key.clone()]) {
                         self.walk_path.push((current_node, 0));
                         path_walked += key.len();
                         current_node = next_node
@@ -439,7 +441,7 @@ impl Trie {
                     return Err(DeletionError::KeyNotFound);
                 }
                 DiffTrieNode::Leaf { key, value } => {
-                    if self.keys[key.clone()] == del_key[path_walked..] {
+                    if self.keys[key.clone()] == del_key.to_vec()[path_walked..] {
                         old_value = value.clone();
                         self.walk_path.push((current_node, 0));
                         break;
@@ -941,13 +943,13 @@ impl Trie {
                 }
                 ProofNode::Extension { key, child } => {
                     let key = &proof_store.keys_guard()[*key];
-                    let key = self.insert_key(key);
+                    let key = self.insert_key(key.to_vec().as_slice());
                     let next_node = NodePtr::Remote(*child);
                     self.push_node(DiffTrieNode::Extension { key, next_node });
                 }
                 ProofNode::Leaf { key, value } => {
                     let key = &proof_store.keys_guard()[*key];
-                    let key = self.insert_key(key);
+                    let key = self.insert_key(key.to_vec().as_slice());
                     let value = &proof_store.values_guard()[*value];
                     let value = self.copy_value(value);
                     self.push_node(DiffTrieNode::Leaf { key, value });
@@ -969,14 +971,14 @@ impl Trie {
             let node = self
                 .nodes
                 .get(current_node)
-                .ok_or_else(|| NodeNotFound::new(&path[..path_walked]))?;
+                .ok_or_else(|| NodeNotFound::new(&path.to_vec()[..path_walked]))?;
             match node {
                 DiffTrieNode::Branch { children } => {
                     let children = *children;
 
-                    let n = path[path_walked] as usize;
+                    let n = path.to_vec()[path_walked] as usize;
                     path_walked += 1;
-                    if path[path_walked..].is_empty() {
+                    if path.to_vec()[path_walked..].is_empty() {
                         parent_ptr = self.branch_node_children[children][n];
                         parent_nibble = n;
                         break;
@@ -984,26 +986,28 @@ impl Trie {
                     if let Some(child_ptr) = self.branch_node_children[children][n] {
                         current_node = child_ptr
                             .local_ptr()
-                            .ok_or_else(|| NodeNotFound::new(&path[..path_walked]))?;
+                            .ok_or_else(|| NodeNotFound::new(&path.to_vec()[..path_walked]))?;
                         continue;
                     } else {
-                        return Err(NodeNotFound::new(&path[..path_walked]));
+                        return Err(NodeNotFound::new(&path.to_vec()[..path_walked]));
                     }
                 }
                 DiffTrieNode::Extension { key, next_node } => {
                     let key = key.clone();
                     let next_node = *next_node;
 
-                    if path[path_walked..].starts_with(&self.keys[key.clone()]) {
+                    if path.to_vec()[path_walked..].starts_with(&self.keys[key.clone()]) {
                         path_walked += key.len();
 
-                        if path[path_walked..].is_empty() {
+                        if path.to_vec()[path_walked..].is_empty() {
                             parent_ptr = Some(next_node);
                             parent_nibble = 0;
                             break;
                         }
                         current_node = next_node.local_ptr().ok_or_else(|| {
-                            NodeNotFound(Nibbles::from_nibbles_unchecked(&path[..path_walked]))
+                            NodeNotFound(Nibbles::from_nibbles_unchecked(
+                                &path.to_vec()[..path_walked],
+                            ))
                         })?;
                         continue;
                     }
@@ -1027,14 +1031,14 @@ impl Trie {
         let new_node = match node {
             ProofNode::Leaf { key, value } => {
                 let key = &proof_store.keys_guard()[*key];
-                let key = self.insert_key(key);
+                let key = self.insert_key(key.to_vec().as_slice());
                 let value = &proof_store.values_guard()[*value];
                 let value = self.copy_value(value);
                 self.push_node(DiffTrieNode::Leaf { key, value })
             }
             ProofNode::Extension { key, child } => {
                 let key = &proof_store.keys_guard()[*key];
-                let key = self.insert_key(key);
+                let key = self.insert_key(key.to_vec().as_slice());
                 let next_node = NodePtr::Remote(*child);
                 self.push_node(DiffTrieNode::Extension { key, next_node })
             }

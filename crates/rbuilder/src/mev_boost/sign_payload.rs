@@ -1,18 +1,22 @@
 use super::submission::{
     CapellaSubmitBlockRequest, DenebSubmitBlockRequest, ElectraSubmitBlockRequest,
-    SubmitBlockRequest,
+    FuluSubmitBlockRequest, SubmitBlockRequest,
 };
 use crate::utils::u256decimal_serde_helper;
+use alloy_eips::eip7594::{BlobTransactionSidecarEip7594, BlobTransactionSidecarVariant};
 use alloy_eips::eip7685::Requests;
 use alloy_eips::{eip2718::Encodable2718, eip4844::BlobTransactionSidecar};
 use alloy_primitives::{Address, BlockHash, Bytes, FixedBytes, B256, U256};
+use alloy_rpc_types_beacon::relay::SignedBidSubmissionV5;
 use alloy_rpc_types_beacon::requests::ExecutionRequestsV4;
 use alloy_rpc_types_beacon::{
     events::PayloadAttributesData,
     relay::{BidTrace, SignedBidSubmissionV2, SignedBidSubmissionV3, SignedBidSubmissionV4},
     BlsPublicKey,
 };
-use alloy_rpc_types_engine::{BlobsBundleV1, BlobsBundleV2, ExecutionPayloadV1, ExecutionPayloadV2, ExecutionPayloadV3};
+use alloy_rpc_types_engine::{
+    BlobsBundleV1, BlobsBundleV2, ExecutionPayloadV1, ExecutionPayloadV2, ExecutionPayloadV3,
+};
 use alloy_rpc_types_eth::Withdrawal;
 use ethereum_consensus::{
     crypto::SecretKey,
@@ -25,7 +29,6 @@ use reth_chainspec::{ChainSpec, EthereumHardforks};
 use reth_primitives::SealedBlock;
 use serde_with::{serde_as, DisplayFromStr};
 use std::sync::Arc;
-use alloy_eips::eip7594::{BlobTransactionSidecarEip7594, BlobTransactionSidecarVariant};
 
 /// Object to sign blocks to be sent to relays.
 #[derive(Debug, Clone)]
@@ -195,10 +198,12 @@ pub fn sign_block_for_relay(
                 .expect("deneb block does not have excess blob gas"),
         };
 
-        let blobs_bundle = marshal_txs_blobs_sidecars(blobs_bundle);
         let execution_requests =
             ExecutionRequestsV4::try_from(Requests::new(execution_requests.to_vec()))?;
+
         if chain_spec.is_prague_active_at_timestamp(sealed_block.timestamp) {
+            let blobs_bundle = marshal_txs_blobs_sidecars(blobs_bundle);
+
             SubmitBlockRequest::Electra(ElectraSubmitBlockRequest(SignedBidSubmissionV4 {
                 message,
                 execution_payload,
@@ -206,7 +211,19 @@ pub fn sign_block_for_relay(
                 signature,
                 execution_requests,
             }))
+        } else if chain_spec.is_osaka_active_at_timestamp(sealed_block.timestamp) {
+            let blobs_bundle_v2 = marshall_txs_blobs_sidecars_v2(blobs_bundle);
+
+            SubmitBlockRequest::Fulu(FuluSubmitBlockRequest(SignedBidSubmissionV5 {
+                message,
+                execution_payload,
+                blobs_bundle: blobs_bundle_v2,
+                signature,
+                execution_requests,
+            }))
         } else {
+            let blobs_bundle = marshal_txs_blobs_sidecars(blobs_bundle);
+
             SubmitBlockRequest::Deneb(DenebSubmitBlockRequest(SignedBidSubmissionV3 {
                 message,
                 execution_payload,
@@ -242,10 +259,20 @@ fn flatten_marshal_eip7549<Source>(
     flatten_data.collect::<Vec<Source>>()
 }
 
-fn marshal_txs_blobs_sidecars(txs_blobs_sidecars: &[Arc<BlobTransactionSidecar>]) -> BlobsBundleV1 {
-    let rpc_commitments = flatten_marshal(txs_blobs_sidecars, |t| t.commitments.clone());
-    let rpc_proofs = flatten_marshal(txs_blobs_sidecars, |t| t.proofs.clone());
-    let rpc_blobs = flatten_marshal(txs_blobs_sidecars, |t| t.blobs.clone());
+fn marshal_txs_blobs_sidecars(
+    txs_blobs_sidecars: &[Arc<BlobTransactionSidecarVariant>],
+) -> BlobsBundleV1 {
+    let mut eip4844_sidecars = Vec::new();
+    for blob in txs_blobs_sidecars {
+        if let Some(bb) = blob.as_ref().as_eip4844() {
+            // TODO - bharath: cloning here is a terrible idea
+            eip4844_sidecars.push(Arc::new(bb.clone()))
+        }
+    }
+
+    let rpc_commitments = flatten_marshal(eip4844_sidecars.as_slice(), |t| t.commitments.clone());
+    let rpc_proofs = flatten_marshal(eip4844_sidecars.as_slice(), |t| t.proofs.clone());
+    let rpc_blobs = flatten_marshal(eip4844_sidecars.as_slice(), |t| t.blobs.clone());
 
     BlobsBundleV1 {
         commitments: rpc_commitments,
@@ -254,10 +281,22 @@ fn marshal_txs_blobs_sidecars(txs_blobs_sidecars: &[Arc<BlobTransactionSidecar>]
     }
 }
 
-fn marshall_txs_blobs_sidecars_v2(txs_blobs_sidecars: &[Arc<BlobTransactionSidecarEip7594>]) -> BlobsBundleV2 {
-    let rpc_commitments = flatten_marshal_eip7549(txs_blobs_sidecars, |t| t.commitments.clone());
-    let rpc_proofs = flatten_marshal_eip7549(txs_blobs_sidecars, |t| t.proofs.clone());
-    let rpc_blobs = flatten_marshal_eip7549(txs_blobs_sidecars, |t| t.blobs.clone());
+fn marshall_txs_blobs_sidecars_v2(
+    txs_blobs_sidecars: &[Arc<BlobTransactionSidecarVariant>],
+) -> BlobsBundleV2 {
+    let mut eip7549_sidecars = Vec::new();
+    for blob in txs_blobs_sidecars {
+        if let Some(bb) = blob.as_ref().as_eip7594() {
+            // TODO - bharath: cloning here is a terrible idea
+            eip7549_sidecars.push(Arc::new(bb.clone()))
+        }
+    }
+
+    let rpc_commitments =
+        flatten_marshal_eip7549(eip7549_sidecars.as_slice(), |t| t.commitments.clone());
+    let rpc_proofs =
+        flatten_marshal_eip7549(eip7549_sidecars.as_slice(), |t| t.cell_proofs.clone());
+    let rpc_blobs = flatten_marshal_eip7549(eip7549_sidecars.as_slice(), |t| t.blobs.clone());
 
     BlobsBundleV2 {
         commitments: rpc_commitments,

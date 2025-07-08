@@ -16,6 +16,7 @@ use crate::{
     },
 };
 use alloy_consensus::{Header, EMPTY_OMMER_ROOT_HASH};
+use alloy_eips::eip7594::BlobTransactionSidecarVariant;
 use alloy_eips::{
     eip1559::{calculate_block_gas_limit, ETHEREUM_BLOCK_GAS_LIMIT_30M},
     eip4844::BlobTransactionSidecar,
@@ -58,7 +59,6 @@ use std::{
     sync::Arc,
     time::{Duration, Instant},
 };
-use alloy_eips::eip7594::BlobTransactionSidecarVariant;
 use thiserror::Error;
 use time::OffsetDateTime;
 use tracing::{error, trace};
@@ -237,15 +237,16 @@ impl BlockBuildingContext {
             if chain_spec.is_cancun_active_at_timestamp(onchain_block.header.timestamp) {
                 Some(BlobExcessGasAndPrice::new(
                     onchain_block.header.excess_blob_gas.unwrap_or_default(),
-                    chain_spec.is_prague_active_at_timestamp(onchain_block.header.timestamp),
+                    // TODO - bharath
+                    100,
                 ))
             } else {
                 None
             };
         let block_env = BlockEnv {
-            number: block_number,
+            number: U256::from(block_number),
             beneficiary,
-            timestamp: onchain_block.header.timestamp,
+            timestamp: U256::from(onchain_block.header.timestamp),
             difficulty: onchain_block.header.difficulty,
             prevrandao: Some(onchain_block.header.mix_hash),
             basefee: onchain_block
@@ -338,7 +339,12 @@ impl BlockBuildingContext {
     }
 
     pub fn block(&self) -> u64 {
-        self.evm_env.block_env.number
+        self.evm_env
+            .block_env
+            .number
+            .to_string()
+            .parse::<u64>()
+            .unwrap()
     }
 
     pub fn coinbase_is_suggested_fee_recipient(&self) -> bool {
@@ -773,8 +779,12 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
         let state_root = {
             let (bundle, _) = state.into_parts();
             // we use execution outcome here only for interface compatibility, its just a wrapper around bundle
-            let execution_outcome =
-                ExecutionOutcome::new(bundle, Vec::new(), block_number, Vec::new());
+            let execution_outcome = ExecutionOutcome::new(
+                bundle,
+                Vec::new(),
+                block_number.to_string().parse::<u64>().unwrap(),
+                Vec::new(),
+            ); // TODO - we need to convert from U256 to u64 which is not a good idea to do, we need to use U256 everywhere
             ctx.root_hasher.state_root(&execution_outcome, local_ctx)?
         };
         let root_hash_time = step_start.elapsed();
@@ -822,7 +832,10 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
                 }
             }
             (ctx.excess_blob_gas, Some(self.blob_gas_used))
-        } else if ctx.chain_spec.is_osaka_active_at_timestamp(ctx.attributes.timestamp) {
+        } else if ctx
+            .chain_spec
+            .is_osaka_active_at_timestamp(ctx.attributes.timestamp)
+        {
             for tx_with_blob in self.executed_tx_infos.iter().map(|info| &info.tx) {
                 let eip7594_sidecar = tx_with_blob.blobs_sidecar.as_eip7594();
 
@@ -853,7 +866,7 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
             mix_hash: ctx.attributes.prev_randao,
             nonce: BEACON_NONCE.into(),
             base_fee_per_gas: Some(ctx.evm_env.block_env.basefee),
-            number: block_number,
+            number: block_number.to_string().parse::<u64>().unwrap(),
             gas_limit: ctx.evm_env.block_env.gas_limit,
             difficulty: U256::ZERO,
             gas_used: self.gas_used,
