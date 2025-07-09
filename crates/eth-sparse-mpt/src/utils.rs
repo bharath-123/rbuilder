@@ -41,7 +41,7 @@ pub fn concat_path(p1: &Nibbles, p2: &[u8]) -> Nibbles {
 
 pub fn strip_first_nibble_mut(p: &mut Nibbles) -> u8 {
     let nibble = p.get_byte_unchecked(0);
-    let mut vec = p.to_vec();
+    let mut vec = p.pack().to_vec();
     vec.remove(0);
     p.clear();
     p.extend_from_slice_unchecked(vec.as_slice());

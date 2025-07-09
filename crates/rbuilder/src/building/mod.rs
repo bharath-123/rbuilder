@@ -237,8 +237,7 @@ impl BlockBuildingContext {
             if chain_spec.is_cancun_active_at_timestamp(onchain_block.header.timestamp) {
                 Some(BlobExcessGasAndPrice::new(
                     onchain_block.header.excess_blob_gas.unwrap_or_default(),
-                    // TODO - bharath
-                    100,
+                    5007716,
                 ))
             } else {
                 None

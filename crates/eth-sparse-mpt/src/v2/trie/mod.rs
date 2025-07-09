@@ -414,7 +414,7 @@ impl Trie {
                             if orphan_ptr.is_remote() {
                                 let mut orphan_path = Nibbles::new();
                                 orphan_path.extend_from_slice_unchecked(
-                                    &del_key.to_vec()[..(path_walked - 1)],
+                                    &del_key.pack().to_vec()[..(path_walked - 1)],
                                 );
                                 orphan_path.push_unchecked(orphan_nibble as u8);
                                 return Err(NodeNotFound(orphan_path).into());

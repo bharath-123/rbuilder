@@ -2,7 +2,7 @@ use std::time::Instant;
 
 use crate::utils::{hash_map_with_capacity, HashMap, HashSet};
 use alloy_primitives::map::HashSet as AlloyHashSet;
-use tracing::trace;
+use tracing::{info, trace};
 
 use alloy_primitives::{Bytes, B256};
 use alloy_trie::Nibbles;
@@ -109,10 +109,10 @@ where
 
 fn pad_path(mut path: Nibbles) -> B256 {
     // path.to_vec().resize(64, 0);
-    let mut path_vec = path.to_vec();
-    path_vec.resize(64, 0);
+    let mut path_vec = path.pack();
+    path_vec.to_vec().resize(64, 0);
     path.clear();
-    path.extend_from_slice_unchecked(path_vec.as_slice());
+    path.extend_from_slice(path_vec.as_slice());
     let mut res = B256::default();
     path.pack_to(res.as_mut_slice());
     res

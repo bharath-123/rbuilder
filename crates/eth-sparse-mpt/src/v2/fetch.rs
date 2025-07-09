@@ -140,7 +140,7 @@ impl MissingNodesFetcher {
 
 fn pad_path(mut path: Nibbles) -> B256 {
     // path.to_vec().resize(64, 0);
-    let mut path_vec = path.to_vec();
+    let mut path_vec = path.pack().to_vec();
     path_vec.resize(64, 0);
     path.clear();
     path.extend_from_slice_unchecked(path_vec.as_slice());

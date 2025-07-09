@@ -75,9 +75,10 @@ impl NodeCursor {
 
     pub fn step_into_extension(&mut self, ext: &DiffExtensionNode) {
         let len = ext.key().len();
+        let mut path_left_vec = self.path_left.pack().to_vec();
+
         self.current_path
-            .extend_from_slice_unchecked(&self.path_left.to_vec()[..len]);
-        let mut path_left_vec = self.path_left.to_vec();
+            .extend_from_slice_unchecked(&path_left_vec[..len]);
         path_left_vec.drain(..len);
         self.path_left.clear();
         self.path_left.extend_from_slice(path_left_vec.as_slice());
@@ -336,7 +337,7 @@ impl DiffTrie {
                             .expect("other child must exist");
                         if branch.get_diff_child(other_child_nibble).is_none() {
                             let mut other_child_path = c.current_path.clone();
-                            let mut other_child_path_vec = other_child_path.to_vec();
+                            let mut other_child_path_vec = other_child_path.pack().to_vec();
                             if let Some(l) = other_child_path_vec.last_mut() {
                                 *l = other_child_nibble;
                             }
@@ -438,7 +439,7 @@ impl DiffTrie {
                             let mut new_leaf_key = ext_above.key().clone();
                             new_leaf_key.push(*child_nibble);
                             new_leaf_key
-                                .extend_from_slice_unchecked(leaf_below.key().to_vec().as_slice());
+                                .extend_from_slice_unchecked(leaf_below.key().pack().as_slice());
 
                             let mut new_leaf = leaf_below;
                             new_leaf.changed_key = Some(new_leaf_key);
@@ -452,7 +453,7 @@ impl DiffTrie {
                             let ext_key = ext_above.key_mut();
                             ext_key.push(*child_nibble);
                             ext_key
-                                .extend_from_slice_unchecked(ext_below.key().to_vec().as_slice());
+                                .extend_from_slice_unchecked(ext_below.key().pack().as_slice());
 
                             ext_above.child = ext_below.child.clone();
                         }
@@ -482,7 +483,7 @@ impl DiffTrie {
                             //     .key_mut()
                             //     .as_mut_vec_unchecked()
                             //     .insert(0, *child_nibble);
-                            let mut leaf_below_vec = leaf_below.key_mut().to_vec();
+                            let mut leaf_below_vec = leaf_below.key_mut().pack().to_vec();
                             leaf_below_vec.insert(0, *child_nibble);
                             leaf_below.key_mut().clear();
                             leaf_below
@@ -510,7 +511,7 @@ impl DiffTrie {
                             //     .key_mut()
                             //     .as_mut_vec_unchecked()
                             //     .insert(0, *child_nibble);
-                            let mut ext_below_vec = ext_below.key_mut().to_vec();
+                            let mut ext_below_vec = ext_below.key_mut().pack().to_vec();
                             ext_below_vec.insert(0, *child_nibble);
                             ext_below.key_mut().clear();
                             ext_below
@@ -587,7 +588,7 @@ impl DiffTrie {
                         // leaf.key_mut()
                         //     .as_mut_vec_unchecked()
                         //     .insert(0, child_nibble);
-                        let mut leaf_vec = leaf.key_mut().to_vec();
+                        let mut leaf_vec = leaf.key_mut().pack().to_vec();
                         leaf_vec.insert(0, child_nibble);
                         leaf.key_mut().clear();
                         leaf.key_mut()
@@ -596,7 +597,7 @@ impl DiffTrie {
                     }
                     DiffTrieNodeKind::Extension(ext) => {
                         // ext.key_mut().as_mut_vec_unchecked().insert(0, child_nibble);
-                        let mut ext_vec = ext.key_mut().to_vec();
+                        let mut ext_vec = ext.key_mut().pack().to_vec();
                         ext_vec.insert(0, child_nibble);
                         ext.key_mut().clear();
                         ext.key_mut()
