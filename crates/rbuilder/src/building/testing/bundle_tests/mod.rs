@@ -1,9 +1,5 @@
 pub mod setup;
 
-use alloy_primitives::{B256, U256};
-use itertools::Itertools;
-use std::collections::HashSet;
-
 use crate::{
     building::{
         testing::bundle_tests::setup::NonceValue, BuiltBlockTrace, BundleErr, OrderErr,
@@ -12,6 +8,10 @@ use crate::{
     primitives::{Bundle, BundleRefund, Order, OrderId, Refund, RefundConfig, TxRevertBehavior},
     utils::{constants::BASE_TX_GAS, int_percentage},
 };
+use alloy_primitives::{B256, U256};
+use itertools::Itertools;
+use sha2::digest::consts::U25;
+use std::collections::HashSet;
 
 use self::setup::TestSetup;
 
@@ -96,10 +96,12 @@ fn test_target_block() -> eyre::Result<()> {
 
         test_setup.begin_bundle_order(NEXT_BUILT_BLOCK_NUMBER);
         test_setup.add_dummy_tx_0_1_no_rev()?;
+        let built_block_number_u256 = U256::from(BUILT_BLOCK_NUMBER);
+
         commit_order_err_matches!(
             test_setup,
             OrderErr::Bundle(BundleErr::TargetBlockIncorrect {
-                block: BUILT_BLOCK_NUMBER,
+                block: built_block_number_u256,
                 target_block: NEXT_BUILT_BLOCK_NUMBER,
                 target_max_block: NEXT_BUILT_BLOCK_NUMBER
             })
@@ -110,7 +112,7 @@ fn test_target_block() -> eyre::Result<()> {
         commit_order_err_matches!(
             test_setup,
             OrderErr::Bundle(BundleErr::TargetBlockIncorrect {
-                block: BUILT_BLOCK_NUMBER,
+                block: built_block_number_u256,
                 target_block: PREV_BUILT_BLOCK_NUMBER,
                 target_max_block: PREV_BUILT_BLOCK_NUMBER
             })
@@ -134,10 +136,12 @@ fn test_target_block() -> eyre::Result<()> {
 
         test_setup.begin_share_bundle_order(PREV_PREV_BUILT_BLOCK_NUMBER, PREV_BUILT_BLOCK_NUMBER);
         test_setup.add_dummy_tx_0_1_no_rev()?;
+        let built_block_number_u256 = U256::from(BUILT_BLOCK_NUMBER);
+
         commit_order_err_matches!(
             test_setup,
             OrderErr::Bundle(BundleErr::TargetBlockIncorrect {
-                block: BUILT_BLOCK_NUMBER,
+                block: built_block_number_u256,
                 target_block: PREV_PREV_BUILT_BLOCK_NUMBER,
                 target_max_block: PREV_BUILT_BLOCK_NUMBER
             })
@@ -148,7 +152,7 @@ fn test_target_block() -> eyre::Result<()> {
         commit_order_err_matches!(
             test_setup,
             OrderErr::Bundle(BundleErr::TargetBlockIncorrect {
-                block: BUILT_BLOCK_NUMBER,
+                block: built_block_number_u256,
                 target_block: NEXT_BUILT_BLOCK_NUMBER,
                 target_max_block: NEXT_NEXT_BUILT_BLOCK_NUMBER
             })

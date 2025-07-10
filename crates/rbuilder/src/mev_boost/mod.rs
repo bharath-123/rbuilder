@@ -486,6 +486,7 @@ impl RelayClient {
         let (mut body_data, content_type) = if ssz {
             (
                 match &submission_with_metadata.submission {
+                    SubmitBlockRequest::Fulu(data) => data.0.as_ssz_bytes(),
                     SubmitBlockRequest::Capella(data) => data.0.as_ssz_bytes(),
                     SubmitBlockRequest::Deneb(data) => data.0.as_ssz_bytes(),
                     SubmitBlockRequest::Electra(data) => data.0.as_ssz_bytes(),

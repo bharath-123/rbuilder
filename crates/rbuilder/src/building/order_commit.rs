@@ -20,6 +20,8 @@ use crate::{
 use ahash::HashSet;
 use alloy_consensus::{constants::KECCAK_EMPTY, Transaction};
 use alloy_eips::eip4844::DATA_GAS_PER_BLOB;
+use alloy_eips::eip7594::BlobTransactionSidecarVariant;
+use alloy_evm::Database;
 use alloy_primitives::{Address, B256, I256, U256};
 use itertools::Itertools;
 use reth::revm::database::StateProviderDatabase;
@@ -31,7 +33,7 @@ use revm::{
     context::result::{ExecutionResult, ResultAndState},
     context_interface::result::{EVMError, InvalidTransaction},
     database::{states::bundle_state::BundleRetention, BundleState, State},
-    Database, DatabaseCommit,
+    Database as _, DatabaseCommit,
 };
 use std::{collections::HashMap, sync::Arc};
 use thiserror::Error;
@@ -242,7 +244,7 @@ pub enum BundleErr {
         "Trying to commit bundle for incorrect block, block: {block}, target_blocks: {target_block}-{target_max_block}"
     )]
     TargetBlockIncorrect {
-        block: u64,
+        block: U256,
         target_block: u64,
         target_max_block: u64,
     },
@@ -269,7 +271,7 @@ pub enum BundleErr {
     #[error("Incorrect refundable element: {0}")]
     IncorrectRefundableElement(usize),
     #[error("Incorrect timestamp, min: {min}, max: {max}, block: {block}")]
-    IncorrectTimestamp { min: u64, max: u64, block: u64 },
+    IncorrectTimestamp { min: u64, max: u64, block: U256 },
     #[error("Mev-share without signer")]
     NoSigner,
 }
@@ -424,7 +426,16 @@ impl<'a, 'b, 'c, 'd, Tracer: SimulationTracer> PartialBlockFork<'a, 'b, 'c, 'd, 
     ) -> Result<Result<TransactionOk, TransactionErr>, CriticalCommitOrderError> {
         let coinbase_balance_before = I256::try_from(self.coinbase_balance()?)?;
         // Use blobs.len() instead of checking for tx type just in case in the future some other new txs have blobs
-        let blob_gas_used = tx_with_blobs.blobs_sidecar.blobs.len() as u64 * DATA_GAS_PER_BLOB;
+        // let blob_gas_used = tx_with_blobs.blobs_sidecar.blobs.len() as u64 * DATA_GAS_PER_BLOB;
+        let blob_gas_used = match tx_with_blobs.blobs_sidecar.as_ref() {
+            BlobTransactionSidecarVariant::Eip4844(eip4844_sidecar) => {
+                eip4844_sidecar.blobs.len() as u64 * DATA_GAS_PER_BLOB
+            }
+            BlobTransactionSidecarVariant::Eip7594(eip7594_sidecar) => {
+                eip7594_sidecar.blobs.len() as u64 * DATA_GAS_PER_BLOB
+            }
+        };
+
         if cumulative_blob_gas_used + blob_gas_used > self.ctx.max_blob_gas_per_block() {
             return Ok(Err(TransactionErr::BlobGasLeft));
         }
@@ -579,7 +590,7 @@ impl<'a, 'b, 'c, 'd, Tracer: SimulationTracer> PartialBlockFork<'a, 'b, 'c, 'd, 
         let current_block = self.ctx.evm_env.block_env.number;
         // None is good for any block
         if let Some(block) = bundle.block {
-            if block != current_block {
+            if U256::from(block) != current_block {
                 return Ok(Err(BundleErr::TargetBlockIncorrect {
                     block: current_block,
                     target_block: block,
@@ -593,11 +604,11 @@ impl<'a, 'b, 'c, 'd, Tracer: SimulationTracer> PartialBlockFork<'a, 'b, 'c, 'd, 
             bundle.max_timestamp.unwrap_or(u64::MAX),
             self.ctx.evm_env.block_env.timestamp,
         );
-        if !(min_ts <= block_ts && block_ts <= max_ts) {
+        if !(U256::from(min_ts) <= block_ts && block_ts <= U256::from(max_ts)) {
             return Ok(Err(BundleErr::IncorrectTimestamp {
                 min: min_ts,
                 max: max_ts,
-                block: block_ts,
+                block: U256::from(block_ts),
             }));
         }
 
@@ -810,7 +821,9 @@ impl<'a, 'b, 'c, 'd, Tracer: SimulationTracer> PartialBlockFork<'a, 'b, 'c, 'd, 
         allow_tx_skip: bool,
     ) -> Result<Result<BundleOk, BundleErr>, CriticalCommitOrderError> {
         let current_block = self.ctx.evm_env.block_env.number;
-        if !(bundle.block <= current_block && current_block <= bundle.max_block) {
+        if !(U256::from(bundle.block) <= current_block
+            && current_block <= U256::from(bundle.max_block))
+        {
             return Ok(Err(BundleErr::TargetBlockIncorrect {
                 block: current_block,
                 target_block: bundle.block,
