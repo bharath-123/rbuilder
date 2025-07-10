@@ -1142,6 +1142,21 @@ dependencies = [
 
 [[package]]
 name = "alloy-trie"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "983d99aa81f586cef9dae38443245e585840fcf0fc58b09aee0b1f27aed1d500"
+dependencies = [
+ "alloy-primitives 1.2.1",
+ "alloy-rlp",
+ "arrayvec",
+ "derive_more 2.0.1",
+ "nybbles 0.3.4",
+ "smallvec",
+ "tracing",
+]
+
+[[package]]
+name = "alloy-trie"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bada1fc392a33665de0dc50d401a3701b62583c655e3522a323490a5da016962"
@@ -4049,7 +4064,7 @@ version = "0.1.0"
 dependencies = [
  "alloy-primitives 1.2.1",
  "alloy-rlp",
- "alloy-trie 0.9.0",
+ "alloy-trie 0.8.1",
  "arrayvec",
  "criterion 0.4.0",
  "dashmap 6.1.0",

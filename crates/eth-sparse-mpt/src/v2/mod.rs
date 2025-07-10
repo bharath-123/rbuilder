@@ -10,7 +10,8 @@ use reth_provider::{
     providers::ConsistentDbView, BlockReader, DatabaseProviderFactory, ExecutionOutcome,
     StateCommitmentProvider,
 };
-use reth_trie::{Nibbles, TrieAccount};
+use nybbles::Nibbles;
+use reth_trie::TrieAccount;
 use revm::state::AccountInfo;
 use rustc_hash::FxBuildHasher;
 use std::ops::Range;

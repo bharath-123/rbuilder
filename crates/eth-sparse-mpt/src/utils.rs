@@ -4,8 +4,8 @@ use alloy_primitives::{keccak256, Bytes};
 use alloy_rlp::{length_of_length, BufMut, Encodable, Header, EMPTY_STRING_CODE};
 use alloy_trie::{
     nodes::{ExtensionNodeRef, LeafNodeRef},
-    Nibbles,
 };
+use nybbles::Nibbles;
 use reth_trie::RlpNode;
 use rustc_hash::{FxBuildHasher, FxHasher};
 

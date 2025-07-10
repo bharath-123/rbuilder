@@ -31,6 +31,7 @@ use reth_primitives::{
 use reth_primitives_traits::SignerRecoverable;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
+use tracing::info;
 use std::{cmp::Ordering, collections::HashMap, fmt::Display, hash::Hash, str::FromStr, sync::Arc};
 pub use test_data_generator::TestDataGenerator;
 use thiserror::Error;
@@ -708,9 +709,11 @@ impl TransactionSignedEcRecoveredWithBlobs {
     ) -> Result<Self, TxWithBlobsCreateError> {
         // Check for an eip4844 tx passed without blobs
         if tx.inner().blob_versioned_hashes().is_some() && blob_sidecar.is_none() {
+            info!("BHARATH: eip4844 tx passed without blobs");
             Err(TxWithBlobsCreateError::Eip4844MissingBlobSidecar)
         // Check for a non-eip4844 tx passed with blobs
         } else if blob_sidecar.is_some() && tx.inner().blob_versioned_hashes().is_none() {
+            info!("BHARATH: blobs passed without eip4844 tx");
             Err(TxWithBlobsCreateError::BlobsMissingEip4844)
         // Groovy!
         // No blob txs at all
@@ -766,9 +769,17 @@ impl TransactionSignedEcRecoveredWithBlobs {
         T: TransactionOrdering<Transaction = <V as TransactionValidator>::Transaction>,
         S: BlobStore,
     {
+        let blobs_in_store = pool.blob_store().blobs_len();
+        info!("BHARATH: blobs in store: {}", blobs_in_store);
+
+        let is_blob_present = pool.blob_store().contains(*tx.inner().hash());
+        info!("BHARATH: is blob present: {:?}", is_blob_present);
+
         let blob_sidecar = pool
             .get_blob(*tx.inner().hash())?
             .and_then(|arc| Arc::try_unwrap(arc).ok());
+
+        info!("BHARATH: blob sidecar is present: {:?}", blob_sidecar.is_some());
         Self::new(tx, blob_sidecar, None)
     }
 
@@ -847,6 +858,18 @@ impl TransactionSignedEcRecoveredWithBlobs {
                     signature,
                     hash,
                 );
+                let blobs_len = match &sidecar {
+                    BlobTransactionSidecarVariant::Eip4844(sidecar) => {
+                        info!("BHARATH: decoded eip4844 tx with blobs: blob count: {}", sidecar.blobs.len());
+                        sidecar.blobs.len()
+                    }
+                    BlobTransactionSidecarVariant::Eip7594(sidecar) => {
+                        info!("BHARATH: decoded eip7594 tx with blobs: blob count: {}", sidecar.blobs.len());
+                        sidecar.blobs.len()
+                    }
+                    _ => 0,
+                };
+
                 Ok(TransactionSignedEcRecoveredWithBlobs {
                     tx: tx_signed.with_signer(signer),
                     blobs_sidecar: Arc::new(sidecar),

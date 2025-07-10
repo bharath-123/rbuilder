@@ -6,7 +6,7 @@ use parking_lot::Mutex;
 use rayon::prelude::*;
 
 use alloy_primitives::B256;
-use alloy_trie::Nibbles;
+use nybbles::Nibbles;
 use reth_provider::{
     providers::ConsistentDbView, BlockHashReader, BlockNumReader, BlockReader, DBProvider,
     DatabaseProviderFactory, StateCommitmentProvider,
@@ -89,11 +89,12 @@ impl MissingNodesFetcher {
                     for requested_proof in requested_proofs {
                         let proof_for_node = storge_multiproof
                             .subtree
-                            .matching_nodes_sorted(&requested_proof);
+                            .matching_nodes_sorted(&convert_nibbles_to_reth_nybbles(requested_proof.clone()));
+                        let reth_proof_for_node = proof_for_node.into_iter().map(|(k, v)| (convert_reth_nybbles_to_nibbles(k), v)).collect();
                         let proof_store =
                             shared_cache.account_proof_store_hashed_address(&hashed_address);
                         proof_store
-                            .add_proof(requested_proof, proof_for_node)
+                            .add_proof(requested_proof, reth_proof_for_node)
                             .map_err(SparseTrieError::other)?;
                     }
                     Ok(())
@@ -127,10 +128,12 @@ impl MissingNodesFetcher {
         for requested_node in self.account_proof_requested_nodes.drain(..) {
             let proof_for_node = multiproof
                 .account_subtree
-                .matching_nodes_sorted(&requested_node);
+                .matching_nodes_sorted(&convert_nibbles_to_reth_nybbles(requested_node.clone()));
+
+            let reth_proof_for_node = proof_for_node.into_iter().map(|(k, v)| (convert_reth_nybbles_to_nibbles(k), v)).collect();
             shared_cache
                 .account_trie
-                .add_proof(requested_node, proof_for_node)
+                .add_proof(requested_node, reth_proof_for_node)
                 .map_err(SparseTrieError::other)?;
         }
         let fetched_nodes = *fetched_nodes.lock();
@@ -144,3 +147,18 @@ fn pad_path(mut path: Nibbles) -> B256 {
     path.pack_to(res.as_mut_slice());
     res
 }
+
+pub fn convert_reth_nybbles_to_nibbles(n: reth_trie::Nibbles) -> Nibbles {
+    let mut nibbles = Nibbles::new();
+    nibbles.extend_from_slice_unchecked(n.to_vec().as_slice());
+    nibbles
+}
+
+pub fn convert_nibbles_to_reth_nybbles(n: Nibbles) -> reth_trie::Nibbles {
+    let mut nibbles = reth_trie::Nibbles::new();
+    nibbles.extend_from_slice(n.pack().as_slice());
+    nibbles
+}
+
+
+

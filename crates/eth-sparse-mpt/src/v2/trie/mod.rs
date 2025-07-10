@@ -5,7 +5,7 @@ use alloy_rlp::EMPTY_STRING_CODE;
 use arrayvec::ArrayVec;
 use proof_store::ProofNode;
 use proof_store::ProofStore;
-use reth_trie::Nibbles;
+use nybbles::Nibbles;
 
 pub mod proof_store;
 
