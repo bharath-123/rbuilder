@@ -775,9 +775,12 @@ impl TransactionSignedEcRecoveredWithBlobs {
         let is_blob_present = pool.blob_store().contains(*tx.inner().hash());
         info!("BHARATH: is blob present: {:?}", is_blob_present);
 
-        let blob_sidecar = pool
-            .get_blob(*tx.inner().hash())?
+        let mut blobs = pool.get_all_blobs_exact(vec![*tx.inner().hash()])?;
+        info!("BHARATH: blobs: {:?}", blobs.len());
+        let blob_sidecar = blobs
+            .pop()
             .and_then(|arc| Arc::try_unwrap(arc).ok());
+        info!("BHARATH: blob sidecar: {:?}", blob_sidecar);
 
         info!("BHARATH: blob sidecar is present: {:?}", blob_sidecar.is_some());
         Self::new(tx, blob_sidecar, None)
