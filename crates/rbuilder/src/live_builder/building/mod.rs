@@ -146,7 +146,6 @@ where
         let block_number = ctx.evm_env.block_env.number;
 
         for builder in self.builders.iter() {
-            // info!("BHARATH: spawning block building algorithm: {:?}", builder.name());
             let builder_name = builder.name();
             debug!(
                 block = block_number.to_string(),

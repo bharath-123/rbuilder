@@ -29,7 +29,6 @@ use reth_chainspec::{ChainSpec, EthereumHardforks};
 use reth_primitives::SealedBlock;
 use serde_with::{serde_as, DisplayFromStr};
 use std::sync::Arc;
-use tracing::info;
 
 /// Object to sign blocks to be sent to relays.
 #[derive(Debug, Clone)]
@@ -203,10 +202,8 @@ pub fn sign_block_for_relay(
             ExecutionRequestsV4::try_from(Requests::new(execution_requests.to_vec()))?;
 
         if chain_spec.is_osaka_active_at_timestamp(sealed_block.timestamp) {
-            // info!("BHARATH: number of blobs being sent to relay before marshalling them to BlobsBundleV2: {:?}", total_blobs_len);
             let blobs_bundle_v2 = marshall_txs_blobs_sidecars_v2(blobs_bundle);
 
-            // info!("BHARATH: number of blobs being sent to relay: {:?}", blobs_bundle_v2.blobs.len());
             SubmitBlockRequest::Fulu(FuluSubmitBlockRequest(SignedBidSubmissionV5 {
                 message,
                 execution_payload,
@@ -254,21 +251,12 @@ fn flatten_marshal<Source>(
     flatten_data.collect::<Vec<Source>>()
 }
 
-fn flatten_marshal_eip7549<Source>(
-    txs_blobs_sidecars: &[Arc<BlobTransactionSidecarEip7594>],
-    vec_getter: impl Fn(&Arc<BlobTransactionSidecarEip7594>) -> Vec<Source>,
-) -> Vec<Source> {
-    let flatten_data = txs_blobs_sidecars.iter().flat_map(vec_getter);
-    flatten_data.collect::<Vec<Source>>()
-}
-
 fn marshal_txs_blobs_sidecars(
     txs_blobs_sidecars: &[Arc<BlobTransactionSidecarVariant>],
 ) -> BlobsBundleV1 {
     let mut eip4844_sidecars = Vec::new();
     for blob in txs_blobs_sidecars {
         if let Some(bb) = blob.as_ref().as_eip4844() {
-            // TODO - bharath: cloning here is a terrible idea
             eip4844_sidecars.push(Arc::new(bb.clone()))
         }
     }

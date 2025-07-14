@@ -3,9 +3,7 @@ use crate::{
     live_builder::payload_events::MevBoostSlotData,
     mev_boost::{
         sign_block_for_relay,
-        submission::{
-            BidMetadata, BidValueMetadata, SubmitBlockRequest, SubmitBlockRequestWithMetadata,
-        },
+        submission::{BidMetadata, BidValueMetadata, SubmitBlockRequestWithMetadata},
         BLSBlockSigner, RelayError, SubmitBlockErr,
     },
     primitives::{
@@ -185,8 +183,6 @@ async fn run_submit_to_relays_job(
             continue 'submit;
         };
 
-        // info!("BHARATH: got block from pending bid");
-
         res = Some(BuiltBlockInfo {
             bid_value: block.trace.bid_value,
             true_bid_value: block.trace.true_bid_value,
@@ -213,30 +209,11 @@ async fn run_submit_to_relays_job(
                 }
             });
 
-        let mut executed_orders = block
+        let executed_orders = block
             .trace
             .included_orders
             .iter()
             .flat_map(|exec_res| exec_res.order.original_orders());
-
-        let mut total_blobs_len = 0;
-        for o in executed_orders.by_ref() {
-            let blobs_len = match o {
-                Order::Tx(tx) => match tx.tx_with_blobs.blobs_sidecar.as_ref() {
-                    alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip4844(
-                        blob_transaction_sidecar,
-                    ) => blob_transaction_sidecar.blobs.len(),
-                    alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip7594(
-                        blob_transaction_sidecar_eip7594,
-                    ) => blob_transaction_sidecar_eip7594.blobs.len(),
-                },
-                Order::Bundle(bundle) => 0,
-                Order::ShareBundle(share_bundle) => 0,
-            };
-            total_blobs_len += blobs_len;
-        }
-        // info!("BHARATH: total blobs len in block being sent to relay!: {:?}", total_blobs_len);
-        // info!("BHARATH: blobs in block: {:?}", block.txs_blobs_sidecars.len());
 
         let bid_metadata = BidMetadata {
             value: BidValueMetadata {
@@ -278,8 +255,6 @@ async fn run_submit_to_relays_job(
         );
 
         let (normal_signed_submission, optimistic_signed_submission) = {
-            // info!("BHARATH: normal signed submission");
-            // info!("BHARATH: number of blobs in block: {:?}", block.txs_blobs_sidecars.len());
             let normal_signed_submission = match sign_block_for_relay(
                 &config.signer,
                 &block.sealed_block,
@@ -424,11 +399,9 @@ fn get_relay_filter_and_update_metrics(
     inc_initiated_submissions(optimistic, !only_fast, !only_independent);
     move |relay: &MevBoostRelayBidSubmitter| {
         if only_independent && !relay.is_independent() {
-            // info!("BHARATH: block is expensive and relay is not independent");
             return false; // Sorry relay but this block is expensive and you are not independent :(
         }
         if only_fast && !relay.is_fast() {
-            // info!("BHARATH: block is expensive and relay is not fast");
             return false; // Sorry relay but this block contains replacements and you are slow :(
         }
         true
@@ -475,54 +448,6 @@ async fn submit_bid_to_the_relay(
         trace!("Relay submission is skipped due to rate limit");
         return;
     }
-
-    // info!("BHARATH: submitting block to the relay");
-
-    let txs_len = match &signed_submit_request.submission {
-        SubmitBlockRequest::Fulu(fulu_submit_request) => &fulu_submit_request
-            .0
-            .execution_payload
-            .payload_inner
-            .payload_inner
-            .transactions
-            .len(),
-        SubmitBlockRequest::Capella(capella_submit_request) => &capella_submit_request
-            .0
-            .execution_payload
-            .payload_inner
-            .transactions
-            .len(),
-        SubmitBlockRequest::Deneb(deneb_submit_request) => &deneb_submit_request
-            .0
-            .execution_payload
-            .payload_inner
-            .payload_inner
-            .transactions
-            .len(),
-        SubmitBlockRequest::Electra(electra_submit_request) => &electra_submit_request
-            .0
-            .execution_payload
-            .payload_inner
-            .payload_inner
-            .transactions
-            .len(),
-    };
-
-    let blobs_len = match &signed_submit_request.submission {
-        SubmitBlockRequest::Fulu(fulu_submit_request) => {
-            fulu_submit_request.0.blobs_bundle.blobs.len()
-        }
-        SubmitBlockRequest::Capella(capella_submit_request) => 0,
-        SubmitBlockRequest::Deneb(deneb_submit_request) => {
-            deneb_submit_request.0.blobs_bundle.blobs.len()
-        }
-        SubmitBlockRequest::Electra(electra_submit_request) => {
-            electra_submit_request.0.blobs_bundle.blobs.len()
-        }
-    };
-
-    // info!("BHARATH: txs_len: {:?}", txs_len);
-    // info!("BHARATH: blobs_len: {:?}", blobs_len);
 
     let relay_result = tokio::select! {
         _ = cancel.cancelled() => {

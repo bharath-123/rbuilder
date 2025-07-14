@@ -19,7 +19,6 @@ use alloy_consensus::{Header, EMPTY_OMMER_ROOT_HASH};
 use alloy_eips::eip7594::BlobTransactionSidecarVariant;
 use alloy_eips::{
     eip1559::{calculate_block_gas_limit, ETHEREUM_BLOCK_GAS_LIMIT_30M},
-    eip4844::BlobTransactionSidecar,
     eip4895::Withdrawals,
     eip7685::Requests,
     eip7840::BlobParams,
@@ -61,7 +60,7 @@ use std::{
 };
 use thiserror::Error;
 use time::OffsetDateTime;
-use tracing::{error, info, trace};
+use tracing::{error, trace};
 use tx_sim_cache::TxExecutionCache;
 
 pub mod block_orders;
@@ -821,7 +820,6 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
             .chain_spec
             .is_osaka_active_at_timestamp(ctx.attributes.timestamp)
         {
-            // info!("BHARATH: finalize, osaka");
             for tx_with_blob in self.executed_tx_infos.iter().map(|info| &info.tx) {
                 let eip7594_sidecar = tx_with_blob.blobs_sidecar.as_eip7594();
 
@@ -831,7 +829,6 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
                     }
                 }
             }
-            // info!("BHARATH: eip7594 txs_blob_sidecars: {:?}", txs_blob_sidecars.len());
             (ctx.excess_blob_gas, Some(self.blob_gas_used))
         } else if ctx
             .chain_spec

@@ -279,7 +279,6 @@ where
             }
 
             if config.ignore_blobs {
-                // info!("BHARATH: ignoring blobs");
                 new_commands.retain(|o| {
                     let has_blobs = match o {
                         ReplaceableOrderPoolCommand::Order(o) => {

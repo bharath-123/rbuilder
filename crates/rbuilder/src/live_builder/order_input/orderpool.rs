@@ -11,7 +11,7 @@ use std::{
     time::{Duration, Instant},
 };
 use tokio::sync::mpsc::{self};
-use tracing::{error, info, trace};
+use tracing::{error, trace};
 
 use super::{
     order_sink::{OrderPoolCommand, OrderSender2OrderSink},
@@ -99,7 +99,6 @@ impl OrderPool {
     }
 
     pub fn process_commands(&mut self, commands: Vec<ReplaceableOrderPoolCommand>) {
-        // info!("BHARATH: processing commands");
         commands.into_iter().for_each(|oc| self.process_command(oc));
     }
 
@@ -117,7 +116,6 @@ impl OrderPool {
 
         let (order, target_block) = match &order {
             Order::Tx(..) => {
-                // info!("BHARATH: adding mempool tx to orderpool");
                 self.mempool_txs.push((order.clone(), Instant::now()));
                 (order, None)
             }
@@ -200,7 +198,6 @@ impl OrderPool {
         mut sink: Box<dyn ReplaceableOrderSink>,
     ) -> OrderPoolSubscriptionId {
         for order in self.mempool_txs.iter().map(|(order, _)| order.clone()) {
-            // info!("BHARATH: adding mempool tx to sink: {:?}", order.id());
             sink.insert_order(order);
         }
         for replacement_data in self.bundle_cancellations.iter().map(|(key, _)| key) {

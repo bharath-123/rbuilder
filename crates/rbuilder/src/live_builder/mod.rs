@@ -453,18 +453,8 @@ async fn try_send_to_orderpool<V, T, S>(
 {
     match TransactionSignedEcRecoveredWithBlobs::try_from_tx_without_blobs_and_pool(tx, pool) {
         Ok(tx) => {
-            let blobs_len = match tx.blobs_sidecar.as_ref() {
-                alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip4844(
-                    blob_transaction_sidecar,
-                ) => blob_transaction_sidecar.blobs.len(),
-                alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip7594(
-                    blob_transaction_sidecar_eip7594,
-                ) => blob_transaction_sidecar_eip7594.blobs.len(),
-            };
-
             let order = Order::Tx(MempoolTx::new(tx));
             let command = ReplaceableOrderPoolCommand::Order(order);
-            // info!("BHARATH: sending tx to orderpool with blob count: {:?}", blobs_len);
             if let Err(e) = orderpool_sender.send(command).await {
                 error!("Error sending order to orderpool: {:#}", e);
             }

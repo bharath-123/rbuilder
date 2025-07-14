@@ -7,7 +7,7 @@ use std::{
 };
 use time::OffsetDateTime;
 use tokio_util::sync::CancellationToken;
-use tracing::{debug, error, info, trace};
+use tracing::{debug, error, trace};
 
 use crate::{
     building::{
@@ -402,7 +402,6 @@ impl BlockBuildingHelper for BlockBuildingHelperFromProvider {
         payout_tx_value: Option<U256>,
         seen_competition_bid: Option<U256>,
     ) -> Result<FinalizeBlockResult, BlockBuildingHelperError> {
-        // info!("BHARATH: in finalize_block");
         if payout_tx_value.is_some() && self.building_ctx.coinbase_is_suggested_fee_recipient() {
             return Err(BlockBuildingHelperError::PayoutTxNotAllowed);
         }
@@ -465,7 +464,6 @@ impl BlockBuildingHelper for BlockBuildingHelperFromProvider {
             builder_name: self.builder_name.clone(),
             execution_requests: finalized_block.execution_requests,
         };
-        // info!("BHARATH: blobs in finalized block: {:?}", block.txs_blobs_sidecars.len());
         Ok(FinalizeBlockResult { block })
     }
 

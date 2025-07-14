@@ -9,7 +9,7 @@ mod test_data_generator;
 
 use crate::building::evm_inspector::UsedStateTrace;
 use alloy_consensus::Transaction as _;
-use alloy_eips::eip7594::{BlobTransactionSidecarEip7594, BlobTransactionSidecarVariant};
+use alloy_eips::eip7594::BlobTransactionSidecarVariant;
 use alloy_eips::{
     eip2718::{Decodable2718, Eip2718Error, Encodable2718},
     eip4844::{Blob, BlobTransactionSidecar, Bytes48},
@@ -26,7 +26,7 @@ use reth_ethereum_primitives::PooledTransactionVariant;
 use reth_node_core::primitives::SignedTransaction;
 use reth_primitives::{
     kzg::{BYTES_PER_BLOB, BYTES_PER_COMMITMENT, BYTES_PER_PROOF},
-    PooledTransaction, Recovered, Transaction, TransactionSigned,
+    Recovered, Transaction, TransactionSigned,
 };
 use reth_primitives_traits::SignerRecoverable;
 use serde::{Deserialize, Serialize};
@@ -34,7 +34,6 @@ use sha2::{Digest, Sha256};
 use std::{cmp::Ordering, collections::HashMap, fmt::Display, hash::Hash, str::FromStr, sync::Arc};
 pub use test_data_generator::TestDataGenerator;
 use thiserror::Error;
-use tracing::info;
 use uuid::Uuid;
 
 /// Extra metadata for ShareBundle/Bundle.
@@ -709,11 +708,9 @@ impl TransactionSignedEcRecoveredWithBlobs {
     ) -> Result<Self, TxWithBlobsCreateError> {
         // Check for an eip4844 tx passed without blobs
         if tx.inner().blob_versioned_hashes().is_some() && blob_sidecar.is_none() {
-            // info!("BHARATH: eip4844 tx passed without blobs");
             Err(TxWithBlobsCreateError::Eip4844MissingBlobSidecar)
         // Check for a non-eip4844 tx passed with blobs
         } else if blob_sidecar.is_some() && tx.inner().blob_versioned_hashes().is_none() {
-            // info!("BHARATH: blobs passed without eip4844 tx");
             Err(TxWithBlobsCreateError::BlobsMissingEip4844)
         // Groovy!
         // No blob txs at all
@@ -728,7 +725,6 @@ impl TransactionSignedEcRecoveredWithBlobs {
         } else {
             let b_sidecar = blob_sidecar.unwrap();
             if b_sidecar.is_eip4844() {
-                // info!("BHARATH: returning eip4844 sidecar");
                 Ok(Self {
                     tx,
                     blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::from(
@@ -737,7 +733,6 @@ impl TransactionSignedEcRecoveredWithBlobs {
                     metadata: metadata.unwrap_or_default(),
                 })
             } else {
-                // info!("BHARATH: returning eip7594 sidecar");
                 Ok(Self {
                     tx,
                     blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::from(
@@ -771,21 +766,11 @@ impl TransactionSignedEcRecoveredWithBlobs {
         T: TransactionOrdering<Transaction = <V as TransactionValidator>::Transaction>,
         S: BlobStore,
     {
-        let blobs_in_store = pool.blob_store().blobs_len();
-        // info!("BHARATH: blobs in store: {}", blobs_in_store);
-
-        let is_blob_present = pool.blob_store().contains(*tx.inner().hash());
-        // info!("BHARATH: is blob present: {:?}", is_blob_present);
-
         let mut blobs: Vec<(
             alloy_primitives::FixedBytes<32>,
             Arc<BlobTransactionSidecarVariant>,
         )> = pool.get_all_blobs(vec![*tx.inner().hash()])?;
-        // info!("BHARATH: blobs: {:?}", blobs);
         let blob_sidecar = blobs.pop().map(|(_, arc)| arc.as_ref().clone());
-        // info!("BHARATH: blob sidecar: {:?}", blob_sidecar);
-
-        // info!("BHARATH: blob sidecar is present: {:?}", blob_sidecar.is_some());
         Self::new(tx, blob_sidecar, None)
     }
 
@@ -864,17 +849,6 @@ impl TransactionSignedEcRecoveredWithBlobs {
                     signature,
                     hash,
                 );
-                let blobs_len = match &sidecar {
-                    BlobTransactionSidecarVariant::Eip4844(sidecar) => {
-                        // info!("BHARATH: decoded eip4844 tx with blobs: blob count: {}", sidecar.blobs.len());
-                        sidecar.blobs.len()
-                    }
-                    BlobTransactionSidecarVariant::Eip7594(sidecar) => {
-                        // info!("BHARATH: decoded eip7594 tx with blobs: blob count: {}", sidecar.blobs.len());
-                        sidecar.blobs.len()
-                    }
-                    _ => 0,
-                };
 
                 Ok(TransactionSignedEcRecoveredWithBlobs {
                     tx: tx_signed.with_signer(signer),

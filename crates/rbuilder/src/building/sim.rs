@@ -22,7 +22,7 @@ use std::{
     sync::Arc,
     time::{Duration, Instant},
 };
-use tracing::{error, info, trace};
+use tracing::{error, trace};
 
 #[derive(Debug)]
 pub enum OrderSimResult {
@@ -415,20 +415,6 @@ pub fn simulate_order(
     local_ctx: &mut ThreadBlockBuildingContext,
     state: &mut BlockState,
 ) -> Result<OrderSimResultWithGas, CriticalCommitOrderError> {
-    // info!("BHARATH: simulating order: {:?}", order.id());
-    let blobs_in_order = match &order {
-        Order::Tx(tx) => match tx.tx_with_blobs.blobs_sidecar.as_ref() {
-            alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip4844(
-                blob_transaction_sidecar,
-            ) => blob_transaction_sidecar.blobs.len(),
-            alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip7594(
-                blob_transaction_sidecar_eip7594,
-            ) => blob_transaction_sidecar_eip7594.blobs.len(),
-        },
-        _ => 0,
-    };
-
-    // info!("BHARATH: blobs in order: {:?}", blobs_in_order);
     let mut tracer = AccumulatorSimulationTracer::new();
     let mut fork = PartialBlockFork::new(state, ctx, local_ctx).with_tracer(&mut tracer);
     let rollback_point = fork.rollback_point();
@@ -436,7 +422,6 @@ pub fn simulate_order(
         simulate_order_using_fork(parent_orders, order, &mut fork, &ctx.mempool_tx_detector);
     fork.rollback(rollback_point);
     let sim_res = sim_res?;
-    // info!("BHARATH: sim_res: {:?}", sim_res);
     Ok(OrderSimResultWithGas {
         result: sim_res,
         gas_used: tracer.used_gas,

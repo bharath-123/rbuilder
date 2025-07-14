@@ -14,7 +14,7 @@ use crate::{
         BlockBuildingContext, ExecutionError, OrderPriority, PrioritizedOrderStore,
         SimulatedOrderSink, Sorting, ThreadBlockBuildingContext,
     },
-    primitives::{AccountNonce, Order, OrderId, SimValue},
+    primitives::{AccountNonce, OrderId, SimValue},
     provider::StateProviderFactory,
     telemetry::mark_builder_considers_order,
     utils::NonceCache,
@@ -30,7 +30,7 @@ use std::{
     time::{Duration, Instant},
 };
 use tokio_util::sync::CancellationToken;
-use tracing::{error, info, info_span, trace};
+use tracing::{error, info_span, trace};
 
 use super::{
     block_building_helper::{BiddableUnfinishedBlock, BlockBuildingHelperFromProvider},
@@ -127,27 +127,6 @@ pub fn run_ordering_builder<P, OrderPriorityType>(
         }
 
         let orders = order_intake_consumer.current_block_orders();
-        let order_stats = orders.orders_statistics();
-        // info!("BHARATH: order stats: {:?}", order_stats);
-        let orders_list = orders.get_all_orders();
-
-        let mut total_blob_count = 0;
-        for o in orders_list {
-            let order_blob_count = match &o.order {
-                Order::Tx(tx) => match tx.tx_with_blobs.blobs_sidecar.as_ref() {
-                    alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip4844(
-                        blob_transaction_sidecar,
-                    ) => blob_transaction_sidecar.blobs.len(),
-                    alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip7594(
-                        blob_transaction_sidecar_eip7594,
-                    ) => blob_transaction_sidecar_eip7594.blobs.len(),
-                },
-                Order::Bundle(bundle) => 0,
-                Order::ShareBundle(share_bundle) => 0,
-            };
-            total_blob_count += order_blob_count;
-        }
-        // info!("BHARATH: total blob count in block orders: {:?}", total_blob_count);
 
         match builder.build_block(
             orders,
@@ -156,7 +135,6 @@ pub fn run_ordering_builder<P, OrderPriorityType>(
             input.cancel.clone(),
         ) {
             Ok(block) => {
-                // info!("BHARATH: block built");
                 if block.built_block_trace().got_no_signer_error {
                     use_suggested_fee_recipient_as_coinbase = false;
                 }
@@ -172,21 +150,6 @@ pub fn run_ordering_builder<P, OrderPriorityType>(
         }
         if config.drop_failed_orders {
             let mut removed = order_intake_consumer.remove_orders(builder.failed_orders.drain());
-            for order in &removed {
-                // info!("BHARATH: removed order: {:?}", order.id());
-                let blobs_len = match &order.order {
-                    Order::Tx(tx) => match tx.tx_with_blobs.blobs_sidecar.as_ref() {
-                        alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip4844(
-                            blob_transaction_sidecar,
-                        ) => blob_transaction_sidecar.blobs.len(),
-                        alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip7594(
-                            blob_transaction_sidecar_eip7594,
-                        ) => blob_transaction_sidecar_eip7594.blobs.len(),
-                    },
-                    _ => 0,
-                };
-                // info!("BHARATH: removed order blobs len: {:?}", blobs_len);
-            }
             removed_orders.append(&mut removed);
         }
     }
@@ -344,19 +307,6 @@ impl OrderingBuilderContext {
             let success = commit_result.is_ok();
             match commit_result {
                 Ok(res) => {
-                    // info!("BHARATH: order committed successfully");
-                    let blobs_len = match &sim_order.order {
-                        Order::Tx(tx) => match tx.tx_with_blobs.blobs_sidecar.as_ref() {
-                            alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip4844(
-                                blob_transaction_sidecar,
-                            ) => blob_transaction_sidecar.blobs.len(),
-                            alloy_eips::eip7594::BlobTransactionSidecarVariant::Eip7594(
-                                blob_transaction_sidecar_eip7594,
-                            ) => blob_transaction_sidecar_eip7594.blobs.len(),
-                        },
-                        _ => 0,
-                    };
-                    // info!("BHARATH: blobs len: {:?}", blobs_len);
                     gas_used = res.gas_used;
                     // This intermediate step is needed until we replace all (Address, u64) for AccountNonce
                     let nonces_updated: Vec<_> = res
@@ -370,7 +320,6 @@ impl OrderingBuilderContext {
                     block_orders.update_onchain_nonces(&nonces_updated);
                 }
                 Err(err) => {
-                    // info!("BHARATH: error while filling orders: {:?}", err);
                     if let ExecutionError::LowerInsertedValue { inplace, .. } = &err {
                         // try to reinsert order into the map
                         let order_attempts = order_attempts.entry(sim_order.id()).or_insert(0);

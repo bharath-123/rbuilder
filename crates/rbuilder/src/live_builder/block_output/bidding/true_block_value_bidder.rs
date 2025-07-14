@@ -13,7 +13,6 @@ use std::sync::Arc;
 use time::OffsetDateTime;
 use tokio::time::sleep;
 use tokio_util::sync::CancellationToken;
-use tracing::info;
 
 /// Bidding service giving a TrueBlockValueBidder.
 /// This is just an example not really suitable for production since it gives away all the profit!.
@@ -125,16 +124,13 @@ fn send_block(
     } else {
         None
     };
-    // info!("BHARATH: sending bid");
     bid_maker.send_bid(Bid::new(block, payout_tx_value, None));
 }
 
 impl UnfinishedBlockBuildingSink for TrueBlockValueBidder {
     fn new_block(&self, block: BiddableUnfinishedBlock) {
-        // info!("BHARATH: new block");
         let mut inner = self.inner.lock();
         if let Some(bid_maker) = &inner.bid_maker {
-            // info!("BHARATH: sending block in new_block");
             send_block(block, inner.subsidy, bid_maker.as_ref());
         } else {
             inner.last_block_not_sent = Some(block);

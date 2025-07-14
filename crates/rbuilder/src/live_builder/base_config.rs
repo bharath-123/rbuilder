@@ -339,7 +339,7 @@ impl BaseConfig {
             self.root_hash_use_sparse_trie,
             self.root_hash_compare_sparse_trie,
             thread_pool,
-            ETHSpareMPTVersion::V2,
+            version,
         ))
     }
 
