@@ -12,7 +12,7 @@ use parking_lot::Mutex;
 use std::sync::Arc;
 use tokio::sync::Notify;
 use tokio_util::sync::CancellationToken;
-use tracing::error;
+use tracing::{error, info};
 
 use super::interfaces::{Bid, BidMaker};
 
@@ -25,6 +25,7 @@ pub struct SequentialSealerBidMaker {
 
 impl BidMaker for SequentialSealerBidMaker {
     fn send_bid(&self, bid: Bid) {
+        // info!("BHARATH: sending bid in SequentialSealerBidMaker");
         self.pending_bid.update(bid);
     }
 }
@@ -50,6 +51,7 @@ impl PendingBid {
     }
     /// Updates bid, replacing  on current (we assume they are always increasing but we don't check it).
     fn update(&self, bid: Bid) {
+        // info!("BHARATH: updating bid in PendingBid");
         *self.bid.lock() = Some(bid);
         self.bid_notify.notify_one();
     }
@@ -107,6 +109,7 @@ impl SequentialSealerBidMakerProcess {
     /// block.finalize_block + self.sink.new_block inside spawn_blocking.
     async fn check_for_new_bid(&mut self) {
         if let Some(bid) = self.pending_bid.consume_bid() {
+            // info!("BHARATH: checking for new bid in SequentialSealerBidMakerProcess");
             let payout_tx_val = bid.payout_tx_value();
             let seen_competition_bid = bid.seen_competition_bid();
             let block = bid.block();

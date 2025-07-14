@@ -14,7 +14,7 @@ use std::{
     time::{Duration, Instant},
 };
 use tokio_util::sync::CancellationToken;
-use tracing::error;
+use tracing::{error, info};
 
 /// Function that continuously looks for a SimulationContext on ctx and when it finds one it polls its "request for simulation" channel (SimulationContext::requests).
 /// When the channel closes it goes back to waiting for a new SimulationContext.
@@ -85,6 +85,7 @@ pub fn run_sim_worker<P>(
                                     .collect(),
                                 simulation_time: start_time.elapsed(),
                             };
+                            // info!("BHARATH: sending sim result");
                             current_sim_context
                                 .results
                                 .try_send(result)

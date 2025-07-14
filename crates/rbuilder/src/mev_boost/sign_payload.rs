@@ -29,6 +29,7 @@ use reth_chainspec::{ChainSpec, EthereumHardforks};
 use reth_primitives::SealedBlock;
 use serde_with::{serde_as, DisplayFromStr};
 use std::sync::Arc;
+use tracing::info;
 
 /// Object to sign blocks to be sent to relays.
 #[derive(Debug, Clone)]
@@ -201,23 +202,25 @@ pub fn sign_block_for_relay(
         let execution_requests =
             ExecutionRequestsV4::try_from(Requests::new(execution_requests.to_vec()))?;
 
-        if chain_spec.is_prague_active_at_timestamp(sealed_block.timestamp) {
+        if chain_spec.is_osaka_active_at_timestamp(sealed_block.timestamp) {
+            // info!("BHARATH: number of blobs being sent to relay before marshalling them to BlobsBundleV2: {:?}", total_blobs_len);
+            let blobs_bundle_v2 = marshall_txs_blobs_sidecars_v2(blobs_bundle);
+
+            // info!("BHARATH: number of blobs being sent to relay: {:?}", blobs_bundle_v2.blobs.len());
+            SubmitBlockRequest::Fulu(FuluSubmitBlockRequest(SignedBidSubmissionV5 {
+                message,
+                execution_payload,
+                blobs_bundle: blobs_bundle_v2,
+                signature,
+                execution_requests,
+            }))
+        } else if chain_spec.is_prague_active_at_timestamp(sealed_block.timestamp) {
             let blobs_bundle = marshal_txs_blobs_sidecars(blobs_bundle);
 
             SubmitBlockRequest::Electra(ElectraSubmitBlockRequest(SignedBidSubmissionV4 {
                 message,
                 execution_payload,
                 blobs_bundle,
-                signature,
-                execution_requests,
-            }))
-        } else if chain_spec.is_osaka_active_at_timestamp(sealed_block.timestamp) {
-            let blobs_bundle_v2 = marshall_txs_blobs_sidecars_v2(blobs_bundle);
-
-            SubmitBlockRequest::Fulu(FuluSubmitBlockRequest(SignedBidSubmissionV5 {
-                message,
-                execution_payload,
-                blobs_bundle: blobs_bundle_v2,
                 signature,
                 execution_requests,
             }))
@@ -284,24 +287,32 @@ fn marshal_txs_blobs_sidecars(
 fn marshall_txs_blobs_sidecars_v2(
     txs_blobs_sidecars: &[Arc<BlobTransactionSidecarVariant>],
 ) -> BlobsBundleV2 {
-    let mut eip7549_sidecars = Vec::new();
-    for blob in txs_blobs_sidecars {
-        if let Some(bb) = blob.as_ref().as_eip7594() {
-            // TODO - bharath: cloning here is a terrible idea
-            eip7549_sidecars.push(Arc::new(bb.clone()))
-        }
-    }
+    // Instead of collecting Arc<BlobTransactionSidecarEip7594>, just collect references to the inner struct.
+    let eip7594_sidecars: Vec<&BlobTransactionSidecarEip7594> = txs_blobs_sidecars
+        .iter()
+        .filter_map(|blob| blob.as_ref().as_eip7594())
+        .collect();
 
-    let rpc_commitments =
-        flatten_marshal_eip7549(eip7549_sidecars.as_slice(), |t| t.commitments.clone());
-    let rpc_proofs =
-        flatten_marshal_eip7549(eip7549_sidecars.as_slice(), |t| t.cell_proofs.clone());
-    let rpc_blobs = flatten_marshal_eip7549(eip7549_sidecars.as_slice(), |t| t.blobs.clone());
+    // Now flatten the fields, only cloning the inner data, not the whole struct or Arc.
+    let commitments = eip7594_sidecars
+        .iter()
+        .flat_map(|t| t.commitments.iter().cloned())
+        .collect();
+
+    let proofs = eip7594_sidecars
+        .iter()
+        .flat_map(|t| t.cell_proofs.iter().cloned())
+        .collect();
+
+    let blobs = eip7594_sidecars
+        .iter()
+        .flat_map(|t| t.blobs.iter().cloned())
+        .collect();
 
     BlobsBundleV2 {
-        commitments: rpc_commitments,
-        proofs: rpc_proofs,
-        blobs: rpc_blobs,
+        commitments,
+        proofs,
+        blobs,
     }
 }
 

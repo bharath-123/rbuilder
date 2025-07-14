@@ -87,10 +87,13 @@ impl MissingNodesFetcher {
                         .map_err(SparseTrieError::other)?;
                     *fetched_nodes.lock() += requested_proofs.len();
                     for requested_proof in requested_proofs {
-                        let proof_for_node = storge_multiproof
-                            .subtree
-                            .matching_nodes_sorted(&convert_nibbles_to_reth_nybbles(requested_proof.clone()));
-                        let reth_proof_for_node = proof_for_node.into_iter().map(|(k, v)| (convert_reth_nybbles_to_nibbles(k), v)).collect();
+                        let proof_for_node = storge_multiproof.subtree.matching_nodes_sorted(
+                            &convert_nibbles_to_reth_nybbles(requested_proof.clone()),
+                        );
+                        let reth_proof_for_node = proof_for_node
+                            .into_iter()
+                            .map(|(k, v)| (convert_reth_nybbles_to_nibbles(k), v))
+                            .collect();
                         let proof_store =
                             shared_cache.account_proof_store_hashed_address(&hashed_address);
                         proof_store
@@ -130,7 +133,10 @@ impl MissingNodesFetcher {
                 .account_subtree
                 .matching_nodes_sorted(&convert_nibbles_to_reth_nybbles(requested_node.clone()));
 
-            let reth_proof_for_node = proof_for_node.into_iter().map(|(k, v)| (convert_reth_nybbles_to_nibbles(k), v)).collect();
+            let reth_proof_for_node = proof_for_node
+                .into_iter()
+                .map(|(k, v)| (convert_reth_nybbles_to_nibbles(k), v))
+                .collect();
             shared_cache
                 .account_trie
                 .add_proof(requested_node, reth_proof_for_node)
@@ -159,6 +165,3 @@ pub fn convert_nibbles_to_reth_nybbles(n: Nibbles) -> reth_trie::Nibbles {
     nibbles.extend_from_slice(n.pack().as_slice());
     nibbles
 }
-
-
-

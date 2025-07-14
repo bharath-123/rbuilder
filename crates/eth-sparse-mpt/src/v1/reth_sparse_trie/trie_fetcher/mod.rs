@@ -207,7 +207,6 @@ fn convert_reth_multiproof(
         }
         let mut subtree = Vec::with_capacity(reth_storage_proof.subtree.len());
 
-    
         for (k, v) in reth_storage_proof.subtree.into_inner() {
             subtree.push((convert_reth_nybbles_to_nibbles(k), v));
         }

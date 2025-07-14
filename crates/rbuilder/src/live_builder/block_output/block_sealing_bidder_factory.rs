@@ -7,7 +7,7 @@ use crate::{
     provider::StateProviderFactory,
 };
 use std::{fmt::Debug, sync::Arc};
-use tracing::error;
+use tracing::{error, info};
 
 use super::{
     bid_value_source::interfaces::{BidValueObs, BidValueSource, CompetitionBid},
@@ -165,6 +165,7 @@ impl BlockSealingBidder {
 
 impl UnfinishedBlockBuildingSink for BlockSealingBidder {
     fn new_block(&self, biddable_block: BiddableUnfinishedBlock) {
+        // info!("BHARATH: sending block in BlockSealingBidder");
         self.bidder.new_block(biddable_block);
     }
     fn can_use_suggested_fee_recipient_as_coinbase(&self) -> bool {
