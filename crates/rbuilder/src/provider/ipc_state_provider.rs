@@ -285,30 +285,6 @@ impl StateProvider for IpcStateProvider {
 
         Ok(storage)
     }
-
-    // fn bytecode_by_hash(&self, code_hash: &B256) -> ProviderResult<Option<Bytecode>> {
-    //     let empty_hash = code_hash.is_zero() || *code_hash == KECCAK_EMPTY;
-    //     if empty_hash {
-    //         return Ok(None);
-    //     }
-    //
-    //     if let Some(bytecode) = self.code_cache.get(code_hash) {
-    //         return Ok(Some(bytecode.clone()));
-    //     }
-    //
-    //     let bytecode = rpc_call::<(&B256,), Option<Bytes>>(
-    //         &self.ipc_provider,
-    //         "rbuilder_getCodeByHash",
-    //         (code_hash,),
-    //     )?
-    //     .map(|b| {
-    //         let bytecode = Bytecode::new_raw(b);
-    //         self.code_cache.insert(*code_hash, bytecode.clone());
-    //         bytecode
-    //     });
-    //
-    //     Ok(bytecode)
-    // }
 }
 
 impl BlockHashReader for IpcStateProvider {
