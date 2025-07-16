@@ -8011,7 +8011,7 @@ dependencies = [
 [[package]]
 name = "op-revm"
 version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "auto_impl",
  "once_cell",
@@ -12432,7 +12432,7 @@ dependencies = [
 [[package]]
 name = "revm"
 version = "27.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "revm-bytecode 6.0.1",
  "revm-context 8.0.2",
@@ -12461,7 +12461,7 @@ dependencies = [
 [[package]]
 name = "revm-bytecode"
 version = "6.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "bitvec",
  "once_cell",
@@ -12488,7 +12488,7 @@ dependencies = [
 [[package]]
 name = "revm-context"
 version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "cfg-if",
  "derive-where",
@@ -12518,7 +12518,7 @@ dependencies = [
 [[package]]
 name = "revm-context-interface"
 version = "8.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "alloy-eip2930 0.2.1",
  "alloy-eip7702 0.6.1",
@@ -12545,7 +12545,7 @@ dependencies = [
 [[package]]
 name = "revm-database"
 version = "7.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "alloy-eips 1.0.20",
  "revm-bytecode 6.0.1",
@@ -12569,7 +12569,7 @@ dependencies = [
 [[package]]
 name = "revm-database-interface"
 version = "7.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "auto_impl",
  "either",
@@ -12599,7 +12599,7 @@ dependencies = [
 [[package]]
 name = "revm-handler"
 version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "auto_impl",
  "derive-where",
@@ -12633,7 +12633,7 @@ dependencies = [
 [[package]]
 name = "revm-inspector"
 version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "auto_impl",
  "either",
@@ -12697,7 +12697,7 @@ dependencies = [
 [[package]]
 name = "revm-interpreter"
 version = "23.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "revm-bytecode 6.0.1",
  "revm-context-interface 8.0.1",
@@ -12729,7 +12729,7 @@ dependencies = [
 [[package]]
 name = "revm-precompile"
 version = "24.0.0"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "ark-bls12-381",
  "ark-bn254",
@@ -12755,7 +12755,7 @@ dependencies = [
 [[package]]
 name = "revm-primitives"
 version = "20.0.0"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "alloy-primitives 1.2.1",
  "num_enum",
@@ -12776,7 +12776,7 @@ dependencies = [
 [[package]]
 name = "revm-state"
 version = "7.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Fcontract_size_limit#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
 dependencies = [
  "bitflags 2.9.1",
  "revm-bytecode 6.0.1",
