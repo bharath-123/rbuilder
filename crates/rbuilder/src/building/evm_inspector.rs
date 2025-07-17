@@ -7,8 +7,8 @@ use revm::{
     context::ContextTr,
     inspector::JournalExt,
     interpreter::{interpreter_types::Jumps, CallInputs, CallOutcome, Interpreter},
-    Inspector,
 };
+use revm::inspector::Inspector;
 use revm_inspectors::access_list::AccessListInspector;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -290,13 +290,13 @@ where
     UsedStateEVMInspector<'a>: Inspector<CTX>,
 {
     // TODO - looks like the step method has been removed from access_list_inspector? Debug this
-    // #[inline]
-    // fn step(&mut self, interp: &mut Interpreter, context: &mut CTX) {
-    //     self.access_list_inspector.step(interp, context);
-    //     if let Some(used_state_inspector) = &mut self.used_state_inspector {
-    //         used_state_inspector.step(interp, context);
-    //     }
-    // }
+    #[inline]
+    fn step(&mut self, interp: &mut Interpreter, context: &mut CTX) {
+        self.access_list_inspector.step(interp, context);
+        if let Some(used_state_inspector) = &mut self.used_state_inspector {
+            used_state_inspector.step(interp, context);
+        }
+    }
 
     #[inline]
     fn call(&mut self, context: &mut CTX, inputs: &mut CallInputs) -> Option<CallOutcome> {
