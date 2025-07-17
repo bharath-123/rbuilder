@@ -821,10 +821,8 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
             .is_osaka_active_at_timestamp(ctx.attributes.timestamp)
         {
             for tx_with_blob in self.executed_tx_infos.iter().map(|info| &info.tx) {
-                let eip7594_sidecar = tx_with_blob.blobs_sidecar.as_eip7594();
-
-                if eip7594_sidecar.is_some() {
-                    if !eip7594_sidecar.unwrap().blobs.is_empty() {
+                if let Some(eip7594_sidecar) = tx_with_blob.blobs_sidecar.as_eip7594() {
+                    if !eip7594_sidecar.blobs.is_empty() {
                         txs_blob_sidecars.push(tx_with_blob.blobs_sidecar.clone());
                     }
                 }
@@ -835,10 +833,8 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
             .is_cancun_active_at_timestamp(ctx.attributes.timestamp)
         {
             for tx_with_blob in self.executed_tx_infos.iter().map(|info| &info.tx) {
-                let eip4844_sidecar = tx_with_blob.blobs_sidecar.as_eip4844();
-
-                if eip4844_sidecar.is_some() {
-                    if !eip4844_sidecar.unwrap().blobs.is_empty() {
+                if let Some(eip4844_sidecar) = tx_with_blob.blobs_sidecar.as_eip4844() {
+                    if !eip4844_sidecar.blobs.is_empty() {
                         txs_blob_sidecars.push(tx_with_blob.blobs_sidecar.clone());
                     }
                 }

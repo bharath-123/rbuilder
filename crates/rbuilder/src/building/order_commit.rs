@@ -426,7 +426,6 @@ impl<'a, 'b, 'c, 'd, Tracer: SimulationTracer> PartialBlockFork<'a, 'b, 'c, 'd, 
     ) -> Result<Result<TransactionOk, TransactionErr>, CriticalCommitOrderError> {
         let coinbase_balance_before = I256::try_from(self.coinbase_balance()?)?;
         // Use blobs.len() instead of checking for tx type just in case in the future some other new txs have blobs
-        // let blob_gas_used = tx_with_blobs.blobs_sidecar.blobs.len() as u64 * DATA_GAS_PER_BLOB;
         let blob_gas_used = match tx_with_blobs.blobs_sidecar.as_ref() {
             BlobTransactionSidecarVariant::Eip4844(eip4844_sidecar) => {
                 eip4844_sidecar.blobs.len() as u64 * DATA_GAS_PER_BLOB

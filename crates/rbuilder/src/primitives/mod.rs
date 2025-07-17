@@ -714,29 +714,29 @@ impl TransactionSignedEcRecoveredWithBlobs {
             Err(TxWithBlobsCreateError::BlobsMissingEip4844)
         // Groovy!
         // No blob txs at all
-        } else if blob_sidecar.is_none() && tx.inner().blob_versioned_hashes().is_none() {
-            Ok(Self {
-                tx,
-                blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip4844(
-                    BlobTransactionSidecar::default(),
-                )),
-                metadata: metadata.unwrap_or_default(),
-            })
         } else {
-            let b_sidecar = blob_sidecar.unwrap();
-            if b_sidecar.is_eip4844() {
-                Ok(Self {
-                    tx,
-                    blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::from(
-                        b_sidecar.into_eip4844().unwrap_or_default(),
-                    )),
-                    metadata: metadata.unwrap_or_default(),
-                })
+            if let Some(b_sidecar) = blob_sidecar {
+                match b_sidecar {
+                    BlobTransactionSidecarVariant::Eip4844(sidecar) => {
+                        Ok(Self {
+                            tx,
+                            blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip4844(sidecar)),
+                            metadata: metadata.unwrap_or_default(),
+                        })
+                    },
+                    BlobTransactionSidecarVariant::Eip7594(sidecar) => {
+                        Ok(Self {
+                            tx,
+                            blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip7594(sidecar)),
+                            metadata: metadata.unwrap_or_default(),
+                        })
+                    },
+                }
             } else {
                 Ok(Self {
                     tx,
-                    blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::from(
-                        b_sidecar.into_eip7594().unwrap_or_default(),
+                    blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip4844(
+                        BlobTransactionSidecar::default(),
                     )),
                     metadata: metadata.unwrap_or_default(),
                 })
@@ -766,11 +766,6 @@ impl TransactionSignedEcRecoveredWithBlobs {
         T: TransactionOrdering<Transaction = <V as TransactionValidator>::Transaction>,
         S: BlobStore,
     {
-        // let mut blobs: Vec<(
-        //     alloy_primitives::FixedBytes<32>,
-        //     Arc<BlobTransactionSidecarVariant>,
-        // )> = pool.get_all_blobs(vec![*tx.inner().hash()])?;
-        // let blob_sidecar = blobs.pop().map(|(_, arc)| arc.as_ref().clone());
         let blob_sidecar = pool
             .get_blob(*tx.inner().hash())?
             .and_then(|b| Arc::try_unwrap(b).ok());
