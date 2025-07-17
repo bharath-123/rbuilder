@@ -243,32 +243,35 @@ pub fn sign_block_for_relay(
     Ok(submit_block_request)
 }
 
-fn flatten_marshal<Source>(
-    txs_blobs_sidecars: &[Arc<BlobTransactionSidecar>],
-    vec_getter: impl Fn(&Arc<BlobTransactionSidecar>) -> Vec<Source>,
-) -> Vec<Source> {
-    let flatten_data = txs_blobs_sidecars.iter().flat_map(vec_getter);
-    flatten_data.collect::<Vec<Source>>()
-}
-
 fn marshal_txs_blobs_sidecars(
     txs_blobs_sidecars: &[Arc<BlobTransactionSidecarVariant>],
 ) -> BlobsBundleV1 {
-    let mut eip4844_sidecars = Vec::new();
-    for blob in txs_blobs_sidecars {
-        if let Some(bb) = blob.as_ref().as_eip4844() {
-            eip4844_sidecars.push(Arc::new(bb.clone()))
-        }
-    }
+    // Instead of collecting Arc<BlobTransactionSidecar>, just collect references to the inner struct.
+    let eip4844_sidecars: Vec<&BlobTransactionSidecar> = txs_blobs_sidecars
+        .iter()
+        .filter_map(|blob| blob.as_ref().as_eip4844())
+        .collect();
 
-    let rpc_commitments = flatten_marshal(eip4844_sidecars.as_slice(), |t| t.commitments.clone());
-    let rpc_proofs = flatten_marshal(eip4844_sidecars.as_slice(), |t| t.proofs.clone());
-    let rpc_blobs = flatten_marshal(eip4844_sidecars.as_slice(), |t| t.blobs.clone());
+    // Now flatten the fields, only cloning the inner data, not the whole struct or Arc.
+    let commitments = eip4844_sidecars
+        .iter()
+        .flat_map(|t| t.commitments.iter().cloned())
+        .collect();
+
+    let proofs = eip4844_sidecars
+        .iter()
+        .flat_map(|t| t.proofs.iter().cloned())
+        .collect();
+
+    let blobs = eip4844_sidecars
+        .iter()
+        .flat_map(|t| t.blobs.iter().cloned())
+        .collect();
 
     BlobsBundleV1 {
-        commitments: rpc_commitments,
-        proofs: rpc_proofs,
-        blobs: rpc_blobs,
+        commitments,
+        proofs,
+        blobs,
     }
 }
 

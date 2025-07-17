@@ -69,8 +69,7 @@ impl ValidationAPIClient {
         }
 
         let method = match req {
-            // TODO - move this to v5
-            SubmitBlockRequest::Fulu(_) => "flashbots_validateBuilderSubmissionV4",
+            SubmitBlockRequest::Fulu(_) => "flashbots_validateBuilderSubmissionV5",
             SubmitBlockRequest::Capella(_) => "flashbots_validateBuilderSubmissionV2",
             SubmitBlockRequest::Deneb(_) => "flashbots_validateBuilderSubmissionV3",
             SubmitBlockRequest::Electra(_) => "flashbots_validateBuilderSubmissionV4",

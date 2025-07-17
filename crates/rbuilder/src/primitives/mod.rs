@@ -9,7 +9,7 @@ mod test_data_generator;
 
 use crate::building::evm_inspector::UsedStateTrace;
 use alloy_consensus::Transaction as _;
-use alloy_eips::eip7594::BlobTransactionSidecarVariant;
+use alloy_eips::eip7594::{BlobTransactionSidecarEip7594, BlobTransactionSidecarVariant};
 use alloy_eips::{
     eip2718::{Decodable2718, Eip2718Error, Encodable2718},
     eip4844::{Blob, BlobTransactionSidecar, Bytes48},
@@ -766,11 +766,14 @@ impl TransactionSignedEcRecoveredWithBlobs {
         T: TransactionOrdering<Transaction = <V as TransactionValidator>::Transaction>,
         S: BlobStore,
     {
-        let mut blobs: Vec<(
-            alloy_primitives::FixedBytes<32>,
-            Arc<BlobTransactionSidecarVariant>,
-        )> = pool.get_all_blobs(vec![*tx.inner().hash()])?;
-        let blob_sidecar = blobs.pop().map(|(_, arc)| arc.as_ref().clone());
+        // let mut blobs: Vec<(
+        //     alloy_primitives::FixedBytes<32>,
+        //     Arc<BlobTransactionSidecarVariant>,
+        // )> = pool.get_all_blobs(vec![*tx.inner().hash()])?;
+        // let blob_sidecar = blobs.pop().map(|(_, arc)| arc.as_ref().clone());
+        let blob_sidecar = pool
+            .get_blob(*tx.inner().hash())?
+            .and_then(|b| Arc::try_unwrap(b).ok());
         Self::new(tx, blob_sidecar, None)
     }
 
@@ -879,6 +882,30 @@ impl TransactionSignedEcRecoveredWithBlobs {
         Ok(TransactionSignedEcRecoveredWithBlobs {
             tx,
             blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip4844(fake_sidecar)),
+            metadata: Metadata::default(),
+        })
+    }
+
+    pub fn decode_enveloped_with_fake_eip7594_blobs(
+        raw_tx: Bytes,
+    ) -> Result<TransactionSignedEcRecoveredWithBlobs, TxWithBlobsCreateError> {
+        let decoded = TransactionSigned::decode_2718(&mut raw_tx.as_ref())
+            .map_err(TxWithBlobsCreateError::FailedToDecodeTransaction)?;
+        let tx = SignerRecoverable::try_into_recovered(decoded)
+            .map_err(|_| TxWithBlobsCreateError::InvalidTransactionSignature)?;
+        let mut fake_sidecar = BlobTransactionSidecarEip7594::default();
+        for _ in 0..tx.blob_versioned_hashes().map_or(0, |hashes| hashes.len()) {
+            fake_sidecar.blobs.push(Blob::from([0u8; BYTES_PER_BLOB]));
+            fake_sidecar
+                .commitments
+                .push(Bytes48::from([0u8; BYTES_PER_COMMITMENT]));
+            fake_sidecar
+                .cell_proofs
+                .push(Bytes48::from([0u8; BYTES_PER_PROOF]));
+        }
+        Ok(TransactionSignedEcRecoveredWithBlobs {
+            tx,
+            blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip7594(fake_sidecar)),
             metadata: Metadata::default(),
         })
     }
