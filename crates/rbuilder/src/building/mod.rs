@@ -48,7 +48,7 @@ use revm::{
     context::BlockEnv,
     context_interface::{block::BlobExcessGasAndPrice, result::InvalidTransaction},
     database::states::bundle_state::BundleRetention,
-    primitives::hardfork::SpecId,
+    primitives::{eip4844::{BLOB_BASE_FEE_UPDATE_FRACTION_CANCUN, BLOB_BASE_FEE_UPDATE_FRACTION_PRAGUE}, hardfork::SpecId},
 };
 use serde::Deserialize;
 use std::{
@@ -233,10 +233,15 @@ impl BlockBuildingContext {
         let block_number = onchain_block.header.number;
 
         let blob_excess_gas_and_price =
-            if chain_spec.is_cancun_active_at_timestamp(onchain_block.header.timestamp) {
+            if chain_spec.is_prague_active_at_timestamp(onchain_block.header.timestamp) || chain_spec.is_osaka_active_at_timestamp(onchain_block.header.timestamp) {
                 Some(BlobExcessGasAndPrice::new(
                     onchain_block.header.excess_blob_gas.unwrap_or_default(),
-                    5007716,
+                    BLOB_BASE_FEE_UPDATE_FRACTION_PRAGUE,
+                ))
+            } else if chain_spec.is_cancun_active_at_timestamp(onchain_block.header.timestamp) { 
+                Some(BlobExcessGasAndPrice::new(
+                    onchain_block.header.excess_blob_gas.unwrap_or_default(),
+                    BLOB_BASE_FEE_UPDATE_FRACTION_CANCUN,
                 ))
             } else {
                 None
@@ -833,6 +838,7 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
             .is_cancun_active_at_timestamp(ctx.attributes.timestamp)
         {
             for tx_with_blob in self.executed_tx_infos.iter().map(|info| &info.tx) {
+
                 if let Some(eip4844_sidecar) = tx_with_blob.blobs_sidecar.as_eip4844() {
                     if !eip4844_sidecar.blobs.is_empty() {
                         txs_blob_sidecars.push(tx_with_blob.blobs_sidecar.clone());
