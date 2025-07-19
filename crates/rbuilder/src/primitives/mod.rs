@@ -766,9 +766,11 @@ impl TransactionSignedEcRecoveredWithBlobs {
         T: TransactionOrdering<Transaction = <V as TransactionValidator>::Transaction>,
         S: BlobStore,
     {
-        let blob_sidecar = pool
-            .get_blob(*tx.inner().hash())?
-            .and_then(|b| Arc::try_unwrap(b).ok());
+        let mut blobs: Vec<(
+            alloy_primitives::FixedBytes<32>,
+            Arc<BlobTransactionSidecarVariant>,
+        )> = pool.get_all_blobs(vec![*tx.inner().hash()])?;
+        let blob_sidecar = blobs.pop().map(|(_, arc)| arc.as_ref().clone());
         Self::new(tx, blob_sidecar, None)
     }
 
