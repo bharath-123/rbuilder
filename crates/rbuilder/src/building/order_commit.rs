@@ -271,7 +271,7 @@ pub enum BundleErr {
     #[error("Incorrect refundable element: {0}")]
     IncorrectRefundableElement(usize),
     #[error("Incorrect timestamp, min: {min}, max: {max}, block: {block}")]
-    IncorrectTimestamp { min: u64, max: u64, block: U256 },
+    IncorrectTimestamp { min: u64, max: u64, block: u64 },
     #[error("Mev-share without signer")]
     NoSigner,
 }
@@ -609,7 +609,7 @@ impl<'a, 'b, 'c, 'd, Tracer: SimulationTracer> PartialBlockFork<'a, 'b, 'c, 'd, 
             return Ok(Err(BundleErr::IncorrectTimestamp {
                 min: min_ts,
                 max: max_ts,
-                block: U256::from(block_ts),
+                block: block_ts.try_into().expect("Block number should be a u64"),
             }));
         }
 

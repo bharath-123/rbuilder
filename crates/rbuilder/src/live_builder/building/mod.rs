@@ -112,9 +112,8 @@ where
                 .evm_env
                 .block_env
                 .number
-                .to_string()
-                .parse::<u64>()
-                .unwrap(),
+                .try_into()
+                .expect("Block number should be a u64"),
             Box::new(mempool_txs_detector_sniffer),
         );
 
