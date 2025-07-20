@@ -350,9 +350,8 @@ impl BlockBuildingContext {
         self.evm_env
             .block_env
             .number
-            .to_string()
-            .parse::<u64>()
-            .unwrap()
+            .try_into()
+            .expect("Block number should be a u64")
     }
 
     pub fn coinbase_is_suggested_fee_recipient(&self) -> bool {
@@ -790,9 +789,11 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
             let execution_outcome = ExecutionOutcome::new(
                 bundle,
                 Vec::new(),
-                block_number.to_string().parse::<u64>().unwrap(),
+                block_number
+                    .try_into()
+                    .expect("Block number should be a u64"),
                 Vec::new(),
-            ); // TODO - we need to convert from U256 to u64 which is not a good idea to do, we need to use U256 everywhere
+            );
             ctx.root_hasher.state_root(&execution_outcome, local_ctx)?
         };
         let root_hash_time = step_start.elapsed();
@@ -870,7 +871,9 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
             mix_hash: ctx.attributes.prev_randao,
             nonce: BEACON_NONCE.into(),
             base_fee_per_gas: Some(ctx.evm_env.block_env.basefee),
-            number: block_number.to_string().parse::<u64>().unwrap(),
+            number: block_number
+                .try_into()
+                .expect("Block number should be a u64"),
             gas_limit: ctx.evm_env.block_env.gas_limit,
             difficulty: U256::ZERO,
             gas_used: self.gas_used,

@@ -20,7 +20,6 @@ use crate::{
     utils::NonceCache,
 };
 use ahash::{HashMap, HashSet};
-use alloy_primitives::U256;
 use derivative::Derivative;
 use reth_provider::StateProvider;
 use serde::Deserialize;
@@ -162,13 +161,17 @@ pub fn backtest_simulate_block<P, OrderPriorityType: OrderPriority>(
 where
     P: StateProviderFactory + Clone + 'static,
 {
+    let ctx_block_number: u64 = input
+        .ctx
+        .evm_env
+        .block_env
+        .number
+        .try_into()
+        .expect("Block number should be a u64");
     let use_suggested_fee_recipient_as_coinbase = ordering_config.coinbase_payment;
-    let state_provider = input.provider.history_by_block_number(
-        (input.ctx.evm_env.block_env.number - U256::from(1))
-            .to_string()
-            .parse::<u64>()
-            .unwrap(),
-    )?; // TODO - bharath: U256 -> u64 conversion which is not desirable
+    let state_provider = input
+        .provider
+        .history_by_block_number(ctx_block_number - 1)?;
     let block_orders =
         block_orders_from_sim_orders::<OrderPriorityType>(input.sim_orders, &state_provider)?;
     let mut local_ctx = ThreadBlockBuildingContext::default();

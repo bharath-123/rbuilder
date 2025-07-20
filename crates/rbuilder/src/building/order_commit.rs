@@ -244,7 +244,7 @@ pub enum BundleErr {
         "Trying to commit bundle for incorrect block, block: {block}, target_blocks: {target_block}-{target_max_block}"
     )]
     TargetBlockIncorrect {
-        block: U256,
+        block: u64,
         target_block: u64,
         target_max_block: u64,
     },
@@ -591,7 +591,9 @@ impl<'a, 'b, 'c, 'd, Tracer: SimulationTracer> PartialBlockFork<'a, 'b, 'c, 'd, 
         if let Some(block) = bundle.block {
             if U256::from(block) != current_block {
                 return Ok(Err(BundleErr::TargetBlockIncorrect {
-                    block: current_block,
+                    block: current_block
+                        .try_into()
+                        .expect("Block number should be a u64"),
                     target_block: block,
                     target_max_block: block,
                 }));
@@ -824,7 +826,9 @@ impl<'a, 'b, 'c, 'd, Tracer: SimulationTracer> PartialBlockFork<'a, 'b, 'c, 'd, 
             && current_block <= U256::from(bundle.max_block))
         {
             return Ok(Err(BundleErr::TargetBlockIncorrect {
-                block: current_block,
+                block: current_block
+                    .try_into()
+                    .expect("Block number should be a u64"),
                 target_block: bundle.block,
                 target_max_block: bundle.max_block,
             }));

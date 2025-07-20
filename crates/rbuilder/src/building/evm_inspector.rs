@@ -289,7 +289,6 @@ where
     CTX: ContextTr<Journal: JournalExt>,
     UsedStateEVMInspector<'a>: Inspector<CTX>,
 {
-    // TODO - looks like the step method has been removed from access_list_inspector? Debug this
     #[inline]
     fn step(&mut self, interp: &mut Interpreter, context: &mut CTX) {
         self.access_list_inspector.step(interp, context);

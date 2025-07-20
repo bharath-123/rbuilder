@@ -95,12 +95,11 @@ fn test_target_block() -> eyre::Result<()> {
 
         test_setup.begin_bundle_order(NEXT_BUILT_BLOCK_NUMBER);
         test_setup.add_dummy_tx_0_1_no_rev()?;
-        let built_block_number_u256 = U256::from(BUILT_BLOCK_NUMBER);
 
         commit_order_err_matches!(
             test_setup,
             OrderErr::Bundle(BundleErr::TargetBlockIncorrect {
-                block: built_block_number_u256,
+                block: BUILT_BLOCK_NUMBER,
                 target_block: NEXT_BUILT_BLOCK_NUMBER,
                 target_max_block: NEXT_BUILT_BLOCK_NUMBER
             })
@@ -111,7 +110,7 @@ fn test_target_block() -> eyre::Result<()> {
         commit_order_err_matches!(
             test_setup,
             OrderErr::Bundle(BundleErr::TargetBlockIncorrect {
-                block: built_block_number_u256,
+                block: BUILT_BLOCK_NUMBER,
                 target_block: PREV_BUILT_BLOCK_NUMBER,
                 target_max_block: PREV_BUILT_BLOCK_NUMBER
             })
@@ -136,12 +135,10 @@ fn test_target_block() -> eyre::Result<()> {
         test_setup.begin_share_bundle_order(PREV_PREV_BUILT_BLOCK_NUMBER, PREV_BUILT_BLOCK_NUMBER);
         test_setup.add_dummy_tx_0_1_no_rev()?;
 
-        let built_block_number_u256 = U256::from(BUILT_BLOCK_NUMBER);
-
         commit_order_err_matches!(
             test_setup,
             OrderErr::Bundle(BundleErr::TargetBlockIncorrect {
-                block: built_block_number_u256,
+                block: BUILT_BLOCK_NUMBER,
                 target_block: PREV_PREV_BUILT_BLOCK_NUMBER,
                 target_max_block: PREV_BUILT_BLOCK_NUMBER
             })
@@ -152,7 +149,7 @@ fn test_target_block() -> eyre::Result<()> {
         commit_order_err_matches!(
             test_setup,
             OrderErr::Bundle(BundleErr::TargetBlockIncorrect {
-                block: built_block_number_u256,
+                block: BUILT_BLOCK_NUMBER,
                 target_block: NEXT_BUILT_BLOCK_NUMBER,
                 target_max_block: NEXT_NEXT_BUILT_BLOCK_NUMBER
             })

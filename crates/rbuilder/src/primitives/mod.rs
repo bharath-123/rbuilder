@@ -714,33 +714,27 @@ impl TransactionSignedEcRecoveredWithBlobs {
             Err(TxWithBlobsCreateError::BlobsMissingEip4844)
         // Groovy!
         // No blob txs at all
-        } else {
-            if let Some(b_sidecar) = blob_sidecar {
-                match b_sidecar {
-                    BlobTransactionSidecarVariant::Eip4844(sidecar) => {
-                        Ok(Self {
-                            tx,
-                            blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip4844(sidecar)),
-                            metadata: metadata.unwrap_or_default(),
-                        })
-                    },
-                    BlobTransactionSidecarVariant::Eip7594(sidecar) => {
-                        Ok(Self {
-                            tx,
-                            blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip7594(sidecar)),
-                            metadata: metadata.unwrap_or_default(),
-                        })
-                    },
-                }
-            } else {
-                Ok(Self {
+        } else if let Some(b_sidecar) = blob_sidecar {
+            match b_sidecar {
+                BlobTransactionSidecarVariant::Eip4844(sidecar) => Ok(Self {
                     tx,
-                    blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip4844(
-                        BlobTransactionSidecar::default(),
-                    )),
+                    blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip4844(sidecar)),
                     metadata: metadata.unwrap_or_default(),
-                })
+                }),
+                BlobTransactionSidecarVariant::Eip7594(sidecar) => Ok(Self {
+                    tx,
+                    blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip7594(sidecar)),
+                    metadata: metadata.unwrap_or_default(),
+                }),
             }
+        } else {
+            Ok(Self {
+                tx,
+                blobs_sidecar: Arc::new(BlobTransactionSidecarVariant::Eip4844(
+                    BlobTransactionSidecar::default(),
+                )),
+                metadata: metadata.unwrap_or_default(),
+            })
         }
     }
 
