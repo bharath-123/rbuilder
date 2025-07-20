@@ -108,7 +108,9 @@ where
 }
 
 fn pad_path(mut path: Nibbles) -> B256 {
-    path.as_mut_vec_unchecked().resize(64, 0);
+    let mut new_vec = path.to_vec();
+    new_vec.resize(64, 0);
+    path = Nibbles::from_iter_unchecked(new_vec);
     let mut res = B256::default();
     path.pack_to(res.as_mut_slice());
     res
@@ -194,7 +196,7 @@ fn convert_reth_multiproof(
 ) -> MultiProof {
     let mut account_subtree = Vec::with_capacity(reth_proof.account_subtree.len());
     for (k, v) in reth_proof.account_subtree.into_inner() {
-        account_subtree.push((convert_reth_nybbles_to_nibbles(k), v));
+        account_subtree.push((k, v));
     }
     account_subtree.sort_by_key(|a| a.0.clone());
     let mut storages = hash_map_with_capacity(reth_proof.storages.len());
@@ -208,7 +210,7 @@ fn convert_reth_multiproof(
         let mut subtree = Vec::with_capacity(reth_storage_proof.subtree.len());
 
         for (k, v) in reth_storage_proof.subtree.into_inner() {
-            subtree.push((convert_reth_nybbles_to_nibbles(k), v));
+            subtree.push((k, v));
         }
         subtree.sort_by_key(|a| a.0.clone());
         let v = StorageMultiProof { subtree };
@@ -220,14 +222,3 @@ fn convert_reth_multiproof(
     }
 }
 
-pub fn convert_reth_nybbles_to_nibbles(n: reth_trie::Nibbles) -> Nibbles {
-    let mut nibbles = Nibbles::new();
-    nibbles.extend_from_slice_unchecked(n.to_vec().as_slice());
-    nibbles
-}
-
-pub fn convert_nibbles_to_reth_nybbles(n: Nibbles) -> reth_trie::Nibbles {
-    let mut nibbles = reth_trie::Nibbles::new();
-    nibbles.extend_from_slice(n.pack().as_slice());
-    nibbles
-}

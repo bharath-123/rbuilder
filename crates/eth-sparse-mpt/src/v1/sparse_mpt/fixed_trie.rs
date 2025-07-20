@@ -286,8 +286,8 @@ impl FixedTrie {
                             parent_child_idx = None;
 
                             let len = node.key.len();
-                            current_path.extend_from_slice_unchecked(&path_left[..len]);
-                            path_left.as_mut_vec_unchecked().drain(..len);
+                            current_path.extend(&path_left.slice(..len));
+                            path_left.truncate(path_left.len() - len);
 
                             if path_left.is_empty() {
                                 break;
@@ -456,10 +456,15 @@ impl FixedTrie {
                                         // we stepped into child above so the path is the path of current child and orphan child differs
                                         // only in last nibble
                                         let mut path = c.current_path.clone();
-                                        path.as_mut_vec_unchecked()
-                                            .last_mut()
-                                            .map(|n| *n = orphan_nibble)
-                                            .unwrap();
+                                        // Instead of using as_mut_vec_unchecked (which does not exist for Nibbles),
+                                        // we can use the safe pop/push approach to replace the last nibble.
+                                        // Remove the last nibble and push the orphan_nibble.
+                                        path.pop();
+                                        path.push(orphan_nibble);
+                                        // path.as_mut_vec_unchecked()
+                                        //     .last_mut()
+                                        //     .map(|n| *n = orphan_nibble)
+                                        //     .unwrap();
                                         missing_nodes.push(path);
                                     }
                                 }

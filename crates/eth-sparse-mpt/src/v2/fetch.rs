@@ -88,11 +88,11 @@ impl MissingNodesFetcher {
                     *fetched_nodes.lock() += requested_proofs.len();
                     for requested_proof in requested_proofs {
                         let proof_for_node = storge_multiproof.subtree.matching_nodes_sorted(
-                            &convert_nibbles_to_reth_nybbles(requested_proof.clone()),
+                            &requested_proof.clone(),
                         );
                         let reth_proof_for_node = proof_for_node
                             .into_iter()
-                            .map(|(k, v)| (convert_reth_nybbles_to_nibbles(k), v))
+                            .map(|(k, v)| (k, v))
                             .collect();
                         let proof_store =
                             shared_cache.account_proof_store_hashed_address(&hashed_address);
@@ -131,11 +131,11 @@ impl MissingNodesFetcher {
         for requested_node in self.account_proof_requested_nodes.drain(..) {
             let proof_for_node = multiproof
                 .account_subtree
-                .matching_nodes_sorted(&convert_nibbles_to_reth_nybbles(requested_node.clone()));
+                .matching_nodes_sorted(&requested_node.clone());
 
             let reth_proof_for_node = proof_for_node
                 .into_iter()
-                .map(|(k, v)| (convert_reth_nybbles_to_nibbles(k), v))
+                .map(|(k, v)| (k, v))
                 .collect();
             shared_cache
                 .account_trie
@@ -148,20 +148,10 @@ impl MissingNodesFetcher {
 }
 
 fn pad_path(mut path: Nibbles) -> B256 {
-    path.as_mut_vec_unchecked().resize(64, 0);
+    let mut new_vec = path.to_vec();
+    new_vec.resize(64, 0);
+    path = Nibbles::from_iter_unchecked(new_vec);
     let mut res = B256::default();
     path.pack_to(res.as_mut_slice());
     res
-}
-
-pub fn convert_reth_nybbles_to_nibbles(n: reth_trie::Nibbles) -> Nibbles {
-    let mut nibbles = Nibbles::new();
-    nibbles.extend_from_slice_unchecked(n.to_vec().as_slice());
-    nibbles
-}
-
-pub fn convert_nibbles_to_reth_nybbles(n: Nibbles) -> reth_trie::Nibbles {
-    let mut nibbles = reth_trie::Nibbles::new();
-    nibbles.extend_from_slice(n.pack().as_slice());
-    nibbles
 }
