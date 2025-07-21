@@ -34,7 +34,6 @@ use sha2::{Digest, Sha256};
 use std::{cmp::Ordering, collections::HashMap, fmt::Display, hash::Hash, str::FromStr, sync::Arc};
 pub use test_data_generator::TestDataGenerator;
 use thiserror::Error;
-use tracing::info;
 use uuid::Uuid;
 
 /// Extra metadata for ShareBundle/Bundle.
