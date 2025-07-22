@@ -107,15 +107,15 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "alloy-chains"
-version = "0.2.5"
+version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5674914c2cfdb866c21cb0c09d82374ee39a1395cf512e7515f4c014083b3fff"
+checksum = "4195a29a4b87137b2bb02105e746102873bc03561805cf45c0e510c961f160e6"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "num_enum",
  "serde",
- "strum 0.27.1",
+ "strum 0.27.2",
 ]
 
 [[package]]
@@ -143,13 +143,13 @@ dependencies = [
 
 [[package]]
 name = "alloy-consensus"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
- "alloy-serde 1.0.20",
+ "alloy-serde 1.0.23",
  "alloy-trie 0.9.0",
  "alloy-tx-macros",
  "arbitrary",
@@ -182,28 +182,28 @@ dependencies = [
 
 [[package]]
 name = "alloy-consensus-any"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
- "alloy-serde 1.0.20",
+ "alloy-serde 1.0.23",
  "arbitrary",
  "serde",
 ]
 
 [[package]]
 name = "alloy-dyn-abi"
-version = "1.2.1"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b95b3deca680efc7e9cba781f1a1db352fa1ea50e6384a514944dcf4419e652"
+checksum = "d9e8a436f0aad7df8bb47f144095fba61202265d9f5f09a70b0e3227881a668e"
 dependencies = [
- "alloy-json-abi 1.2.1",
- "alloy-primitives 1.2.1",
- "alloy-sol-type-parser 1.2.1",
- "alloy-sol-types 1.2.1",
+ "alloy-json-abi 1.3.0",
+ "alloy-primitives 1.3.0",
+ "alloy-sol-type-parser 1.3.0",
+ "alloy-sol-types 1.3.0",
  "derive_more 2.0.1",
  "itoa",
  "serde",
@@ -227,10 +227,9 @@ dependencies = [
 [[package]]
 name = "alloy-eip2124"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "741bdd7499908b3aa0b159bba11e71c8cddd009a2c2eb7a06e825f1ec87900a5"
+source = "git+https://github.com/alloy-rs/eips?branch=rkrasiuk%2Ffork-hash-from-bytes-arr#1cc63cb63366e5641927369b130cd43de9623a48"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "arbitrary",
  "crc",
@@ -256,7 +255,7 @@ version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7b82752a889170df67bbb36d42ca63c531eb16274f0d7299ae2a680facba17bd"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "arbitrary",
  "rand 0.8.5",
@@ -281,7 +280,7 @@ version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9d4769c6ffddca380b0070d71c8b7f30bed375543fe76bb2f74ec0acf4b7cd16"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "arbitrary",
  "k256 0.13.4",
@@ -313,15 +312,15 @@ dependencies = [
 
 [[package]]
 name = "alloy-eips"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
  "alloy-eip2124 0.2.0",
  "alloy-eip2930 0.2.1",
  "alloy-eip7702 0.6.1",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
- "alloy-serde 1.0.20",
+ "alloy-serde 1.0.23",
  "arbitrary",
  "auto_impl",
  "c-kzg",
@@ -335,15 +334,16 @@ dependencies = [
 
 [[package]]
 name = "alloy-evm"
-version = "0.13.0"
-source = "git+https://github.com/alloy-rs/evm?branch=fusaka%2Fdevnet2#0f1420656bd704de0ca066414013997a7c455c0d"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "28de0dd1bbb0634ef7c3715e8e60176b77b82f8b6b15b2e35fe64cf6640f6550"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-hardforks",
- "alloy-primitives 1.2.1",
- "alloy-rpc-types-eth 1.0.20",
- "alloy-sol-types 1.2.1",
+ "alloy-primitives 1.3.0",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-sol-types 1.3.0",
  "auto_impl",
  "derive_more 2.0.1",
  "op-alloy-consensus",
@@ -354,12 +354,12 @@ dependencies = [
 
 [[package]]
 name = "alloy-genesis"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
- "alloy-serde 1.0.20",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
+ "alloy-serde 1.0.23",
  "alloy-trie 0.9.0",
  "serde",
  "serde_with",
@@ -373,7 +373,7 @@ checksum = "819a3620fe125e0fff365363315ee5e24c23169173b19747dfd6deba33db8990"
 dependencies = [
  "alloy-chains",
  "alloy-eip2124 0.2.0",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "auto_impl",
  "dyn-clone",
  "serde",
@@ -393,12 +393,12 @@ dependencies = [
 
 [[package]]
 name = "alloy-json-abi"
-version = "1.2.1"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15516116086325c157c18261d768a20677f0f699348000ed391d4ad0dcb82530"
+checksum = "459f98c6843f208856f338bfb25e65325467f7aff35dfeb0484d0a76e059134b"
 dependencies = [
- "alloy-primitives 1.2.1",
- "alloy-sol-type-parser 1.2.1",
+ "alloy-primitives 1.3.0",
+ "alloy-sol-type-parser 1.3.0",
  "serde",
  "serde_json",
 ]
@@ -419,11 +419,11 @@ dependencies = [
 
 [[package]]
 name = "alloy-json-rpc"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-primitives 1.2.1",
- "alloy-sol-types 1.2.1",
+ "alloy-primitives 1.3.0",
+ "alloy-sol-types 1.3.0",
  "http 1.3.1",
  "serde",
  "serde_json",
@@ -433,20 +433,20 @@ dependencies = [
 
 [[package]]
 name = "alloy-network"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-consensus-any 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-json-rpc 1.0.20",
- "alloy-network-primitives 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-consensus-any 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-json-rpc 1.0.23",
+ "alloy-network-primitives 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-any",
- "alloy-rpc-types-eth 1.0.20",
- "alloy-serde 1.0.20",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-serde 1.0.23",
  "alloy-signer",
- "alloy-sol-types 1.2.1",
+ "alloy-sol-types 1.3.0",
  "async-trait",
  "auto_impl",
  "derive_more 2.0.1",
@@ -471,26 +471,26 @@ dependencies = [
 
 [[package]]
 name = "alloy-network-primitives"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
- "alloy-serde 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
+ "alloy-serde 1.0.23",
  "serde",
 ]
 
 [[package]]
 name = "alloy-node-bindings"
-version = "1.0.20"
+version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15fdb7f13794430ec98cf9a8bca8d9509ade14d12b260b6d7b7e0d133f6631fc"
+checksum = "0de75f0d0af3c6cb0bd3648e530289b2c542b7bf57e7d4296d1c29281418a476"
 dependencies = [
  "alloy-genesis",
  "alloy-hardforks",
  "alloy-network",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-signer",
  "alloy-signer-local",
  "k256 0.13.4",
@@ -553,9 +553,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-primitives"
-version = "1.2.1"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6177ed26655d4e84e00b65cb494d4e0b8830e7cae7ef5d63087d445a2600fb55"
+checksum = "3cfebde8c581a5d37b678d0a48a32decb51efd7a63a08ce2517ddec26db705c8"
 dependencies = [
  "alloy-rlp",
  "arbitrary",
@@ -574,7 +574,7 @@ dependencies = [
  "paste",
  "proptest",
  "proptest-derive",
- "rand 0.9.1",
+ "rand 0.9.2",
  "ruint",
  "rustc-hash 2.1.1",
  "serde",
@@ -584,21 +584,21 @@ dependencies = [
 
 [[package]]
 name = "alloy-provider"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
  "alloy-chains",
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-json-rpc 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-json-rpc 1.0.23",
  "alloy-network",
- "alloy-network-primitives 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-network-primitives 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-pubsub",
  "alloy-rpc-client",
- "alloy-rpc-types-eth 1.0.20",
+ "alloy-rpc-types-eth 1.0.23",
  "alloy-signer",
- "alloy-sol-types 1.2.1",
+ "alloy-sol-types 1.3.0",
  "alloy-transport",
  "alloy-transport-http",
  "alloy-transport-ipc",
@@ -626,11 +626,11 @@ dependencies = [
 
 [[package]]
 name = "alloy-pubsub"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-json-rpc 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-json-rpc 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-transport",
  "bimap",
  "futures",
@@ -668,17 +668,16 @@ dependencies = [
 
 [[package]]
 name = "alloy-rpc-client"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-json-rpc 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-json-rpc 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-pubsub",
  "alloy-transport",
  "alloy-transport-http",
  "alloy-transport-ipc",
  "alloy-transport-ws",
- "async-stream",
  "futures",
  "pin-project",
  "reqwest 0.12.22",
@@ -688,62 +687,61 @@ dependencies = [
  "tokio-stream",
  "tower 0.5.2",
  "tracing",
- "tracing-futures",
  "url",
  "wasmtimer",
 ]
 
 [[package]]
 name = "alloy-rpc-types"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
- "alloy-rpc-types-eth 1.0.20",
- "alloy-serde 1.0.20",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-serde 1.0.23",
  "serde",
 ]
 
 [[package]]
 name = "alloy-rpc-types-admin"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
  "alloy-genesis",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "serde",
  "serde_json",
 ]
 
 [[package]]
 name = "alloy-rpc-types-anvil"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-primitives 1.2.1",
- "alloy-rpc-types-eth 1.0.20",
- "alloy-serde 1.0.20",
+ "alloy-primitives 1.3.0",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-serde 1.0.23",
  "serde",
 ]
 
 [[package]]
 name = "alloy-rpc-types-any"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-consensus-any 1.0.20",
- "alloy-rpc-types-eth 1.0.20",
- "alloy-serde 1.0.20",
+ "alloy-consensus-any 1.0.23",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-serde 1.0.23",
 ]
 
 [[package]]
 name = "alloy-rpc-types-beacon"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
  "ethereum_ssz 0.9.0",
  "ethereum_ssz_derive 0.9.0",
@@ -756,30 +754,30 @@ dependencies = [
 
 [[package]]
 name = "alloy-rpc-types-debug"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "serde",
 ]
 
 [[package]]
 name = "alloy-rpc-types-engine"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
- "alloy-serde 1.0.20",
+ "alloy-serde 1.0.23",
  "derive_more 2.0.1",
  "ethereum_ssz 0.9.0",
  "ethereum_ssz_derive 0.9.0",
  "jsonwebtoken 9.3.1",
  "rand 0.8.5",
  "serde",
- "strum 0.27.1",
+ "strum 0.27.2",
 ]
 
 [[package]]
@@ -804,19 +802,19 @@ dependencies = [
 
 [[package]]
 name = "alloy-rpc-types-eth"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-consensus-any 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-network-primitives 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-consensus-any 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-network-primitives 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
- "alloy-serde 1.0.20",
- "alloy-sol-types 1.2.1",
+ "alloy-serde 1.0.23",
+ "alloy-sol-types 1.3.0",
  "arbitrary",
- "itertools 0.13.0",
+ "itertools 0.14.0",
  "serde",
  "serde_json",
  "serde_with",
@@ -825,26 +823,26 @@ dependencies = [
 
 [[package]]
 name = "alloy-rpc-types-mev"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
- "alloy-rpc-types-eth 1.0.20",
- "alloy-serde 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-serde 1.0.23",
  "serde",
  "serde_json",
 ]
 
 [[package]]
 name = "alloy-rpc-types-trace"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-primitives 1.2.1",
- "alloy-rpc-types-eth 1.0.20",
- "alloy-serde 1.0.20",
+ "alloy-primitives 1.3.0",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-serde 1.0.23",
  "serde",
  "serde_json",
  "thiserror 2.0.12",
@@ -852,12 +850,12 @@ dependencies = [
 
 [[package]]
 name = "alloy-rpc-types-txpool"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-primitives 1.2.1",
- "alloy-rpc-types-eth 1.0.20",
- "alloy-serde 1.0.20",
+ "alloy-primitives 1.3.0",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-serde 1.0.23",
  "serde",
 ]
 
@@ -874,10 +872,10 @@ dependencies = [
 
 [[package]]
 name = "alloy-serde"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "arbitrary",
  "serde",
  "serde_json",
@@ -885,10 +883,10 @@ dependencies = [
 
 [[package]]
 name = "alloy-signer"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "async-trait",
  "auto_impl",
  "either",
@@ -899,12 +897,12 @@ dependencies = [
 
 [[package]]
 name = "alloy-signer-local"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-consensus 1.0.20",
+ "alloy-consensus 1.0.23",
  "alloy-network",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-signer",
  "async-trait",
  "k256 0.13.4",
@@ -928,12 +926,12 @@ dependencies = [
 
 [[package]]
 name = "alloy-sol-macro"
-version = "1.2.1"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a14f21d053aea4c6630687c2f4ad614bed4c81e14737a9b904798b24f30ea849"
+checksum = "aedac07a10d4c2027817a43cc1f038313fc53c7ac866f7363239971fd01f9f18"
 dependencies = [
- "alloy-sol-macro-expander 1.2.1",
- "alloy-sol-macro-input 1.2.1",
+ "alloy-sol-macro-expander 1.3.0",
+ "alloy-sol-macro-input 1.3.0",
  "proc-macro-error2",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
@@ -960,11 +958,11 @@ dependencies = [
 
 [[package]]
 name = "alloy-sol-macro-expander"
-version = "1.2.1"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "34d99282e7c9ef14eb62727981a985a01869e586d1dec729d3bb33679094c100"
+checksum = "24f9a598f010f048d8b8226492b6401104f5a5c1273c2869b72af29b48bb4ba9"
 dependencies = [
- "alloy-sol-macro-input 1.2.1",
+ "alloy-sol-macro-input 1.3.0",
  "const-hex",
  "heck 0.5.0",
  "indexmap 2.10.0",
@@ -972,7 +970,7 @@ dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
  "syn 2.0.104",
- "syn-solidity 1.2.1",
+ "syn-solidity 1.3.0",
  "tiny-keccak",
 ]
 
@@ -994,9 +992,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-sol-macro-input"
-version = "1.2.1"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eda029f955b78e493360ee1d7bd11e1ab9f2a220a5715449babc79d6d0a01105"
+checksum = "f494adf9d60e49aa6ce26dfd42c7417aa6d4343cf2ae621f20e4d92a5ad07d85"
 dependencies = [
  "const-hex",
  "dunce",
@@ -1005,7 +1003,7 @@ dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
  "syn 2.0.104",
- "syn-solidity 1.2.1",
+ "syn-solidity 1.3.0",
 ]
 
 [[package]]
@@ -1020,9 +1018,9 @@ dependencies = [
 
 [[package]]
 name = "alloy-sol-type-parser"
-version = "1.2.1"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "10db1bd7baa35bc8d4a1b07efbf734e73e5ba09f2580fb8cee3483a36087ceb2"
+checksum = "52db32fbd35a9c0c0e538b58b81ebbae08a51be029e7ad60e08b60481c2ec6c3"
 dependencies = [
  "serde",
  "winnow",
@@ -1043,23 +1041,23 @@ dependencies = [
 
 [[package]]
 name = "alloy-sol-types"
-version = "1.2.1"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "58377025a47d8b8426b3e4846a251f2c1991033b27f517aade368146f6ab1dfe"
+checksum = "a285b46e3e0c177887028278f04cc8262b76fd3b8e0e20e93cea0a58c35f5ac5"
 dependencies = [
- "alloy-json-abi 1.2.1",
- "alloy-primitives 1.2.1",
- "alloy-sol-macro 1.2.1",
+ "alloy-json-abi 1.3.0",
+ "alloy-primitives 1.3.0",
+ "alloy-sol-macro 1.3.0",
  "serde",
 ]
 
 [[package]]
 name = "alloy-transport"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-json-rpc 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-json-rpc 1.0.23",
+ "alloy-primitives 1.3.0",
  "base64 0.22.1",
  "derive_more 2.0.1",
  "futures",
@@ -1077,10 +1075,10 @@ dependencies = [
 
 [[package]]
 name = "alloy-transport-http"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-json-rpc 1.0.20",
+ "alloy-json-rpc 1.0.23",
  "alloy-transport",
  "reqwest 0.12.22",
  "serde_json",
@@ -1091,10 +1089,10 @@ dependencies = [
 
 [[package]]
 name = "alloy-transport-ipc"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-json-rpc 1.0.20",
+ "alloy-json-rpc 1.0.23",
  "alloy-pubsub",
  "alloy-transport",
  "bytes",
@@ -1110,8 +1108,8 @@ dependencies = [
 
 [[package]]
 name = "alloy-transport-ws"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
  "alloy-pubsub",
  "alloy-transport",
@@ -1147,7 +1145,7 @@ version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "983d99aa81f586cef9dae38443245e585840fcf0fc58b09aee0b1f27aed1d500"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "arrayvec",
  "derive_more 2.0.1",
@@ -1162,7 +1160,7 @@ version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bada1fc392a33665de0dc50d401a3701b62583c655e3522a323490a5da016962"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "arbitrary",
  "arrayvec",
@@ -1178,10 +1176,10 @@ dependencies = [
 
 [[package]]
 name = "alloy-tx-macros"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "darling 0.20.11",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
@@ -2360,17 +2358,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bstr"
-version = "1.12.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "234113d19d0d7d613b40e86fb654acf958910802bcceab913a4f9e7cda03b1a4"
-dependencies = [
- "memchr",
- "regex-automata 0.4.9",
- "serde",
-]
-
-[[package]]
 name = "built"
 version = "0.7.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2409,9 +2396,9 @@ dependencies = [
 
 [[package]]
 name = "bytemuck_derive"
-version = "1.9.3"
+version = "1.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7ecc273b49b3205b83d648f0690daa588925572cc5063745bfe547fe7ec8e1a1"
+checksum = "441473f2b4b0459a68628c744bc61d23e730fb00128b841d30fa4bb3972257e4"
 dependencies = [
  "proc-macro2 1.0.95",
  "quote 1.0.40",
@@ -3262,9 +3249,9 @@ dependencies = [
 
 [[package]]
 name = "curve25519-dalek"
-version = "4.2.0"
+version = "4.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "373b7c5dbd637569a2cca66e8d66b8c446a1e7bf064ea321d265d7b3dfe7c97e"
+checksum = "97fb8b7c4503de7d6ae7b42ab72a5a59857b4c937ec27a3d4539dba95b5ab2be"
 dependencies = [
  "cfg-if",
  "cpufeatures",
@@ -4063,7 +4050,7 @@ dependencies = [
 name = "eth-sparse-mpt"
 version = "0.1.0"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "alloy-trie 0.8.1",
  "arrayvec",
@@ -4208,7 +4195,7 @@ version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3dc1355dbb41fbbd34ec28d4fb2a57d9a70c67ac3c19f6a5ca4d4a176b9e997a"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "hex",
  "serde",
  "serde_derive",
@@ -4232,7 +4219,7 @@ version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9ca8ba45b63c389c6e115b095ca16381534fdcc03cf58176a3f8554db2dbe19b"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "ethereum_serde_utils 0.8.0",
  "itertools 0.13.0",
  "serde",
@@ -4631,9 +4618,9 @@ dependencies = [
 
 [[package]]
 name = "fiat-crypto"
-version = "0.3.0"
+version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "64cd1e32ddd350061ae6edb1b082d7c54915b5c672c389143b9a63403a109f24"
+checksum = "28dea519a9695b9977216879a3ebfddf92f1c08c05d984f8996aecd6ecdc811d"
 
 [[package]]
 name = "filetime"
@@ -5450,7 +5437,7 @@ dependencies = [
  "idna",
  "ipnet",
  "once_cell",
- "rand 0.9.1",
+ "rand 0.9.2",
  "ring 0.17.14",
  "serde",
  "thiserror 2.0.12",
@@ -5473,7 +5460,7 @@ dependencies = [
  "moka",
  "once_cell",
  "parking_lot",
- "rand 0.9.1",
+ "rand 0.9.2",
  "resolv-conf",
  "serde",
  "smallvec",
@@ -5716,7 +5703,7 @@ dependencies = [
  "tokio",
  "tokio-rustls 0.26.2",
  "tower-service",
- "webpki-roots 1.0.1",
+ "webpki-roots 1.0.2",
 ]
 
 [[package]]
@@ -6182,9 +6169,9 @@ dependencies = [
 
 [[package]]
 name = "instability"
-version = "0.3.7"
+version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0bf9fed6d91cfb734e7476a06bde8300a1b94e217e1b523b6f0cd1a01998c71d"
+checksum = "435d80800b936787d62688c927b6490e887c7ef5ff9ce922c6c6050fca75eb9a"
 dependencies = [
  "darling 0.20.11",
  "indoc",
@@ -6243,9 +6230,9 @@ dependencies = [
 
 [[package]]
 name = "io-uring"
-version = "0.7.8"
+version = "0.7.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b86e202f00093dcba4275d4636b93ef9dd75d025ae560d2521b45ea28ab49013"
+checksum = "d93587f37623a1a17d94ef2bc9ada592f5465fe7732084ab7beefabe5c77c0c4"
 dependencies = [
  "bitflags 2.9.1",
  "cfg-if",
@@ -6507,7 +6494,7 @@ dependencies = [
  "jsonrpsee-types 0.25.1",
  "parking_lot",
  "pin-project",
- "rand 0.9.1",
+ "rand 0.9.2",
  "rustc-hash 2.1.1",
  "serde",
  "serde_json",
@@ -6987,9 +6974,9 @@ dependencies = [
 
 [[package]]
 name = "libredox"
-version = "0.1.4"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1580801010e535496706ba011c15f8532df6b42297d2e471fec38ceadd8c0638"
+checksum = "4488594b9328dee448adb906d8b126d9b7deb7cf5c22161ee591610bb1be83c0"
 dependencies = [
  "bitflags 2.9.1",
  "libc",
@@ -7372,7 +7359,7 @@ dependencies = [
  "hashbrown 0.15.4",
  "metrics",
  "quanta",
- "rand 0.9.1",
+ "rand 0.9.2",
  "rand_xoshiro",
  "sketches-ddsketch",
 ]
@@ -7973,15 +7960,15 @@ checksum = "d6790f58c7ff633d8771f42965289203411a5e5c68388703c06e14f24770b41e"
 
 [[package]]
 name = "op-alloy-consensus"
-version = "0.18.9"
+version = "0.18.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a8719d9b783b29cfa1cf8d591b894805786b9ab4940adc700a57fd0d5b721cf5"
+checksum = "d3c719b26da6d9cac18c3a35634d6ab27a74a304ed9b403b43749c22e57a389f"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
- "alloy-serde 1.0.20",
+ "alloy-serde 1.0.23",
  "arbitrary",
  "derive_more 2.0.1",
  "serde",
@@ -7991,13 +7978,13 @@ dependencies = [
 
 [[package]]
 name = "op-alloy-rpc-types-engine"
-version = "0.18.9"
+version = "0.18.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6a4559d84f079b3fdfd01e4ee0bb118025e92105fbb89736f5d77ab3ca261698"
+checksum = "50cf45d43a3d548fdc39d9bfab6ba13cc06b3214ef4b9c36d3efbf3faea1b9f1"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "alloy-rpc-types-engine",
  "derive_more 2.0.1",
@@ -8010,8 +7997,8 @@ dependencies = [
 
 [[package]]
 name = "op-revm"
-version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+version = "8.0.3"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "auto_impl",
  "once_cell",
@@ -9044,7 +9031,7 @@ dependencies = [
  "bitflags 2.9.1",
  "lazy_static",
  "num-traits",
- "rand 0.9.1",
+ "rand 0.9.2",
  "rand_chacha 0.9.0",
  "rand_xorshift 0.4.0",
  "regex-syntax 0.8.5",
@@ -9162,7 +9149,7 @@ dependencies = [
  "bytes",
  "getrandom 0.3.3",
  "lru-slab",
- "rand 0.9.1",
+ "rand 0.9.2",
  "ring 0.17.14",
  "rustc-hash 2.1.1",
  "rustls 0.23.29",
@@ -9264,9 +9251,9 @@ dependencies = [
 
 [[package]]
 name = "rand"
-version = "0.9.1"
+version = "0.9.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9fbfd9d094a40bf3ae768db9361049ace4c0e04a4fd6b359518bd7b73a73dd97"
+checksum = "6db2770f06117d490610c7488547d543617b21bfa07796d7a12f6f1bd53850d1"
 dependencies = [
  "rand_chacha 0.9.0",
  "rand_core 0.9.3",
@@ -9511,20 +9498,20 @@ version = "0.1.0"
 dependencies = [
  "ahash",
  "alloy-chains",
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-evm",
- "alloy-json-rpc 1.0.20",
+ "alloy-json-rpc 1.0.23",
  "alloy-network",
- "alloy-network-primitives 1.0.20",
+ "alloy-network-primitives 1.0.23",
  "alloy-node-bindings",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-provider",
  "alloy-rlp",
  "alloy-rpc-types",
  "alloy-rpc-types-beacon",
  "alloy-rpc-types-engine",
- "alloy-rpc-types-eth 1.0.20",
+ "alloy-rpc-types-eth 1.0.23",
  "alloy-signer-local",
  "assert_matches",
  "async-trait",
@@ -9587,7 +9574,7 @@ dependencies = [
  "reth-trie",
  "reth-trie-parallel",
  "revm",
- "revm-inspectors",
+ "revm-inspectors 0.26.5",
  "secp256k1 0.30.0",
  "serde",
  "serde_json",
@@ -9629,9 +9616,9 @@ checksum = "d3edd4d5d42c92f0a659926464d4cce56b562761267ecf0f469d85b7de384175"
 
 [[package]]
 name = "redox_syscall"
-version = "0.5.13"
+version = "0.5.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0d04b7d0ee6b4a0207a0a7adb104d23ecb0b47d6beae7152d0fa34b692b29fd6"
+checksum = "7e8af0dde094006011e6a740d4879319439489813bd0bcdc7d821beaeeff48ec"
 dependencies = [
  "bitflags 2.9.1",
 ]
@@ -9841,7 +9828,7 @@ dependencies = [
  "wasm-bindgen-futures",
  "wasm-streams",
  "web-sys",
- "webpki-roots 1.0.1",
+ "webpki-roots 1.0.2",
 ]
 
 [[package]]
@@ -9852,8 +9839,8 @@ checksum = "95325155c684b1c89f7765e30bc1c42e4a6da51ca513615660cb8a62ef9a88e3"
 
 [[package]]
 name = "reth"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-rpc-types",
  "aquamarine",
@@ -9898,12 +9885,12 @@ dependencies = [
 
 [[package]]
 name = "reth-basic-payload-builder"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "futures-core",
  "futures-util",
  "metrics",
@@ -9922,19 +9909,19 @@ dependencies = [
 
 [[package]]
 name = "reth-chain-state"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-signer",
  "alloy-signer-local",
  "derive_more 2.0.1",
  "metrics",
  "parking_lot",
  "pin-project",
- "rand 0.9.1",
+ "rand 0.9.2",
  "reth-chainspec",
  "reth-errors",
  "reth-ethereum-primitives",
@@ -9953,15 +9940,15 @@ dependencies = [
 
 [[package]]
 name = "reth-chainspec"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-chains",
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-evm",
  "alloy-genesis",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-trie 0.9.0",
  "auto_impl",
  "derive_more 2.0.1",
@@ -9973,8 +9960,8 @@ dependencies = [
 
 [[package]]
 name = "reth-cli"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-genesis",
  "clap 4.5.41",
@@ -9987,14 +9974,14 @@ dependencies = [
 
 [[package]]
 name = "reth-cli-commands"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "ahash",
  "alloy-chains",
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "backon",
  "clap 4.5.41",
@@ -10022,6 +10009,7 @@ dependencies = [
  "reth-discv5",
  "reth-downloaders",
  "reth-ecies",
+ "reth-era",
  "reth-era-downloader",
  "reth-era-utils",
  "reth-eth-wire",
@@ -10041,6 +10029,7 @@ dependencies = [
  "reth-primitives-traits",
  "reth-provider",
  "reth-prune",
+ "reth-revm",
  "reth-stages",
  "reth-static-file",
  "reth-static-file-types",
@@ -10058,8 +10047,8 @@ dependencies = [
 
 [[package]]
 name = "reth-cli-runner"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "reth-tasks",
  "tokio",
@@ -10068,11 +10057,11 @@ dependencies = [
 
 [[package]]
 name = "reth-cli-util"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "cfg-if",
  "eyre",
  "libc",
@@ -10086,13 +10075,13 @@ dependencies = [
 
 [[package]]
 name = "reth-codecs"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-genesis",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-trie 0.9.0",
  "arbitrary",
  "bytes",
@@ -10106,8 +10095,8 @@ dependencies = [
 
 [[package]]
 name = "reth-codecs-derive"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "convert_case 0.7.1",
  "proc-macro2 1.0.95",
@@ -10117,8 +10106,8 @@ dependencies = [
 
 [[package]]
 name = "reth-config"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "eyre",
  "humantime-serde",
@@ -10132,11 +10121,11 @@ dependencies = [
 
 [[package]]
 name = "reth-consensus"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-primitives 1.3.0",
  "auto_impl",
  "reth-execution-types",
  "reth-primitives-traits",
@@ -10145,11 +10134,11 @@ dependencies = [
 
 [[package]]
 name = "reth-consensus-common"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "reth-chainspec",
  "reth-consensus",
  "reth-primitives-traits",
@@ -10157,13 +10146,13 @@ dependencies = [
 
 [[package]]
 name = "reth-consensus-debug-client"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-json-rpc 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-json-rpc 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-provider",
  "alloy-rpc-types-engine",
  "auto_impl",
@@ -10176,15 +10165,16 @@ dependencies = [
  "reth-tracing",
  "ringbuffer",
  "serde",
+ "serde_json",
  "tokio",
 ]
 
 [[package]]
 name = "reth-db"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "derive_more 2.0.1",
  "eyre",
  "metrics",
@@ -10199,7 +10189,7 @@ dependencies = [
  "reth-storage-errors",
  "reth-tracing",
  "rustc-hash 2.1.1",
- "strum 0.27.1",
+ "strum 0.27.2",
  "sysinfo 0.33.1",
  "tempfile",
  "thiserror 2.0.12",
@@ -10207,12 +10197,12 @@ dependencies = [
 
 [[package]]
 name = "reth-db-api"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
+ "alloy-consensus 1.0.23",
  "alloy-genesis",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "arbitrary",
  "bytes",
  "derive_more 2.0.1",
@@ -10235,12 +10225,12 @@ dependencies = [
 
 [[package]]
 name = "reth-db-common"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
+ "alloy-consensus 1.0.23",
  "alloy-genesis",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "boyer-moore-magiclen",
  "eyre",
  "reth-chainspec",
@@ -10264,11 +10254,11 @@ dependencies = [
 
 [[package]]
 name = "reth-db-models"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "arbitrary",
  "bytes",
  "modular-bitfield",
@@ -10279,10 +10269,10 @@ dependencies = [
 
 [[package]]
 name = "reth-discv4"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "discv5",
  "enr 0.13.0",
@@ -10305,10 +10295,10 @@ dependencies = [
 
 [[package]]
 name = "reth-discv5"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "derive_more 2.0.1",
  "discv5",
@@ -10316,7 +10306,7 @@ dependencies = [
  "futures",
  "itertools 0.14.0",
  "metrics",
- "rand 0.9.1",
+ "rand 0.9.2",
  "reth-chainspec",
  "reth-ethereum-forks",
  "reth-metrics",
@@ -10329,10 +10319,10 @@ dependencies = [
 
 [[package]]
 name = "reth-dns-discovery"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "data-encoding",
  "enr 0.13.0",
  "hickory-resolver",
@@ -10353,12 +10343,12 @@ dependencies = [
 
 [[package]]
 name = "reth-downloaders"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "futures",
  "futures-util",
@@ -10383,11 +10373,11 @@ dependencies = [
 
 [[package]]
 name = "reth-ecies"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "aes",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "block-padding",
  "byteorder",
@@ -10414,11 +10404,11 @@ dependencies = [
 
 [[package]]
 name = "reth-engine-local"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
  "eyre",
  "futures-util",
@@ -10436,12 +10426,12 @@ dependencies = [
 
 [[package]]
 name = "reth-engine-primitives"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
  "auto_impl",
  "futures",
@@ -10461,8 +10451,8 @@ dependencies = [
 
 [[package]]
 name = "reth-engine-service"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "futures",
  "pin-project",
@@ -10484,13 +10474,13 @@ dependencies = [
 
 [[package]]
 name = "reth-engine-tree"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-evm",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "alloy-rpc-types-engine",
  "derive_more 2.0.1",
@@ -10521,6 +10511,7 @@ dependencies = [
  "reth-trie-db",
  "reth-trie-parallel",
  "reth-trie-sparse",
+ "reth-trie-sparse-parallel",
  "revm",
  "revm-primitives",
  "schnellru",
@@ -10531,10 +10522,10 @@ dependencies = [
 
 [[package]]
 name = "reth-engine-util"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
+ "alloy-consensus 1.0.23",
  "alloy-rpc-types-engine",
  "eyre",
  "futures",
@@ -10558,12 +10549,12 @@ dependencies = [
 
 [[package]]
 name = "reth-era"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "ethereum_ssz 0.9.0",
  "ethereum_ssz_derive 0.9.0",
@@ -10574,10 +10565,10 @@ dependencies = [
 
 [[package]]
 name = "reth-era-downloader"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "bytes",
  "eyre",
  "futures-util",
@@ -10589,11 +10580,11 @@ dependencies = [
 
 [[package]]
 name = "reth-era-utils"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "eyre",
  "futures-util",
@@ -10613,8 +10604,8 @@ dependencies = [
 
 [[package]]
 name = "reth-errors"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "reth-consensus",
  "reth-execution-errors",
@@ -10624,11 +10615,11 @@ dependencies = [
 
 [[package]]
 name = "reth-eth-wire"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-chains",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "bytes",
  "derive_more 2.0.1",
@@ -10652,14 +10643,14 @@ dependencies = [
 
 [[package]]
 name = "reth-eth-wire-types"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-chains",
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-hardforks",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "bytes",
  "derive_more 2.0.1",
@@ -10673,71 +10664,34 @@ dependencies = [
 
 [[package]]
 name = "reth-ethereum-cli"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
- "alloy-rlp",
- "alloy-rpc-types",
- "backon",
+ "alloy-consensus 1.0.23",
  "clap 4.5.41",
  "eyre",
- "futures",
- "reth-basic-payload-builder",
  "reth-chainspec",
  "reth-cli",
  "reth-cli-commands",
  "reth-cli-runner",
- "reth-cli-util",
- "reth-config",
- "reth-consensus",
  "reth-db",
- "reth-db-api",
- "reth-downloaders",
- "reth-errors",
- "reth-ethereum-payload-builder",
- "reth-ethereum-primitives",
- "reth-evm",
- "reth-execution-types",
- "reth-exex",
- "reth-fs-util",
- "reth-network",
- "reth-network-api",
- "reth-network-p2p",
  "reth-node-api",
  "reth-node-builder",
  "reth-node-core",
  "reth-node-ethereum",
- "reth-node-events",
  "reth-node-metrics",
- "reth-payload-builder",
- "reth-primitives-traits",
- "reth-provider",
- "reth-prune",
- "reth-revm",
- "reth-stages",
- "reth-static-file",
- "reth-tasks",
  "reth-tracing",
- "reth-transaction-pool",
- "reth-trie",
- "reth-trie-db",
- "serde_json",
- "similar-asserts",
- "tokio",
  "tracing",
 ]
 
 [[package]]
 name = "reth-ethereum-consensus"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "reth-chainspec",
  "reth-consensus",
  "reth-consensus-common",
@@ -10748,11 +10702,11 @@ dependencies = [
 
 [[package]]
 name = "reth-ethereum-engine-primitives"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "alloy-rpc-types-engine",
  "reth-engine-primitives",
@@ -10766,12 +10720,12 @@ dependencies = [
 
 [[package]]
 name = "reth-ethereum-forks"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-eip2124 0.2.0",
  "alloy-hardforks",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "auto_impl",
  "once_cell",
  "rustc-hash 2.1.1",
@@ -10779,12 +10733,12 @@ dependencies = [
 
 [[package]]
 name = "reth-ethereum-payload-builder"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "alloy-rpc-types-engine",
  "reth-basic-payload-builder",
@@ -10808,12 +10762,12 @@ dependencies = [
 
 [[package]]
 name = "reth-ethereum-primitives"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "arbitrary",
  "modular-bitfield",
@@ -10826,8 +10780,8 @@ dependencies = [
 
 [[package]]
 name = "reth-etl"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "rayon",
  "reth-db-api",
@@ -10836,13 +10790,13 @@ dependencies = [
 
 [[package]]
 name = "reth-evm"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-evm",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "auto_impl",
  "derive_more 2.0.1",
  "futures-util",
@@ -10859,13 +10813,13 @@ dependencies = [
 
 [[package]]
 name = "reth-evm-ethereum"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-evm",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "derive_more 2.0.1",
  "reth-chainspec",
  "reth-ethereum-forks",
@@ -10878,11 +10832,11 @@ dependencies = [
 
 [[package]]
 name = "reth-execution-errors"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-evm",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "nybbles 0.4.1",
  "reth-storage-errors",
@@ -10891,13 +10845,13 @@ dependencies = [
 
 [[package]]
 name = "reth-execution-types"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-evm",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "derive_more 2.0.1",
  "reth-ethereum-primitives",
  "reth-primitives-traits",
@@ -10909,12 +10863,12 @@ dependencies = [
 
 [[package]]
 name = "reth-exex"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "eyre",
  "futures",
  "itertools 0.14.0",
@@ -10947,11 +10901,11 @@ dependencies = [
 
 [[package]]
 name = "reth-exex-types"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "reth-chain-state",
  "reth-execution-types",
  "reth-primitives-traits",
@@ -10961,8 +10915,8 @@ dependencies = [
 
 [[package]]
 name = "reth-fs-util"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "serde",
  "serde_json",
@@ -10971,11 +10925,11 @@ dependencies = [
 
 [[package]]
 name = "reth-invalid-block-hooks"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "alloy-rpc-types-debug",
  "eyre",
@@ -10999,8 +10953,8 @@ dependencies = [
 
 [[package]]
 name = "reth-ipc"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "bytes",
  "futures",
@@ -11019,8 +10973,8 @@ dependencies = [
 
 [[package]]
 name = "reth-libmdbx"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "bitflags 2.9.1",
  "byteorder",
@@ -11036,8 +10990,8 @@ dependencies = [
 
 [[package]]
 name = "reth-mdbx-sys"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "bindgen",
  "cc",
@@ -11045,8 +10999,8 @@ dependencies = [
 
 [[package]]
 name = "reth-metrics"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "futures",
  "metrics",
@@ -11057,16 +11011,16 @@ dependencies = [
 
 [[package]]
 name = "reth-net-banlist"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
 ]
 
 [[package]]
 name = "reth-net-nat"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "futures-util",
  "if-addrs",
@@ -11079,12 +11033,12 @@ dependencies = [
 
 [[package]]
 name = "reth-network"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "aquamarine",
  "auto_impl",
@@ -11097,7 +11051,7 @@ dependencies = [
  "parking_lot",
  "pin-project",
  "rand 0.8.5",
- "rand 0.9.1",
+ "rand 0.9.2",
  "reth-chainspec",
  "reth-consensus",
  "reth-discv4",
@@ -11134,11 +11088,13 @@ dependencies = [
 
 [[package]]
 name = "reth-network-api"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-admin",
+ "alloy-rpc-types-eth 1.0.23",
  "auto_impl",
  "derive_more 2.0.1",
  "enr 0.13.0",
@@ -11157,12 +11113,12 @@ dependencies = [
 
 [[package]]
 name = "reth-network-p2p"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "auto_impl",
  "derive_more 2.0.1",
  "futures",
@@ -11179,10 +11135,10 @@ dependencies = [
 
 [[package]]
 name = "reth-network-peers"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "enr 0.13.0",
  "secp256k1 0.30.0",
@@ -11194,8 +11150,8 @@ dependencies = [
 
 [[package]]
 name = "reth-network-types"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-eip2124 0.2.0",
  "humantime-serde",
@@ -11208,8 +11164,8 @@ dependencies = [
 
 [[package]]
 name = "reth-nippy-jar"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "anyhow",
  "bincode",
@@ -11225,8 +11181,8 @@ dependencies = [
 
 [[package]]
 name = "reth-node-api"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-rpc-types-engine",
  "eyre",
@@ -11249,12 +11205,12 @@ dependencies = [
 
 [[package]]
 name = "reth-node-builder"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-provider",
  "alloy-rpc-types",
  "alloy-rpc-types-engine",
@@ -11287,6 +11243,7 @@ dependencies = [
  "reth-network-p2p",
  "reth-node-api",
  "reth-node-core",
+ "reth-node-ethstats",
  "reth-node-events",
  "reth-node-metrics",
  "reth-payload-builder",
@@ -11313,12 +11270,12 @@ dependencies = [
 
 [[package]]
 name = "reth-node-core"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
  "clap 4.5.41",
  "derive_more 2.0.1",
@@ -11326,7 +11283,7 @@ dependencies = [
  "eyre",
  "futures",
  "humantime",
- "rand 0.9.1",
+ "rand 0.9.2",
  "reth-chainspec",
  "reth-cli-util",
  "reth-config",
@@ -11334,6 +11291,7 @@ dependencies = [
  "reth-db",
  "reth-discv4",
  "reth-discv5",
+ "reth-engine-local",
  "reth-engine-primitives",
  "reth-ethereum-forks",
  "reth-net-nat",
@@ -11353,7 +11311,7 @@ dependencies = [
  "secp256k1 0.30.0",
  "serde",
  "shellexpand",
- "strum 0.27.1",
+ "strum 0.27.2",
  "thiserror 2.0.12",
  "toml 0.8.23",
  "tracing",
@@ -11364,15 +11322,16 @@ dependencies = [
 
 [[package]]
 name = "reth-node-ethereum"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
+ "alloy-eips 1.0.23",
+ "alloy-network",
  "alloy-rpc-types-engine",
- "alloy-rpc-types-eth 1.0.20",
+ "alloy-rpc-types-eth 1.0.23",
  "eyre",
  "reth-chainspec",
- "reth-consensus",
+ "reth-engine-local",
  "reth-engine-primitives",
  "reth-ethereum-consensus",
  "reth-ethereum-engine-primitives",
@@ -11390,6 +11349,7 @@ dependencies = [
  "reth-rpc",
  "reth-rpc-api",
  "reth-rpc-builder",
+ "reth-rpc-eth-api",
  "reth-rpc-eth-types",
  "reth-rpc-server-types",
  "reth-tracing",
@@ -11399,13 +11359,37 @@ dependencies = [
 ]
 
 [[package]]
-name = "reth-node-events"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+name = "reth-node-ethstats"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-primitives 1.3.0",
+ "chrono",
+ "futures-util",
+ "reth-chain-state",
+ "reth-network-api",
+ "reth-primitives-traits",
+ "reth-storage-api",
+ "reth-transaction-pool",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.12",
+ "tokio",
+ "tokio-stream",
+ "tokio-tungstenite 0.26.2",
+ "tracing",
+ "url",
+]
+
+[[package]]
+name = "reth-node-events"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
+dependencies = [
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
  "derive_more 2.0.1",
  "futures",
@@ -11424,8 +11408,8 @@ dependencies = [
 
 [[package]]
 name = "reth-node-metrics"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "eyre",
  "http 1.3.1",
@@ -11445,8 +11429,8 @@ dependencies = [
 
 [[package]]
 name = "reth-node-types"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "reth-chainspec",
  "reth-db-api",
@@ -11458,12 +11442,12 @@ dependencies = [
 
 [[package]]
 name = "reth-optimism-primitives"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "arbitrary",
  "bytes",
@@ -11477,10 +11461,10 @@ dependencies = [
 
 [[package]]
 name = "reth-payload-builder"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
+ "alloy-consensus 1.0.23",
  "alloy-rpc-types",
  "futures-util",
  "metrics",
@@ -11497,8 +11481,8 @@ dependencies = [
 
 [[package]]
 name = "reth-payload-builder-primitives"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "pin-project",
  "reth-payload-primitives",
@@ -11509,11 +11493,11 @@ dependencies = [
 
 [[package]]
 name = "reth-payload-primitives"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
  "auto_impl",
  "op-alloy-rpc-types-engine",
@@ -11528,20 +11512,20 @@ dependencies = [
 
 [[package]]
 name = "reth-payload-validator"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
+ "alloy-consensus 1.0.23",
  "alloy-rpc-types-engine",
  "reth-primitives-traits",
 ]
 
 [[package]]
 name = "reth-primitives"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
+ "alloy-consensus 1.0.23",
  "c-kzg",
  "once_cell",
  "reth-ethereum-forks",
@@ -11552,15 +11536,15 @@ dependencies = [
 
 [[package]]
 name = "reth-primitives-traits"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-genesis",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
- "alloy-rpc-types-eth 1.0.20",
+ "alloy-rpc-types-eth 1.0.23",
  "alloy-trie 0.9.0",
  "arbitrary",
  "auto_impl",
@@ -11585,12 +11569,12 @@ dependencies = [
 
 [[package]]
 name = "reth-provider"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
  "dashmap 6.1.0",
  "eyre",
@@ -11623,19 +11607,19 @@ dependencies = [
  "reth-trie-db",
  "revm-database",
  "revm-state",
- "strum 0.27.1",
+ "strum 0.27.2",
  "tokio",
  "tracing",
 ]
 
 [[package]]
 name = "reth-prune"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "itertools 0.14.0",
  "metrics",
  "rayon",
@@ -11658,10 +11642,10 @@ dependencies = [
 
 [[package]]
 name = "reth-prune-types"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "arbitrary",
  "derive_more 2.0.1",
  "modular-bitfield",
@@ -11691,11 +11675,11 @@ dependencies = [
 
 [[package]]
 name = "reth-ress-protocol"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "futures",
  "reth-eth-wire",
@@ -11710,11 +11694,11 @@ dependencies = [
 
 [[package]]
 name = "reth-ress-provider"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-primitives 1.3.0",
  "eyre",
  "futures",
  "parking_lot",
@@ -11737,10 +11721,10 @@ dependencies = [
 
 [[package]]
 name = "reth-revm"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "reth-primitives-traits",
  "reth-storage-api",
  "reth-storage-errors",
@@ -11750,27 +11734,27 @@ dependencies = [
 
 [[package]]
 name = "reth-rpc"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
+ "alloy-consensus 1.0.23",
  "alloy-dyn-abi",
- "alloy-eips 1.0.20",
+ "alloy-eips 1.0.23",
  "alloy-evm",
  "alloy-genesis",
  "alloy-network",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "alloy-rpc-types",
  "alloy-rpc-types-admin",
  "alloy-rpc-types-beacon",
  "alloy-rpc-types-debug",
  "alloy-rpc-types-engine",
- "alloy-rpc-types-eth 1.0.20",
+ "alloy-rpc-types-eth 1.0.23",
  "alloy-rpc-types-mev",
  "alloy-rpc-types-trace",
  "alloy-rpc-types-txpool",
- "alloy-serde 1.0.20",
+ "alloy-serde 1.0.23",
  "alloy-signer",
  "alloy-signer-local",
  "async-trait",
@@ -11779,6 +11763,7 @@ dependencies = [
  "http 1.3.1",
  "http-body 1.0.1",
  "hyper 1.6.0",
+ "itertools 0.14.0",
  "jsonrpsee 0.25.1",
  "jsonrpsee-types 0.25.1",
  "jsonwebtoken 9.3.1",
@@ -11789,7 +11774,6 @@ dependencies = [
  "reth-consensus",
  "reth-engine-primitives",
  "reth-errors",
- "reth-ethereum-primitives",
  "reth-evm",
  "reth-evm-ethereum",
  "reth-execution-types",
@@ -11811,7 +11795,7 @@ dependencies = [
  "reth-transaction-pool",
  "reth-trie-common",
  "revm",
- "revm-inspectors",
+ "revm-inspectors 0.27.1",
  "revm-primitives",
  "serde",
  "serde_json",
@@ -11826,24 +11810,24 @@ dependencies = [
 
 [[package]]
 name = "reth-rpc-api"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
+ "alloy-eips 1.0.23",
  "alloy-genesis",
- "alloy-json-rpc 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-json-rpc 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types",
  "alloy-rpc-types-admin",
  "alloy-rpc-types-anvil",
  "alloy-rpc-types-beacon",
  "alloy-rpc-types-debug",
  "alloy-rpc-types-engine",
- "alloy-rpc-types-eth 1.0.20",
+ "alloy-rpc-types-eth 1.0.23",
  "alloy-rpc-types-mev",
  "alloy-rpc-types-trace",
  "alloy-rpc-types-txpool",
- "alloy-serde 1.0.20",
+ "alloy-serde 1.0.23",
  "jsonrpsee 0.25.1",
  "reth-chain-state",
  "reth-engine-primitives",
@@ -11854,8 +11838,8 @@ dependencies = [
 
 [[package]]
 name = "reth-rpc-builder"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-network",
  "alloy-provider",
@@ -11892,15 +11876,17 @@ dependencies = [
 
 [[package]]
 name = "reth-rpc-convert"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-json-rpc 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-json-rpc 1.0.23",
  "alloy-network",
- "alloy-primitives 1.2.1",
- "alloy-rpc-types-eth 1.0.20",
+ "alloy-primitives 1.3.0",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-signer",
  "jsonrpsee-types 0.25.1",
+ "reth-ethereum-primitives",
  "reth-evm",
  "reth-primitives-traits",
  "revm-context",
@@ -11909,11 +11895,11 @@ dependencies = [
 
 [[package]]
 name = "reth-rpc-engine-api"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
  "async-trait",
  "jsonrpsee-core 0.25.1",
@@ -11939,20 +11925,20 @@ dependencies = [
 
 [[package]]
 name = "reth-rpc-eth-api"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
+ "alloy-consensus 1.0.23",
  "alloy-dyn-abi",
- "alloy-eips 1.0.20",
+ "alloy-eips 1.0.23",
  "alloy-evm",
- "alloy-json-rpc 1.0.20",
+ "alloy-json-rpc 1.0.23",
  "alloy-network",
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
- "alloy-rpc-types-eth 1.0.20",
+ "alloy-rpc-types-eth 1.0.23",
  "alloy-rpc-types-mev",
- "alloy-serde 1.0.20",
+ "alloy-serde 1.0.23",
  "async-trait",
  "auto_impl",
  "dyn-clone",
@@ -11966,7 +11952,6 @@ dependencies = [
  "reth-evm",
  "reth-network-api",
  "reth-node-api",
- "reth-payload-builder",
  "reth-primitives-traits",
  "reth-revm",
  "reth-rpc-convert",
@@ -11977,29 +11962,30 @@ dependencies = [
  "reth-transaction-pool",
  "reth-trie-common",
  "revm",
- "revm-inspectors",
+ "revm-inspectors 0.27.1",
  "tokio",
  "tracing",
 ]
 
 [[package]]
 name = "reth-rpc-eth-types"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
  "alloy-evm",
- "alloy-primitives 1.2.1",
- "alloy-rpc-types-eth 1.0.20",
- "alloy-sol-types 1.2.1",
+ "alloy-network",
+ "alloy-primitives 1.3.0",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-sol-types 1.3.0",
  "derive_more 2.0.1",
  "futures",
  "itertools 0.14.0",
  "jsonrpsee-core 0.25.1",
  "jsonrpsee-types 0.25.1",
  "metrics",
- "rand 0.9.1",
+ "rand 0.9.2",
  "reth-chain-state",
  "reth-chainspec",
  "reth-errors",
@@ -12016,7 +12002,7 @@ dependencies = [
  "reth-transaction-pool",
  "reth-trie",
  "revm",
- "revm-inspectors",
+ "revm-inspectors 0.27.1",
  "schnellru",
  "serde",
  "thiserror 2.0.12",
@@ -12027,8 +12013,8 @@ dependencies = [
 
 [[package]]
 name = "reth-rpc-layer"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "alloy-rpc-types-engine",
  "http 1.3.1",
@@ -12041,28 +12027,28 @@ dependencies = [
 
 [[package]]
 name = "reth-rpc-server-types"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
  "jsonrpsee-core 0.25.1",
  "jsonrpsee-types 0.25.1",
  "reth-errors",
  "reth-network-api",
  "serde",
- "strum 0.27.1",
+ "strum 0.27.2",
 ]
 
 [[package]]
 name = "reth-stages"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "bincode",
  "blake3",
  "eyre",
@@ -12103,11 +12089,11 @@ dependencies = [
 
 [[package]]
 name = "reth-stages-api"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "aquamarine",
  "auto_impl",
  "futures-util",
@@ -12130,10 +12116,10 @@ dependencies = [
 
 [[package]]
 name = "reth-stages-types"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "arbitrary",
  "bytes",
  "modular-bitfield",
@@ -12144,10 +12130,10 @@ dependencies = [
 
 [[package]]
 name = "reth-static-file"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "parking_lot",
  "rayon",
  "reth-codecs",
@@ -12164,24 +12150,24 @@ dependencies = [
 
 [[package]]
 name = "reth-static-file-types"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "clap 4.5.41",
  "derive_more 2.0.1",
  "serde",
- "strum 0.27.1",
+ "strum 0.27.2",
 ]
 
 [[package]]
 name = "reth-storage-api"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rpc-types-engine",
  "auto_impl",
  "reth-chainspec",
@@ -12200,11 +12186,11 @@ dependencies = [
 
 [[package]]
 name = "reth-storage-errors"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "derive_more 2.0.1",
  "reth-primitives-traits",
@@ -12216,8 +12202,8 @@ dependencies = [
 
 [[package]]
 name = "reth-tasks"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "auto_impl",
  "dyn-clone",
@@ -12234,8 +12220,8 @@ dependencies = [
 
 [[package]]
 name = "reth-tokio-util"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "tokio",
  "tokio-stream",
@@ -12244,8 +12230,8 @@ dependencies = [
 
 [[package]]
 name = "reth-tracing"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "clap 4.5.41",
  "eyre",
@@ -12259,12 +12245,12 @@ dependencies = [
 
 [[package]]
 name = "reth-transaction-pool"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "aquamarine",
  "auto_impl",
@@ -12272,7 +12258,7 @@ dependencies = [
  "futures-util",
  "metrics",
  "parking_lot",
- "rand 0.9.1",
+ "rand 0.9.2",
  "reth-chain-state",
  "reth-chainspec",
  "reth-eth-wire-types",
@@ -12297,12 +12283,12 @@ dependencies = [
 
 [[package]]
 name = "reth-trie"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-eips 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-eips 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "alloy-trie 0.9.0",
  "auto_impl",
@@ -12322,14 +12308,14 @@ dependencies = [
 
 [[package]]
 name = "reth-trie-common"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-consensus 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
- "alloy-rpc-types-eth 1.0.20",
- "alloy-serde 1.0.20",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-serde 1.0.23",
  "alloy-trie 0.9.0",
  "arbitrary",
  "bytes",
@@ -12348,10 +12334,10 @@ dependencies = [
 
 [[package]]
 name = "reth-trie-db"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "reth-db-api",
  "reth-execution-errors",
  "reth-primitives-traits",
@@ -12361,10 +12347,10 @@ dependencies = [
 
 [[package]]
 name = "reth-trie-parallel"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "derive_more 2.0.1",
  "itertools 0.14.0",
@@ -12386,10 +12372,10 @@ dependencies = [
 
 [[package]]
 name = "reth-trie-sparse"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "alloy-rlp",
  "alloy-trie 0.9.0",
  "auto_impl",
@@ -12403,17 +12389,33 @@ dependencies = [
 ]
 
 [[package]]
+name = "reth-trie-sparse-parallel"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
+dependencies = [
+ "alloy-primitives 1.3.0",
+ "alloy-rlp",
+ "alloy-trie 0.9.0",
+ "rayon",
+ "reth-execution-errors",
+ "reth-trie-common",
+ "reth-trie-sparse",
+ "smallvec",
+ "tracing",
+]
+
+[[package]]
 name = "reth-zstd-compressors"
-version = "1.5.0"
-source = "git+https://github.com/bharath-123/reth?branch=bharath%2Ffusaka-revm-fix#95f0cf979d3b13b26a98ece83c4540e715210eb7"
+version = "1.6.0"
+source = "git+https://github.com/paradigmxyz/reth?branch=fusaka-devnet-3#8402695f5e48d249d3d178c84b717b6d1693cc85"
 dependencies = [
  "zstd 0.13.3",
 ]
 
 [[package]]
 name = "revm"
-version = "27.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+version = "27.0.3"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "revm-bytecode",
  "revm-context",
@@ -12431,7 +12433,7 @@ dependencies = [
 [[package]]
 name = "revm-bytecode"
 version = "6.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "bitvec",
  "once_cell",
@@ -12442,8 +12444,8 @@ dependencies = [
 
 [[package]]
 name = "revm-context"
-version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+version = "8.0.3"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "cfg-if",
  "derive-where",
@@ -12458,7 +12460,7 @@ dependencies = [
 [[package]]
 name = "revm-context-interface"
 version = "8.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "alloy-eip2930 0.2.1",
  "alloy-eip7702 0.6.1",
@@ -12473,9 +12475,9 @@ dependencies = [
 [[package]]
 name = "revm-database"
 version = "7.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
- "alloy-eips 1.0.20",
+ "alloy-eips 1.0.23",
  "revm-bytecode",
  "revm-database-interface",
  "revm-primitives",
@@ -12486,7 +12488,7 @@ dependencies = [
 [[package]]
 name = "revm-database-interface"
 version = "7.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "auto_impl",
  "either",
@@ -12497,8 +12499,8 @@ dependencies = [
 
 [[package]]
 name = "revm-handler"
-version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+version = "8.0.3"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "auto_impl",
  "derive-where",
@@ -12515,8 +12517,8 @@ dependencies = [
 
 [[package]]
 name = "revm-inspector"
-version = "8.0.2"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+version = "8.0.3"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "auto_impl",
  "either",
@@ -12536,10 +12538,26 @@ version = "0.26.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c7b99a2332cf8eed9e9a22fffbf76dfadc99d2c45de6ae6431a1eb9f657dd97a"
 dependencies = [
- "alloy-primitives 1.2.1",
- "alloy-rpc-types-eth 1.0.20",
+ "alloy-primitives 1.3.0",
+ "alloy-rpc-types-eth 1.0.23",
  "alloy-rpc-types-trace",
- "alloy-sol-types 1.2.1",
+ "alloy-sol-types 1.3.0",
+ "colorchoice",
+ "revm",
+ "serde_json",
+ "thiserror 2.0.12",
+]
+
+[[package]]
+name = "revm-inspectors"
+version = "0.27.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aad27cab355b0aa905d0744f3222e716b40ad48b32276ac4b0a615f2c3364c97"
+dependencies = [
+ "alloy-primitives 1.3.0",
+ "alloy-rpc-types-eth 1.0.23",
+ "alloy-rpc-types-trace",
+ "alloy-sol-types 1.3.0",
  "anstyle",
  "boa_engine",
  "boa_gc",
@@ -12552,8 +12570,8 @@ dependencies = [
 
 [[package]]
 name = "revm-interpreter"
-version = "23.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+version = "23.0.2"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "revm-bytecode",
  "revm-context-interface",
@@ -12563,8 +12581,8 @@ dependencies = [
 
 [[package]]
 name = "revm-precompile"
-version = "24.0.0"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+version = "24.0.1"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "ark-bls12-381",
  "ark-bn254",
@@ -12590,9 +12608,9 @@ dependencies = [
 [[package]]
 name = "revm-primitives"
 version = "20.0.0"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "num_enum",
  "serde",
 ]
@@ -12600,7 +12618,7 @@ dependencies = [
 [[package]]
 name = "revm-state"
 version = "7.0.1"
-source = "git+https://github.com/bluealloy/revm?branch=rakita%2Feip7907#37edc381a940a52abb90b3e0a480292a675e8129"
+source = "git+https://github.com/bluealloy/revm?branch=fusaka-devnet-3#d5292dda70a21784d1cf9fcfca957445376e91f0"
 dependencies = [
  "bitflags 2.9.1",
  "revm-bytecode",
@@ -12803,7 +12821,7 @@ dependencies = [
  "primitive-types",
  "proptest",
  "rand 0.8.5",
- "rand 0.9.1",
+ "rand 0.9.2",
  "rlp",
  "ruint-macro",
  "serde",
@@ -12912,15 +12930,15 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "1.0.7"
+version = "1.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c71e83d6afe7ff64890ec6b71d6a69bb8a610ab78ce364b3352876bb4c801266"
+checksum = "11181fbabf243db407ef8df94a6ce0b2f9a733bd8be4ad02b4eda9602296cac8"
 dependencies = [
  "bitflags 2.9.1",
  "errno",
  "libc",
  "linux-raw-sys 0.9.4",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -13256,7 +13274,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c3c81b43dc2d8877c216a3fccf76677ee1ebccd429566d3e67447290d0c42b2"
 dependencies = [
  "bitcoin_hashes",
- "rand 0.9.1",
+ "rand 0.9.2",
  "secp256k1-sys 0.11.0",
 ]
 
@@ -13400,9 +13418,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.140"
+version = "1.0.141"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "20068b6e96dc6c9bd23e01df8827e6c7e1f2fddd43c21810382803c136b99373"
+checksum = "30b9eff21ebe718216c6ec64e1d9ac57087aad11efc64e32002bce4a0d4c03d3"
 dependencies = [
  "indexmap 2.10.0",
  "itoa",
@@ -13659,27 +13677,6 @@ name = "simdutf8"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e"
-
-[[package]]
-name = "similar"
-version = "2.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bbbb5d9659141646ae647b42fe094daf6c6192d1620870b449d9557f748b2daa"
-dependencies = [
- "bstr",
- "unicode-segmentation",
-]
-
-[[package]]
-name = "similar-asserts"
-version = "1.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b5b441962c817e33508847a22bd82f03a30cff43642dc2fae8b050566121eb9a"
-dependencies = [
- "console",
- "serde",
- "similar",
-]
 
 [[package]]
 name = "simple_asn1"
@@ -14226,11 +14223,11 @@ dependencies = [
 
 [[package]]
 name = "strum"
-version = "0.27.1"
+version = "0.27.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f64def088c51c9510a8579e3c5d67c65349dcf755e5479ad3d010aa6454e2c32"
+checksum = "af23d6f6c1a224baef9d3f61e287d2761385a5b88fdab4eb4c6f11aeb54c4bcf"
 dependencies = [
- "strum_macros 0.27.1",
+ "strum_macros 0.27.2",
 ]
 
 [[package]]
@@ -14261,14 +14258,13 @@ dependencies = [
 
 [[package]]
 name = "strum_macros"
-version = "0.27.1"
+version = "0.27.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c77a8c5abcaf0f9ce05d62342b7d298c346515365c36b673df4ebe3ced01fde8"
+checksum = "7695ce3845ea4b33927c055a39dc438a45b059f7c1b3d91d38d10355fb8cbca7"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2 1.0.95",
  "quote 1.0.40",
- "rustversion",
  "syn 2.0.104",
 ]
 
@@ -14345,9 +14341,9 @@ dependencies = [
 
 [[package]]
 name = "syn-solidity"
-version = "1.2.1"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b9ac494e7266fcdd2ad80bf4375d55d27a117ea5c866c26d0e97fe5b3caeeb75"
+checksum = "a7a985ff4ffd7373e10e0fb048110fb11a162e5a4c47f92ddb8787a6f766b769"
 dependencies = [
  "paste",
  "proc-macro2 1.0.95",
@@ -14425,7 +14421,7 @@ dependencies = [
 name = "sysperf"
 version = "0.1.0"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "num_cpus",
  "rand 0.8.5",
  "rayon",
@@ -14512,7 +14508,7 @@ dependencies = [
  "fastrand 2.3.0",
  "getrandom 0.3.3",
  "once_cell",
- "rustix 1.0.7",
+ "rustix 1.0.8",
  "windows-sys 0.59.0",
 ]
 
@@ -14558,9 +14554,9 @@ name = "test-relay"
 version = "0.1.0"
 dependencies = [
  "ahash",
- "alloy-consensus 1.0.20",
- "alloy-json-rpc 1.0.20",
- "alloy-primitives 1.2.1",
+ "alloy-consensus 1.0.23",
+ "alloy-json-rpc 1.0.23",
+ "alloy-primitives 1.3.0",
  "alloy-provider",
  "clap 4.5.41",
  "clap_builder",
@@ -14909,6 +14905,7 @@ dependencies = [
  "futures-util",
  "log",
  "rustls 0.23.29",
+ "rustls-native-certs 0.8.1",
  "rustls-pki-types",
  "tokio",
  "tokio-rustls 0.26.2",
@@ -15110,8 +15107,6 @@ version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97d095ae15e245a057c8e8451bab9b3ee1e1f68e9ba2b4fbc18d0ac5237835f2"
 dependencies = [
- "futures",
- "futures-task",
  "pin-project",
  "tracing",
 ]
@@ -15207,7 +15202,7 @@ version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ee44f4cef85f88b4dea21c0b1f58320bdf35715cf56d840969487cff00613321"
 dependencies = [
- "alloy-primitives 1.2.1",
+ "alloy-primitives 1.3.0",
  "ethereum_hashing 0.7.0",
  "ethereum_ssz 0.9.0",
  "smallvec",
@@ -15319,7 +15314,7 @@ dependencies = [
  "http 1.3.1",
  "httparse",
  "log",
- "rand 0.9.1",
+ "rand 0.9.2",
  "rustls 0.23.29",
  "rustls-pki-types",
  "sha1",
@@ -15870,14 +15865,14 @@ version = "0.26.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "75c7f0ef91146ebfb530314f5f1d24528d7f0767efbfd31dce919275413e393e"
 dependencies = [
- "webpki-root-certs 1.0.1",
+ "webpki-root-certs 1.0.2",
 ]
 
 [[package]]
 name = "webpki-root-certs"
-version = "1.0.1"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86138b15b2b7d561bc4469e77027b8dd005a43dc502e9031d1f5afc8ce1f280e"
+checksum = "4e4ffd8df1c57e87c325000a3d6ef93db75279dc3a231125aac571650f22b12a"
 dependencies = [
  "rustls-pki-types",
 ]
@@ -15894,14 +15889,14 @@ version = "0.26.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "521bc38abb08001b01866da9f51eb7c5d647a19260e00054a8c7fd5f9e57f7a9"
 dependencies = [
- "webpki-roots 1.0.1",
+ "webpki-roots 1.0.2",
 ]
 
 [[package]]
 name = "webpki-roots"
-version = "1.0.1"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8782dd5a41a24eed3a4f40b606249b3e236ca61adf1f25ea4d45c73de122b502"
+checksum = "7e8983c3ab33d6fb807cfcdad2491c4ea8cbc8ed839181c7dfd9c67c83e261b2"
 dependencies = [
  "rustls-pki-types",
 ]
@@ -16572,7 +16567,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af3a19837351dc82ba89f8a125e22a3c475f05aba604acc023d62b2739ae2909"
 dependencies = [
  "libc",
- "rustix 1.0.7",
+ "rustix 1.0.8",
 ]
 
 [[package]]
@@ -16854,5 +16849,5 @@ dependencies = [
 
 [[patch.unused]]
 name = "alloy-contract"
-version = "1.0.20"
-source = "git+https://github.com/alloy-rs/alloy?branch=fusaka%2Fdevnet2#000b830535a0b4d6374bc09727e3663fb6af9b89"
+version = "1.0.23"
+source = "git+https://github.com/alloy-rs/alloy?branch=fusaka-devnet-3#3b877aca44f8d410226d3250b3ce53bcc077642b"
