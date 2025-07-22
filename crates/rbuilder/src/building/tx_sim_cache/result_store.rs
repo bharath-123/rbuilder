@@ -132,7 +132,6 @@ impl<R: Clone + std::fmt::Debug> ExecutionResultStoreWalker<R> {
 #[cfg(test)]
 mod tests {
     use crate::utils::test_utils::{addr, u256};
-    use reth::revm::state::CodeSize;
 
     use super::*;
 
@@ -146,7 +145,6 @@ mod tests {
                 nonce: 0,
                 code_hash: Default::default(),
                 code: None,
-                code_size: CodeSize::Known(0),
             }),
         }
     }
