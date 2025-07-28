@@ -168,13 +168,13 @@ impl BlockBuildingContext {
 
         let excess_blob_gas = if chain_spec.is_cancun_active_at_timestamp(attributes.timestamp) {
             if chain_spec.is_cancun_active_at_timestamp(parent.timestamp) {
-                let blob_params = if chain_spec.is_prague_active_at_timestamp(attributes.timestamp)
+                if let Some(blobs_params) =
+                    chain_spec.blob_params_at_timestamp(attributes.timestamp)
                 {
-                    BlobParams::prague()
+                    parent.next_block_excess_blob_gas(blobs_params)
                 } else {
-                    BlobParams::cancun()
-                };
-                parent.next_block_excess_blob_gas(blob_params)
+                    parent.next_block_excess_blob_gas(BlobParams::cancun())
+                }
             } else {
                 // for the first post-fork block, both parent.blob_gas_used and
                 // parent.excess_blob_gas are evaluated as 0
