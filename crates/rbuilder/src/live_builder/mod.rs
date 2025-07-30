@@ -314,6 +314,7 @@ where
                 self.faster_finalize,
             ) {
                 mark_building_started(block_ctx.timestamp());
+                tracing::info!("BHARATH: block number in block ctx: {}", block_ctx.block());
                 builder_pool.start_block_building(
                     payload,
                     block_ctx,
