@@ -267,6 +267,7 @@ fn run_check_if_parent_block_is_last_block<P>(
                 continue;
             }
         };
+        tracing::info!("BHARATH: last block number in run_check_if_parent_block_is_last_block: {}", last_block_number);
         if last_block_number + 1 != block_ctx.block() {
             info!(
                 reason = "last block number",
