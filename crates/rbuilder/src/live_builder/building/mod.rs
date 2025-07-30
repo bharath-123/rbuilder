@@ -89,7 +89,6 @@ where
         });
 
         {
-            info!("BHARATH: block number in start_block_building: {}", block_ctx.block());
             let provider = self.provider.clone();
             let block_ctx = block_ctx.clone();
             let block_cancellation = block_cancellation.clone();
@@ -259,7 +258,6 @@ fn run_check_if_parent_block_is_last_block<P>(
         if block_cancellation.is_cancelled() {
             return;
         }
-        tracing::info!("BHARATH: last block number in run_check_if_parent_block_is_last_block: {}", block_ctx.block());
         let last_block_number = match provider.last_block_number() {
             Ok(n) => n,
             Err(err) => {
@@ -267,7 +265,6 @@ fn run_check_if_parent_block_is_last_block<P>(
                 continue;
             }
         };
-        tracing::info!("BHARATH: last block number in run_check_if_parent_block_is_last_block: {}", last_block_number);
         if last_block_number + 1 != block_ctx.block() {
             info!(
                 reason = "last block number",
