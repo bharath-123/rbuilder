@@ -63,7 +63,7 @@ pub async fn subscribe_to_txpool_with_blobs(
                     tx_with_blobs
                 }
                 Ok(None) => {
-                    trace!(?tx_hash, "tx not found in tx pool");
+                    tracing::info!(?tx_hash, "BHARATH: tx not found in tx pool");
                     continue;
                 }
                 Err(err) => {
