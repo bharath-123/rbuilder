@@ -18,9 +18,9 @@ use crate::{
     },
 };
 use alloy_consensus::{constants::KECCAK_EMPTY, Header, EMPTY_OMMER_ROOT_HASH};
+use alloy_eips::eip7594::BlobTransactionSidecarVariant;
 use alloy_eips::{
     eip1559::{calculate_block_gas_limit, ETHEREUM_BLOCK_GAS_LIMIT_30M},
-    eip4844::BlobTransactionSidecar,
     eip4895::Withdrawals,
     eip7685::Requests,
     eip7840::BlobParams,
@@ -50,7 +50,10 @@ use revm::{
     context::BlockEnv,
     context_interface::{block::BlobExcessGasAndPrice, result::InvalidTransaction},
     database::states::bundle_state::BundleRetention,
-    primitives::hardfork::SpecId,
+    primitives::{
+        eip4844::{BLOB_BASE_FEE_UPDATE_FRACTION_CANCUN, BLOB_BASE_FEE_UPDATE_FRACTION_PRAGUE},
+        hardfork::SpecId,
+    },
 };
 use serde::Deserialize;
 use std::{
@@ -234,19 +237,26 @@ impl BlockBuildingContext {
     ) -> BlockBuildingContext {
         let block_number = onchain_block.header.number;
 
-        let blob_excess_gas_and_price =
-            if chain_spec.is_cancun_active_at_timestamp(onchain_block.header.timestamp) {
-                Some(BlobExcessGasAndPrice::new(
-                    onchain_block.header.excess_blob_gas.unwrap_or_default(),
-                    chain_spec.is_prague_active_at_timestamp(onchain_block.header.timestamp),
-                ))
-            } else {
-                None
-            };
+        let blob_excess_gas_and_price = if chain_spec
+            .is_prague_active_at_timestamp(onchain_block.header.timestamp)
+            || chain_spec.is_osaka_active_at_timestamp(onchain_block.header.timestamp)
+        {
+            Some(BlobExcessGasAndPrice::new(
+                onchain_block.header.excess_blob_gas.unwrap_or_default(),
+                BLOB_BASE_FEE_UPDATE_FRACTION_PRAGUE,
+            ))
+        } else if chain_spec.is_cancun_active_at_timestamp(onchain_block.header.timestamp) {
+            Some(BlobExcessGasAndPrice::new(
+                onchain_block.header.excess_blob_gas.unwrap_or_default(),
+                BLOB_BASE_FEE_UPDATE_FRACTION_CANCUN,
+            ))
+        } else {
+            None
+        };
         let block_env = BlockEnv {
-            number: block_number,
+            number: U256::from(block_number),
             beneficiary,
-            timestamp: onchain_block.header.timestamp,
+            timestamp: U256::from(onchain_block.header.timestamp),
             difficulty: onchain_block.header.difficulty,
             prevrandao: Some(onchain_block.header.mix_hash),
             basefee: onchain_block
@@ -339,7 +349,11 @@ impl BlockBuildingContext {
     }
 
     pub fn block(&self) -> u64 {
-        self.evm_env.block_env.number
+        self.evm_env
+            .block_env
+            .number
+            .try_into()
+            .expect("Block number should be a u64")
     }
 
     pub fn coinbase_is_suggested_fee_recipient(&self) -> bool {
@@ -508,7 +522,7 @@ impl ExecutionError {
 pub struct FinalizeResult {
     pub sealed_block: SealedBlock,
     // sidecars for all txs in SealedBlock
-    pub txs_blob_sidecars: Vec<Arc<BlobTransactionSidecar>>,
+    pub txs_blob_sidecars: Vec<Arc<BlobTransactionSidecarVariant>>,
     /// The Pectra execution requests for this bid.
     pub execution_requests: Vec<Bytes>,
 
@@ -836,8 +850,14 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
         let state_root = {
             let (bundle, _) = state.into_parts();
             // we use execution outcome here only for interface compatibility, its just a wrapper around bundle
-            let execution_outcome =
-                ExecutionOutcome::new(bundle, Vec::new(), block_number, Vec::new());
+            let execution_outcome = ExecutionOutcome::new(
+                bundle,
+                Vec::new(),
+                block_number
+                    .try_into()
+                    .expect("Block number should be a u64"),
+                Vec::new(),
+            );
             ctx.root_hasher.state_root(&execution_outcome, local_ctx)?
         };
         let root_hash_time = step_start.elapsed();
@@ -873,11 +893,25 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
         let mut txs_blob_sidecars = Vec::new();
         let (excess_blob_gas, blob_gas_used) = if ctx
             .chain_spec
+            .is_osaka_active_at_timestamp(ctx.attributes.timestamp)
+        {
+            for tx_with_blob in self.executed_tx_infos.iter().map(|info| &info.tx) {
+                if let Some(eip7594_sidecar) = tx_with_blob.blobs_sidecar.as_eip7594() {
+                    if !eip7594_sidecar.blobs.is_empty() {
+                        txs_blob_sidecars.push(tx_with_blob.blobs_sidecar.clone());
+                    }
+                }
+            }
+            (ctx.excess_blob_gas, Some(self.blob_gas_used))
+        } else if ctx
+            .chain_spec
             .is_cancun_active_at_timestamp(ctx.attributes.timestamp)
         {
             for tx_with_blob in self.executed_tx_infos.iter().map(|info| &info.tx) {
-                if !tx_with_blob.blobs_sidecar.blobs.is_empty() {
-                    txs_blob_sidecars.push(tx_with_blob.blobs_sidecar.clone());
+                if let Some(eip4844_sidecar) = tx_with_blob.blobs_sidecar.as_eip4844() {
+                    if !eip4844_sidecar.blobs.is_empty() {
+                        txs_blob_sidecars.push(tx_with_blob.blobs_sidecar.clone());
+                    }
                 }
             }
             (ctx.excess_blob_gas, Some(self.blob_gas_used))
@@ -901,7 +935,9 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
             mix_hash: ctx.attributes.prev_randao,
             nonce: BEACON_NONCE.into(),
             base_fee_per_gas: Some(ctx.evm_env.block_env.basefee),
-            number: block_number,
+            number: block_number
+                .try_into()
+                .expect("Block number should be a u64"),
             gas_limit: ctx.evm_env.block_env.gas_limit,
             difficulty: U256::ZERO,
             gas_used: self.gas_used,
