@@ -252,11 +252,14 @@ pub fn sign_block_for_relay(
 fn marshal_txs_blobs_sidecars(
     txs_blobs_sidecars: &[Arc<BlobTransactionSidecarVariant>],
 ) -> BlobsBundleV1 {
+    tracing::info!("BHARATH: marshalling blobs bundle v1");
+    tracing::info!("BHARATH: number of blobs: {}", txs_blobs_sidecars.len());
     // Instead of collecting Arc<BlobTransactionSidecar>, just collect references to the inner struct.
     let eip4844_sidecars: Vec<&BlobTransactionSidecar> = txs_blobs_sidecars
         .iter()
         .filter_map(|blob| blob.as_ref().as_eip4844())
         .collect();
+    tracing::info!("BHARATH: number of eip4844 sidecars: {}", eip4844_sidecars.len());
 
     // Now flatten the fields, only cloning the inner data, not the whole struct or Arc.
     let commitments = eip4844_sidecars
@@ -291,7 +294,6 @@ fn marshall_txs_blobs_sidecars_v2(
         .iter()
         .filter_map(|blob| blob.as_ref().as_eip7594())
         .collect();
-    tracing::info!("BHARATH: number of eip7594 sidecars: {}", eip7594_sidecars.len());
 
     // Now flatten the fields, only cloning the inner data, not the whole struct or Arc.
     let commitments = eip7594_sidecars
