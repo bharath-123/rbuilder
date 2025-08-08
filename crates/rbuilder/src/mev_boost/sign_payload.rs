@@ -206,6 +206,10 @@ pub fn sign_block_for_relay(
 
         if chain_spec.is_osaka_active_at_timestamp(sealed_block.timestamp) {
             let blobs_bundle_v2 = marshall_txs_blobs_sidecars_v2(blobs_bundle);
+            let blobs_bundle_v1 = marshal_txs_blobs_sidecars(blobs_bundle);
+
+            tracing::info!("BHARATH: no of blobs_bundle_v1: {:?}", blobs_bundle_v1.blobs.len());
+            tracing::info!("BHARATH: no of blobs_bundle_v2: {:?}", blobs_bundle_v2.blobs.len());
 
             let submission = SignedBidSubmissionV5 {
                 message,
@@ -214,6 +218,7 @@ pub fn sign_block_for_relay(
                 signature,
                 execution_requests,
             };
+            
             SubmitBlockRequest::fulu(FuluSubmitBlockRequest::new(submission, adjustment_data))
         } else if chain_spec.is_prague_active_at_timestamp(sealed_block.timestamp) {
             let blobs_bundle = marshal_txs_blobs_sidecars(blobs_bundle);
