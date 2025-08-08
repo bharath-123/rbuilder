@@ -294,6 +294,7 @@ fn marshall_txs_blobs_sidecars_v2(
         .iter()
         .filter_map(|blob| blob.as_ref().as_eip7594())
         .collect();
+    tracing::info!("BHARATH: number of eip7594 sidecars: {}", eip7594_sidecars.len());
 
     // Now flatten the fields, only cloning the inner data, not the whole struct or Arc.
     let commitments = eip7594_sidecars
