@@ -901,8 +901,11 @@ impl<Tracer: SimulationTracer> PartialBlock<Tracer> {
                         txs_blob_sidecars.push(tx_with_blob.blobs_sidecar.clone());
                     }
                 }
-                if let Some(_) = tx_with_blob.blobs_sidecar.as_eip4844() {
-                    tracing::info!("BHARATH: found eip4844 sidecar in fusaka while finalizing");
+                if let Some(eip4844_sidecar) = tx_with_blob.blobs_sidecar.as_eip4844() {
+                    if !eip4844_sidecar.blobs.is_empty() {
+                        tracing::info!("BHARATH: found eip4844 sidecar in fusaka while finalizing");
+                        tracing::info!("BHARATH: number of blobs: {}", eip4844_sidecar.blobs.len());
+                    }
                 }
             }
             (ctx.excess_blob_gas, Some(self.blob_gas_used))
