@@ -5,13 +5,15 @@ use ahash::HashMap;
 use alloy_eips::merge::SLOT_DURATION;
 use lru::LruCache;
 use reth::providers::StateProviderBox;
+use reth_chainspec::{ChainSpec, EthereumHardfork, EthereumHardforks};
 use std::{
     collections::VecDeque,
     num::NonZeroUsize,
+    sync::Arc,
     time::{Duration, Instant},
 };
 use tokio::sync::mpsc::{self};
-use tracing::{error, trace};
+use tracing::{error, info, trace};
 
 use super::{
     order_sink::{OrderPoolCommand, OrderSender2OrderSink},
@@ -77,16 +79,18 @@ pub struct OrderPool {
     known_orders: LruCache<(OrderId, u64), ()>,
     sinks: HashMap<OrderPoolSubscriptionId, SinkSubscription>,
     next_sink_id: u64,
+    chain_spec: Option<Arc<ChainSpec>>,
+    latest_block_timestamp: u64,
 }
 
 impl Default for OrderPool {
     fn default() -> Self {
-        Self::new()
+        Self::new(None)
     }
 }
 
 impl OrderPool {
-    pub fn new() -> Self {
+    pub fn new(chain_spec: Option<Arc<ChainSpec>>) -> Self {
         OrderPool {
             mempool_txs: Vec::new(),
             bundles_by_target_block: HashMap::default(),
@@ -95,6 +99,8 @@ impl OrderPool {
             sinks: Default::default(),
             next_sink_id: 0,
             bundle_cancellations: Default::default(),
+            chain_spec,
+            latest_block_timestamp: 0,
         }
     }
 
@@ -112,6 +118,18 @@ impl OrderPool {
             trace!(?order_id, "Order known, dropping");
             return;
         }
+
+        if let Some(chain_spec) = &self.chain_spec {
+            if should_filter_eip4844_during_osaka(order, chain_spec, self.latest_block_timestamp) {
+                info!(
+                    latest_block_timestamp = self.latest_block_timestamp,
+                    ?order_id,
+                    "BHARATH: filtered order because of eip4844"
+                );
+                return;
+            }
+        }
+
         trace!(?order_id, "Adding order");
 
         let (order, target_block) = match &order {
@@ -235,8 +253,14 @@ impl OrderPool {
     /// Should be called when last block is updated.
     /// It's slow but since it only happens at the start of the block it does now matter.
     /// It clears old txs from the mempool and old bundle_cancellations.
-    pub fn head_updated(&mut self, new_block_number: u64, new_state: &StateProviderBox) {
+    pub fn head_updated(
+        &mut self,
+        new_block_number: u64,
+        new_block_timestamp: u64,
+        new_state: &StateProviderBox,
+    ) {
         // remove from bundles by target block
+        self.latest_block_timestamp = new_block_timestamp;
         self.bundles_by_target_block
             .retain(|block_number, _| *block_number > new_block_number);
         self.bundles_for_current_block.clear();
@@ -267,6 +291,40 @@ impl OrderPool {
             }
             self.bundle_cancellations.pop_front();
         }
+
+        // Filter out EIP-4844 blob transactions during Osaka fork
+        if let Some(chain_spec) = &self.chain_spec {
+            if chain_spec.is_osaka_active_at_timestamp(new_block_timestamp)
+                || chain_spec.is_osaka_active_at_timestamp(new_block_timestamp + 12)
+            {
+                let initial_mempool_count = self.mempool_txs.len();
+
+                // Remove EIP-4844 blob transactions from mempool
+                self.mempool_txs.retain(|(order, _)| {
+                    !should_filter_eip4844_during_osaka(order, chain_spec, new_block_timestamp)
+                });
+
+                // Remove EIP-4844 blob transactions from bundles_for_current_block
+                self.bundles_for_current_block.retain(|order| {
+                    !should_filter_eip4844_during_osaka(order, chain_spec, new_block_timestamp)
+                });
+
+                // Remove EIP-4844 blob transactions from bundles_by_target_block
+                for bundle_store in self.bundles_by_target_block.values_mut() {
+                    bundle_store.bundles.retain(|order| {
+                        !should_filter_eip4844_during_osaka(order, chain_spec, new_block_timestamp)
+                    });
+                }
+
+                let final_mempool_count = self.mempool_txs.len();
+                if initial_mempool_count != final_mempool_count {
+                    tracing::info!(
+                        "Filtered {} EIP-4844 blob transactions during Osaka fork transition",
+                        initial_mempool_count - final_mempool_count
+                    );
+                }
+            }
+        }
     }
 
     /// Does NOT take in account cancellations
@@ -279,4 +337,54 @@ impl OrderPool {
             .sum();
         (tx_count, bundle_count)
     }
+}
+
+/// Check if an order contains EIP-4844 blob transactions during Osaka fork
+fn should_filter_eip4844_during_osaka(
+    order: &Order,
+    chain_spec: &Arc<ChainSpec>,
+    current_timestamp: u64,
+) -> bool {
+    // Only filter if Osaka fork is active
+    if !chain_spec.is_osaka_active_at_timestamp(current_timestamp) {
+        return false;
+    }
+
+    match order {
+        Order::Tx(tx) => {
+            // Check if this is an EIP-4844 transaction with actual blobs
+            if tx.tx_with_blobs.blobs_sidecar.is_eip4844() {
+                tracing::warn!(
+                    tx_hash = ?tx.tx_with_blobs.hash(),
+                    "Filtering EIP-4844 blob transaction during Osaka fork transition"
+                );
+                return true;
+            }
+        }
+        Order::Bundle(bundle) => {
+            for tx in &bundle.txs {
+                if tx.blobs_sidecar.is_eip4844() {
+                    tracing::warn!(
+                        bundle_uuid = ?bundle.uuid,
+                        tx_hash = ?tx.hash(),
+                        "Filtering bundle with EIP-4844 blob transaction during Osaka fork transition"
+                    );
+                    return true;
+                }
+            }
+        }
+        Order::ShareBundle(share_bundle) => {
+            for (tx, _) in share_bundle.flatten_txs() {
+                if tx.blobs_sidecar.is_eip4844() {
+                    tracing::warn!(
+                        tx_hash = ?tx.hash(),
+                        "Filtering share bundle with EIP-4844 blob transaction during Osaka fork transition"
+                    );
+                    return true;
+                }
+            }
+        }
+    }
+
+    false
 }

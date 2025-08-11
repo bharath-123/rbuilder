@@ -18,6 +18,7 @@ use crate::telemetry::{set_current_block, set_ordepool_count};
 use alloy_consensus::Header;
 use jsonrpsee::RpcModule;
 use parking_lot::Mutex;
+use reth_chainspec::ChainSpec;
 use std::{net::Ipv4Addr, path::PathBuf, sync::Arc, time::Duration};
 use std::{path::Path, time::Instant};
 use tokio::{sync::mpsc, task::JoinHandle};
@@ -200,6 +201,7 @@ pub async fn start_orderpool_jobs<P>(
     order_sender: mpsc::Sender<ReplaceableOrderPoolCommand>,
     order_receiver: mpsc::Receiver<ReplaceableOrderPoolCommand>,
     header_receiver: mpsc::Receiver<Header>,
+    chain_spec: Arc<ChainSpec>,
 ) -> eyre::Result<(JoinHandle<()>, OrderPoolSubscriber)>
 where
     P: StateProviderFactory + 'static,
@@ -211,7 +213,7 @@ where
         warn!("ignore_blobs is set to true, some order input is ignored");
     }
 
-    let orderpool = Arc::new(Mutex::new(OrderPool::new()));
+    let orderpool = Arc::new(Mutex::new(OrderPool::new(Some(chain_spec))));
     let subscriber = OrderPoolSubscriber {
         orderpool: orderpool.clone(),
     };
@@ -357,7 +359,7 @@ where
                         let mut orderpool = orderpool.lock();
                         let start = Instant::now();
 
-                        orderpool.head_updated(current_block, &state);
+                        orderpool.head_updated(current_block, header.timestamp, &state);
 
                         let update_time = start.elapsed();
                         let (tx_count, bundle_count) = orderpool.content_count();
