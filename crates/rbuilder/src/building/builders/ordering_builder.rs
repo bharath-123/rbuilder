@@ -285,39 +285,6 @@ impl OrderingBuilderContext {
             if sim_order.sim_value.gas_used() == 0 {
                 continue;
             }
-            if self
-                .ctx
-                .chain_spec
-                .is_osaka_active_at_timestamp(self.ctx.timestamp().unix_timestamp() as u64)
-                || self
-                    .ctx
-                    .chain_spec
-                    .is_osaka_active_at_timestamp(self.ctx.timestamp().unix_timestamp() as u64 + 12)
-            {
-                tracing::info!("BHARATH: fill_orders: checking if order is eip4844");
-                match &sim_order.order {
-                    Order::Tx(tx) => {
-                        if tx.tx_with_blobs.blobs_sidecar.is_eip4844() {
-                            tracing::info!("BHARATH: fill_orders: order is eip4844");
-                            continue;
-                        }
-                    }
-                    Order::ShareBundle(bundle) => {
-                        if bundle
-                            .flatten_txs()
-                            .iter()
-                            .any(|(tx, _)| tx.blobs_sidecar.is_eip4844())
-                        {
-                            continue;
-                        }
-                    }
-                    Order::Bundle(bundle) => {
-                        if bundle.txs.iter().any(|tx| tx.blobs_sidecar.is_eip4844()) {
-                            continue;
-                        }
-                    }
-                }
-            }
 
             if let Some(deadline) = self.config.build_duration_deadline() {
                 if build_start.elapsed() > deadline {

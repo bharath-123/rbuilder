@@ -213,7 +213,7 @@ where
         warn!("ignore_blobs is set to true, some order input is ignored");
     }
 
-    let orderpool = Arc::new(Mutex::new(OrderPool::new(Some(chain_spec))));
+    let orderpool = Arc::new(Mutex::new(OrderPool::new()));
     let subscriber = OrderPoolSubscriber {
         orderpool: orderpool.clone(),
     };
@@ -359,7 +359,7 @@ where
                         let mut orderpool = orderpool.lock();
                         let start = Instant::now();
 
-                        orderpool.head_updated(current_block, header.timestamp, &state);
+                        orderpool.head_updated(current_block, &state);
 
                         let update_time = start.elapsed();
                         let (tx_count, bundle_count) = orderpool.content_count();
