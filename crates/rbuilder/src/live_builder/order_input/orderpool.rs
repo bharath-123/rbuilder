@@ -21,7 +21,7 @@ use super::{
     ReplaceableOrderPoolCommand,
 };
 
-const BLOCKS_TO_KEEP_TXS: u32 = 5;
+const BLOCKS_TO_KEEP_TXS: u32 = 32;
 const TIME_TO_KEEP_TXS: Duration = SLOT_DURATION.saturating_mul(BLOCKS_TO_KEEP_TXS);
 
 const TIME_TO_KEEP_BUNDLE_CANCELLATIONS: Duration = Duration::from_secs(60);
