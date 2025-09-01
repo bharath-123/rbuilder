@@ -5,13 +5,15 @@ use ahash::HashMap;
 use alloy_eips::merge::SLOT_DURATION;
 use lru::LruCache;
 use reth::providers::StateProviderBox;
+use reth_chainspec::ChainSpec;
 use std::{
     collections::VecDeque,
     num::NonZeroUsize,
+    sync::Arc,
     time::{Duration, Instant},
 };
 use tokio::sync::mpsc::{self};
-use tracing::{error, trace};
+use tracing::{error, info, trace};
 
 use super::{
     order_sink::{OrderPoolCommand, OrderSender2OrderSink},
@@ -19,7 +21,7 @@ use super::{
     ReplaceableOrderPoolCommand,
 };
 
-const BLOCKS_TO_KEEP_TXS: u32 = 5;
+const BLOCKS_TO_KEEP_TXS: u32 = 10000;
 const TIME_TO_KEEP_TXS: Duration = SLOT_DURATION.saturating_mul(BLOCKS_TO_KEEP_TXS);
 
 const TIME_TO_KEEP_BUNDLE_CANCELLATIONS: Duration = Duration::from_secs(60);
@@ -112,6 +114,7 @@ impl OrderPool {
             trace!(?order_id, "Order known, dropping");
             return;
         }
+
         trace!(?order_id, "Adding order");
 
         let (order, target_block) = match &order {

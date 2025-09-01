@@ -2,12 +2,12 @@ use ahash::HashMap;
 use alloy_consensus::Transaction;
 use alloy_primitives::{Address, B256, U256};
 use reth_primitives::{Recovered, TransactionSigned};
+use revm::inspector::Inspector;
 use revm::{
     bytecode::opcode,
     context::ContextTr,
     inspector::JournalExt,
     interpreter::{interpreter_types::Jumps, CallInputs, CallOutcome, Interpreter},
-    Inspector,
 };
 use revm_inspectors::access_list::AccessListInspector;
 

@@ -1,10 +1,5 @@
 pub mod setup;
 
-use alloy_primitives::{Address, Bytes, B256, U256};
-use itertools::Itertools;
-use reth_primitives::Bytecode;
-use std::collections::{HashMap, HashSet};
-
 use crate::{
     building::{
         testing::bundle_tests::setup::NonceValue, BuiltBlockTrace, BundleErr, ExecutionResult,
@@ -13,6 +8,10 @@ use crate::{
     primitives::{Bundle, BundleRefund, Order, OrderId, Refund, RefundConfig, TxRevertBehavior},
     utils::{constants::BASE_TX_GAS, int_percentage},
 };
+use alloy_primitives::{Address, Bytes, B256, U256};
+use itertools::Itertools;
+use reth_primitives::Bytecode;
+use std::collections::{HashMap, HashSet};
 
 use self::setup::TestSetup;
 
@@ -97,6 +96,7 @@ fn test_target_block() -> eyre::Result<()> {
 
         test_setup.begin_bundle_order(NEXT_BUILT_BLOCK_NUMBER);
         test_setup.add_dummy_tx_0_1_no_rev()?;
+
         commit_order_err_matches!(
             test_setup,
             OrderErr::Bundle(BundleErr::TargetBlockIncorrect {
@@ -135,6 +135,7 @@ fn test_target_block() -> eyre::Result<()> {
 
         test_setup.begin_share_bundle_order(PREV_PREV_BUILT_BLOCK_NUMBER, PREV_BUILT_BLOCK_NUMBER);
         test_setup.add_dummy_tx_0_1_no_rev()?;
+
         commit_order_err_matches!(
             test_setup,
             OrderErr::Bundle(BundleErr::TargetBlockIncorrect {

@@ -59,10 +59,7 @@ pub async fn subscribe_to_txpool_with_blobs(
 
             let tx_with_blobs = match get_tx_with_blobs(tx_hash, &provider).await {
                 Ok(Some(tx_with_blobs)) => tx_with_blobs,
-                Ok(None) => {
-                    trace!(?tx_hash, "tx not found in tx pool");
-                    continue;
-                }
+                Ok(None) => continue,
                 Err(err) => {
                     error!(?tx_hash, ?err, "Failed to get tx from pool");
                     continue;
@@ -117,6 +114,7 @@ mod test {
 
     use super::*;
     use alloy_consensus::{SidecarBuilder, SimpleCoder};
+    use alloy_eips::eip7594::BlobTransactionSidecarVariant;
     use alloy_network::{EthereumWallet, TransactionBuilder};
     use alloy_node_bindings::Anvil;
     use alloy_primitives::U256;
@@ -182,8 +180,12 @@ mod test {
         }
         .unwrap();
 
+        let blob_len = match tx_with_blobs.blobs_sidecar.as_ref() {
+            BlobTransactionSidecarVariant::Eip4844(b_4844) => b_4844.blobs.len(),
+            BlobTransactionSidecarVariant::Eip7594(b_7954) => b_7954.blobs.len(),
+        };
         assert_eq!(tx_with_blobs.hash(), *pending_tx.tx_hash());
-        assert_eq!(tx_with_blobs.blobs_sidecar.blobs.len(), 1);
+        assert_eq!(blob_len, 1);
 
         // send another tx without blobs
         let tx = TransactionRequest::default()
@@ -205,6 +207,11 @@ mod test {
         .unwrap();
 
         assert_eq!(tx_without_blobs.hash(), *pending_tx.tx_hash());
-        assert_eq!(tx_without_blobs.blobs_sidecar.blobs.len(), 0);
+        let blob_len = match tx_without_blobs.blobs_sidecar.as_ref() {
+            BlobTransactionSidecarVariant::Eip4844(b_4844) => b_4844.blobs.len(),
+            BlobTransactionSidecarVariant::Eip7594(b_7954) => b_7954.blobs.len(),
+        };
+
+        assert_eq!(blob_len, 0);
     }
 }

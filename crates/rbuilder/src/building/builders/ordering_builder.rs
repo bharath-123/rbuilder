@@ -14,13 +14,14 @@ use crate::{
         BlockBuildingContext, ExecutionError, OrderPriority, PrioritizedOrderStore,
         SimulatedOrderSink, Sorting, ThreadBlockBuildingContext,
     },
-    primitives::{AccountNonce, OrderId, SimValue},
+    primitives::{AccountNonce, Order, OrderId, SimValue},
     provider::StateProviderFactory,
     telemetry::mark_builder_considers_order,
     utils::NonceCache,
 };
 use ahash::{HashMap, HashSet};
 use derivative::Derivative;
+use reth_chainspec::{ChainSpec, EthereumHardfork, EthereumHardforks};
 use reth_provider::StateProvider;
 use serde::Deserialize;
 use std::{
@@ -126,6 +127,7 @@ pub fn run_ordering_builder<P, OrderPriorityType>(
         }
 
         let orders = order_intake_consumer.current_block_orders();
+
         match builder.build_block(
             orders,
             use_suggested_fee_recipient_as_coinbase
@@ -160,10 +162,17 @@ pub fn backtest_simulate_block<P, OrderPriorityType: OrderPriority>(
 where
     P: StateProviderFactory + Clone + 'static,
 {
+    let ctx_block_number: u64 = input
+        .ctx
+        .evm_env
+        .block_env
+        .number
+        .try_into()
+        .expect("Block number should be a u64");
     let use_suggested_fee_recipient_as_coinbase = ordering_config.coinbase_payment;
     let state_provider = input
         .provider
-        .history_by_block_number(input.ctx.evm_env.block_env.number - 1)?;
+        .history_by_block_number(ctx_block_number - 1)?;
     let block_orders =
         block_orders_from_sim_orders::<OrderPriorityType>(input.sim_orders, &state_provider)?;
     let mut local_ctx = ThreadBlockBuildingContext::default();

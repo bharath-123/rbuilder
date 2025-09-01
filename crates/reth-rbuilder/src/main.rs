@@ -12,11 +12,18 @@ use rbuilder::{
     telemetry,
 };
 use reth::{
+    builder::{
+        components::{ComponentsBuilder, NoopPayloadServiceBuilder},
+        Node,
+    },
     chainspec::{EthereumChainSpecParser, EthereumHardforks},
     cli::Cli,
+    payload::noop::NoopPayloadBuilderService,
     primitives::Header,
 };
-use reth_node_ethereum::{node::EthereumAddOns, EthereumNode};
+use reth_node_ethereum::{
+    node::EthereumAddOns, EthereumNetworkBuilder, EthereumNode, EthereumPoolBuilder,
+};
 use reth_provider::{
     providers::BlockchainProvider, BlockReader, ChainSpecProvider, DatabaseProviderFactory,
     HeaderProvider, StateCommitmentProvider,
@@ -57,7 +64,7 @@ fn main() {
                 .with_components(EthereumNode::components())
                 .with_add_ons(EthereumAddOns::default())
                 .on_node_started(move |node| {
-                    spawn_rbuilder(
+                    spawn_rbuilder( 
                         node.provider().clone(),
                         node.pool().clone(),
                         extra_args.rbuilder_config,
