@@ -209,6 +209,7 @@ async fn run_submit_to_relays_job(
             .included_orders
             .iter()
             .flat_map(|exec_res| exec_res.order.original_orders());
+
         let bid_metadata = BidMetadata {
             value: BidValueMetadata {
                 coinbase_reward: block.trace.coinbase_reward,

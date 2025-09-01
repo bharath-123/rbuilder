@@ -2,10 +2,8 @@ use std::hash::{Hash, Hasher};
 
 use alloy_primitives::{keccak256, Bytes};
 use alloy_rlp::{length_of_length, BufMut, Encodable, Header, EMPTY_STRING_CODE};
-use alloy_trie::{
-    nodes::{ExtensionNodeRef, LeafNodeRef},
-    Nibbles,
-};
+use alloy_trie::nodes::{ExtensionNodeRef, LeafNodeRef};
+use nybbles::Nibbles;
 use reth_trie::RlpNode;
 use rustc_hash::{FxBuildHasher, FxHasher};
 
@@ -137,4 +135,19 @@ fn mismatch_chunks<const N: usize>(xs: &[u8], ys: &[u8]) -> usize {
     off + std::iter::zip(&xs[off..], &ys[off..])
         .take_while(|(x, y)| x == y)
         .count()
+}
+
+// rbuilder uses nybbles v3.3.0 and reth_trie uses nybbles v4.1.0. This is a temporary fix to convert between the two.
+// We can remove the below methods once rbuilder has been upgraded to nybbles v4.1.0.
+// nybbles v4.1.0 has a breaking change in the API which breaks a lot of parts of the eth sparse trie code.
+pub fn convert_reth_nybbles_to_nibbles(n: reth_trie::Nibbles) -> Nibbles {
+    let mut nibbles = Nibbles::new();
+    nibbles.extend_from_slice_unchecked(n.to_vec().as_slice());
+    nibbles
+}
+
+pub fn convert_nibbles_to_reth_nybbles(n: Nibbles) -> reth_trie::Nibbles {
+    let mut nibbles = reth_trie::Nibbles::new();
+    nibbles.extend_from_slice(n.pack().as_slice());
+    nibbles
 }

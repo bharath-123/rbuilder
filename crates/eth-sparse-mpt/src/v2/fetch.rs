@@ -1,12 +1,15 @@
 use std::sync::Arc;
 
-use crate::{utils::HashMap, SparseTrieError};
+use crate::{
+    utils::{convert_nibbles_to_reth_nybbles, convert_reth_nybbles_to_nibbles, HashMap},
+    SparseTrieError,
+};
 use alloy_primitives::map::B256Set;
 use parking_lot::Mutex;
 use rayon::prelude::*;
 
 use alloy_primitives::B256;
-use alloy_trie::Nibbles;
+use nybbles::Nibbles;
 use reth_provider::{
     providers::ConsistentDbView, BlockHashReader, BlockNumReader, BlockReader, DBProvider,
     DatabaseProviderFactory, StateCommitmentProvider,
@@ -87,13 +90,17 @@ impl MissingNodesFetcher {
                         .map_err(SparseTrieError::other)?;
                     *fetched_nodes.lock() += requested_proofs.len();
                     for requested_proof in requested_proofs {
-                        let proof_for_node = storge_multiproof
-                            .subtree
-                            .matching_nodes_sorted(&requested_proof);
+                        let proof_for_node = storge_multiproof.subtree.matching_nodes_sorted(
+                            &convert_nibbles_to_reth_nybbles(requested_proof.clone()),
+                        );
+                        let reth_proof_for_node = proof_for_node
+                            .into_iter()
+                            .map(|(k, v)| (convert_reth_nybbles_to_nibbles(k), v))
+                            .collect();
                         let proof_store =
                             shared_cache.account_proof_store_hashed_address(&hashed_address);
                         proof_store
-                            .add_proof(requested_proof, proof_for_node)
+                            .add_proof(requested_proof, reth_proof_for_node)
                             .map_err(SparseTrieError::other)?;
                     }
                     Ok(())
@@ -127,10 +134,15 @@ impl MissingNodesFetcher {
         for requested_node in self.account_proof_requested_nodes.drain(..) {
             let proof_for_node = multiproof
                 .account_subtree
-                .matching_nodes_sorted(&requested_node);
+                .matching_nodes_sorted(&convert_nibbles_to_reth_nybbles(requested_node.clone()));
+
+            let reth_proof_for_node = proof_for_node
+                .into_iter()
+                .map(|(k, v)| (convert_reth_nybbles_to_nibbles(k), v))
+                .collect();
             shared_cache
                 .account_trie
-                .add_proof(requested_node, proof_for_node)
+                .add_proof(requested_node, reth_proof_for_node)
                 .map_err(SparseTrieError::other)?;
         }
         let fetched_nodes = *fetched_nodes.lock();
