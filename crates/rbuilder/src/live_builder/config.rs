@@ -585,6 +585,7 @@ impl Default for Config {
                         coinbase_payment: false,
                         build_duration_deadline_ms: None,
                         ignore_mempool_profit_on_bundles: false,
+                        pre_filtered_build_duration_deadline_ms: Some(0),
                     }),
                 },
                 BuilderConfig {
@@ -597,6 +598,7 @@ impl Default for Config {
                         coinbase_payment: false,
                         build_duration_deadline_ms: None,
                         ignore_mempool_profit_on_bundles: false,
+                        pre_filtered_build_duration_deadline_ms: Some(0),
                     }),
                 },
                 BuilderConfig {
@@ -609,6 +611,7 @@ impl Default for Config {
                         coinbase_payment: false,
                         build_duration_deadline_ms: Some(30),
                         ignore_mempool_profit_on_bundles: false,
+                        pre_filtered_build_duration_deadline_ms: Some(0),
                     }),
                 },
                 BuilderConfig {
@@ -621,6 +624,7 @@ impl Default for Config {
                         coinbase_payment: true,
                         build_duration_deadline_ms: None,
                         ignore_mempool_profit_on_bundles: false,
+                        pre_filtered_build_duration_deadline_ms: Some(0),
                     }),
                 },
                 BuilderConfig {
@@ -633,6 +637,7 @@ impl Default for Config {
                         coinbase_payment: false,
                         build_duration_deadline_ms: None,
                         ignore_mempool_profit_on_bundles: false,
+                        pre_filtered_build_duration_deadline_ms: Some(0),
                     }),
                 },
                 BuilderConfig {

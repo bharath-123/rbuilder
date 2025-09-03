@@ -49,6 +49,12 @@ pub trait BlockBuildingHelper: Send + Sync {
     /// If not set the trace will default to creation time.
     fn set_trace_orders_closed_at(&mut self, orders_closed_at: OffsetDateTime);
 
+    fn set_filtered_build_statistics(
+        &mut self,
+        considered_orders_statistics: OrderStatistics,
+        failed_orders_statistics: OrderStatistics,
+    );
+
     /// Only if can_add_payout_tx you can pass Some(payout_tx_value) to finalize_block (a little ugly could be improved...)
     fn can_add_payout_tx(&self) -> bool;
 
@@ -515,5 +521,14 @@ impl<
 
     fn builder_name(&self) -> &str {
         &self.builder_name
+    }
+
+    fn set_filtered_build_statistics(
+        &mut self,
+        considered_orders_statistics: OrderStatistics,
+        failed_orders_statistics: OrderStatistics,
+    ) {
+        self.built_block_trace
+            .set_filtered_build_statistics(considered_orders_statistics, failed_orders_statistics);
     }
 }
