@@ -3,8 +3,9 @@ use std::ops::Range;
 use alloy_primitives::{keccak256, Bytes, B256};
 use alloy_rlp::EMPTY_STRING_CODE;
 use arrayvec::ArrayVec;
+
+use nybbles::Nibbles;
 use proof_store::{ProofNode, ProofStore};
-use reth_trie::Nibbles;
 
 pub mod proof_store;
 
@@ -933,11 +934,11 @@ impl Trie {
         let h = alloy_primitives::hex::encode;
         match node {
             DiffTrieNode::Branch { children } => {
-                println!("{} Branch", node_idx);
+                println!("{node_idx} Branch");
                 println!("{}", h(self.rlp_ptrs_local[node_idx].as_slice()));
                 for (idx, child) in self.branch_node_children[children].into_iter().enumerate() {
                     if child.is_some() {
-                        println!("  {} -> {:?}", idx, child);
+                        println!("  {idx} -> {child:?}");
                     }
                 }
                 for child in self.branch_node_children[children].into_iter().flatten() {
@@ -968,7 +969,7 @@ impl Trie {
                 println!("{}", h(self.rlp_ptrs_local[node_idx].as_slice()));
             }
             DiffTrieNode::Null => {
-                println!("{} Null", node_idx);
+                println!("{node_idx} Null");
                 println!("{}", h(self.rlp_ptrs_local[node_idx].as_slice()));
             }
         }
