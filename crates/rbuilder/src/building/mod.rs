@@ -3,6 +3,7 @@ use crate::{
         block_list_provider::BlockList, order_input::mempool_txs_detector::MempoolTxsDetector,
         payload_events::InternalPayloadId,
     },
+    mev_boost::adjustment::BidAdjustmentData,
     primitives::{Order, OrderId, SimValue, SimulatedOrder, TransactionSignedEcRecoveredWithBlobs},
     provider::RootHasher,
     roothash::RootHashError,
@@ -11,8 +12,8 @@ use crate::{
         constants::BASE_TX_GAS,
         default_cfg_env, elapsed_ms,
         receipts::{
-            calculate_receipt_root_and_block_logs_bloom, calculate_transactions_root, BloomCache,
-            TransactionRootCache,
+            calculate_receipts_data, calculate_tx_root_and_placeholder_proof, ReceiptsData,
+            ReceiptsDataCache, TransactionRootCache,
         },
         timestamp_as_u64, Signer,
     },
@@ -55,7 +56,7 @@ use revm::{
 };
 use serde::Deserialize;
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     hash::Hash,
     ops::{Add, AddAssign},
     str::FromStr,
@@ -120,7 +121,7 @@ pub struct BlockBuildingContext {
     pub tx_execution_cache: Arc<TxExecutionCache>,
     pub mempool_tx_detector: Arc<MempoolTxsDetector>,
     pub faster_finalize: bool,
-
+    pub adjustment_fee_payers: ahash::HashSet<Address>,
     /// Cached from evm_env.block_env.number but as BlockNumber. Avoid conversions all over the code.
     block_number: BlockNumber,
 }
@@ -143,6 +144,7 @@ impl BlockBuildingContext {
         payload_id: InternalPayloadId,
         evm_caching_enable: bool,
         faster_finalize: bool,
+        adjustment_fee_payers: ahash::HashSet<Address>,
     ) -> Option<BlockBuildingContext> {
         let attributes = EthPayloadBuilderAttributes::try_new(
             attributes.data.parent_block_hash,
@@ -215,6 +217,7 @@ impl BlockBuildingContext {
             max_blob_gas_per_block,
             mempool_tx_detector: Arc::new(MempoolTxsDetector::new()),
             faster_finalize,
+            adjustment_fee_payers,
             block_number,
         })
     }
@@ -319,6 +322,7 @@ impl BlockBuildingContext {
             max_blob_gas_per_block,
             mempool_tx_detector: Arc::new(MempoolTxsDetector::new()),
             faster_finalize: true,
+            adjustment_fee_payers: Default::default(),
             block_number,
         }
     }
@@ -375,7 +379,7 @@ impl BlockBuildingContext {
 #[derive(Debug, Clone, Default)]
 pub struct ThreadBlockBuildingContext {
     pub cached_reads: LocalCachedReads,
-    pub bloom_cache: BloomCache,
+    pub bloom_cache: ReceiptsDataCache,
     pub tx_root_cache: TransactionRootCache,
     pub root_hash_calculator: SparseTrieLocalCache,
 }
@@ -674,12 +678,15 @@ impl ExecutionError {
 }
 
 pub struct FinalizeResult {
+    /// Sealed block.
     pub sealed_block: SealedBlock,
     // sidecars for all txs in SealedBlock
     pub txs_blob_sidecars: Vec<Arc<BlobTransactionSidecarVariant>>,
     /// The Pectra execution requests for this bid.
     pub execution_requests: Vec<Bytes>,
-
+    /// Bid adjustment data.
+    pub bid_adjustments: HashMap<Address, BidAdjustmentData>,
+    /// Duration of root hash calculation.
     pub root_hash_time: Duration,
 }
 
@@ -987,7 +994,6 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
     }
 
     /// Mostly based on reth's (v1.2) default_ethereum_payload_builder.
-    #[allow(clippy::too_many_arguments)]
     pub fn finalize(
         self,
         mut state: BlockState,
@@ -1008,7 +1014,11 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
         let exec_outcome_time_ms = elapsed_ms(step_start);
         let step_start = Instant::now();
 
-        let (receipts_root, logs_bloom) = calculate_receipt_root_and_block_logs_bloom(
+        let ReceiptsData {
+            logs_bloom,
+            receipts_root,
+            placeholder_receipt_proof,
+        } = calculate_receipts_data(
             &mut local_ctx.bloom_cache,
             &self.executed_tx_infos,
             ctx.faster_finalize,
@@ -1018,25 +1028,22 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
         let step_start = Instant::now();
 
         // calculate the state root
-        let state_root = {
-            let (bundle, _) = state.into_parts();
-            // we use execution outcome here only for interface compatibility, its just a wrapper around bundle
-            let execution_outcome =
-                ExecutionOutcome::new(bundle, Vec::new(), block_number, Vec::new());
-            ctx.root_hasher.state_root(&execution_outcome, local_ctx)?
-        };
+        let (bundle, _) = state.into_parts();
+        // we use execution outcome here only for interface compatibility, its just a wrapper around bundle
+        let execution_outcome = ExecutionOutcome::new(bundle, Vec::new(), block_number, Vec::new());
+        let state_root = ctx.root_hasher.state_root(&execution_outcome, local_ctx)?;
         let root_hash_time = step_start.elapsed();
 
         let root_hash_time_ms = elapsed_ms(step_start);
         let step_start = Instant::now();
 
         // create the block header
-        // let transactions_root = proofs::calculate_transaction_root(&self.executed_tx);
-        let transactions_root = calculate_transactions_root(
-            &mut local_ctx.tx_root_cache,
-            &self.executed_tx_infos,
-            ctx.faster_finalize,
-        );
+        let (transactions_root, placeholder_transaction_proof) =
+            calculate_tx_root_and_placeholder_proof(
+                &mut local_ctx.tx_root_cache,
+                &self.executed_tx_infos,
+                ctx.faster_finalize,
+            );
 
         let transactions_root_time_ms = elapsed_ms(step_start);
         let step_start = Instant::now();
@@ -1128,15 +1135,32 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
                 withdrawals,
             },
         };
+
+        let bid_adjustments = Self::generate_bid_adjustments(
+            &block.header,
+            &execution_outcome,
+            ctx,
+            local_ctx,
+            placeholder_transaction_proof,
+            placeholder_receipt_proof,
+        )
+        .inspect_err(|error| {
+            error!(
+                block_number = block.number,
+                ?error,
+                "Error generating bid adjustment data"
+            );
+        })
+        .unwrap_or_default();
+
         let result = FinalizeResult {
             sealed_block: block.seal_slow(),
             txs_blob_sidecars,
             root_hash_time,
-            execution_requests: requests.map(|er| er.take()).unwrap_or_default(),
+            execution_requests: requests.map(Requests::take).unwrap_or_default(),
+            bid_adjustments,
         };
-
         let block_seal_time_ms = elapsed_ms(step_start);
-
         let total_time_ms = elapsed_ms(start);
 
         trace!(
@@ -1152,6 +1176,83 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
         );
 
         Ok(result)
+    }
+
+    fn generate_bid_adjustments(
+        header: &Header,
+        outcome: &ExecutionOutcome,
+        ctx: &BlockBuildingContext,
+        local_ctx: &mut ThreadBlockBuildingContext,
+        placeholder_transaction_proof: Vec<Bytes>,
+        placeholder_receipt_proof: Vec<Bytes>,
+    ) -> Result<HashMap<Address, BidAdjustmentData>, FinalizeError> {
+        if ctx.adjustment_fee_payers.is_empty() {
+            return Ok(Default::default());
+        }
+
+        let Some(builder_signer) = ctx
+            .builder_signer
+            .filter(|signer| signer.address == header.beneficiary)
+        else {
+            trace!(
+                block_number = header.number,
+                "Builder is not block coinbase"
+            );
+            return Ok(Default::default());
+        };
+
+        let builder_address = builder_signer.address;
+        let fee_recipient_address = ctx.attributes.suggested_fee_recipient;
+
+        let proof_targets = HashSet::from_iter(
+            [builder_address, fee_recipient_address]
+                .into_iter()
+                .chain(ctx.adjustment_fee_payers.clone()),
+        );
+        let mut account_proofs =
+            ctx.root_hasher
+                .account_proofs(outcome, &proof_targets, local_ctx)?;
+
+        let Some(builder_proof) = account_proofs.remove(&builder_address) else {
+            return Err(FinalizeError::Other(eyre::eyre!(
+                "account proof for builder {builder_address} is missing"
+            )));
+        };
+        let Some(fee_recipient_proof) = account_proofs.remove(&fee_recipient_address) else {
+            return Err(FinalizeError::Other(eyre::eyre!(
+                "account proof for proposer {fee_recipient_address} is missing"
+            )));
+        };
+
+        let mut bid_adjustments = HashMap::default();
+        for fee_payer_address in &ctx.adjustment_fee_payers {
+            let Some(fee_payer_proof) = account_proofs.remove(fee_payer_address) else {
+                error!(
+                    %fee_payer_address,
+                    "Fee payer proof is missing"
+                );
+                continue;
+            };
+
+            bid_adjustments.insert(
+                *fee_payer_address,
+                BidAdjustmentData {
+                    state_root: header.state_root,
+                    transactions_root: header.transactions_root,
+                    receipts_root: header.receipts_root,
+                    builder_address,
+                    builder_proof: builder_proof.clone(),
+                    fee_recipient_address,
+                    fee_recipient_proof: fee_recipient_proof.clone(),
+                    fee_payer_address: *fee_payer_address,
+                    fee_payer_proof,
+                    placeholder_transaction_proof: placeholder_transaction_proof.clone(),
+                    placeholder_receipt_proof: placeholder_receipt_proof.clone(),
+                },
+            );
+        }
+
+        Ok(bid_adjustments)
     }
 
     /// Standard pre block ETH stuff + space allocation for rlp length
