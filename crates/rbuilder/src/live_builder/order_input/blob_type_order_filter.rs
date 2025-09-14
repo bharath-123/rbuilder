@@ -36,17 +36,17 @@ pub fn new_fusaka(
     sink: Box<dyn ReplaceableOrderSink>,
 ) -> BlobTypeOrderFilter<impl Fn(&BlobTransactionSidecarVariant) -> bool + Send + Sync> {
     BlobTypeOrderFilter::new(sink, |blob| {
-        if blob.is_eip7594() {
-            tracing::info!("BHARATH: blobs are EIP-7594");
-            true
-        } else {
-            tracing::info!("BHARATH: blobs are EIP-4844");
-            if blob.size() > 0 {
-                false
-            } else {
-                true
-            }
-        }
+        // if blob.is_eip7594() {
+        //     tracing::info!("BHARATH: blobs are EIP-7594");
+        //     true
+        // } else {
+        //     tracing::info!("BHARATH: blobs are EIP-4844");
+        //     if blob.size() > 0 {
+        //         false
+        //     } else {
+        //         true
+        //     }
+        // }
         // match blob {
         //     BlobTransactionSidecarVariant::Eip4844(sidecar) => {
         //         if sidecar.blobs.len() > 0 {
@@ -62,6 +62,7 @@ pub fn new_fusaka(
         //         true  // EIP-7594 is always allowed post-Osaka
         //     }
         // }
+        true
     })
 }
 

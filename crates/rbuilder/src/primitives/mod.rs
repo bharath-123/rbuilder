@@ -860,11 +860,6 @@ impl TransactionSignedEcRecoveredWithBlobs {
             PooledTransactionVariant::Eip4844(blob_tx) => {
                 let (blob_tx, signature, hash) = blob_tx.into_parts();
                 let (blob_tx, sidecar) = blob_tx.into_parts();
-                if sidecar.is_eip4844() {
-                    tracing::info!("BHARATH: blobs are EIP-4844");
-                } else {
-                    tracing::info!("BHARATH: blobs are EIP-7594");
-                }
                 let tx_signed = TransactionSigned::new_unchecked(
                     Transaction::Eip4844(blob_tx),
                     signature,
