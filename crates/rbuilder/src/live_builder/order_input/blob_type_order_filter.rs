@@ -28,7 +28,7 @@ pub fn new_pre_fusaka(
 ) -> BlobTypeOrderFilter<impl Fn(&TransactionSignedEcRecoveredWithBlobs) -> bool + Send + Sync> {
     BlobTypeOrderFilter::new(sink, |tx| {
         if tx.is_eip4844() {
-            matches!(tx.blobs_sidecar, BlobTransactionSidecarVariant::Eip4844(_))
+            matches!(*tx.blobs_sidecar, BlobTransactionSidecarVariant::Eip4844(_))
         } else {
             true
         }
@@ -57,7 +57,7 @@ pub fn new_fusaka(
 ) -> BlobTypeOrderFilter<impl Fn(&TransactionSignedEcRecoveredWithBlobs) -> bool + Send + Sync> {
     BlobTypeOrderFilter::new(sink, |tx| {
         if tx.is_eip4844() {
-            matches!(tx.blobs_sidecar, BlobTransactionSidecarVariant::Eip7594(_))
+            matches!(*tx.blobs_sidecar, BlobTransactionSidecarVariant::Eip7594(_))
         } else {
             true
         }
@@ -78,7 +78,7 @@ impl<FilterFunc: Fn(&TransactionSignedEcRecoveredWithBlobs) -> bool + Send + Syn
         if order
             .list_txs()
             .iter()
-            .all(|(tx, _)| (self.filter_func)(tx.as_ref()))
+            .all(|(tx, _)| (self.filter_func)(tx))
         {
             self.sink.insert_order(order)
         } else {
