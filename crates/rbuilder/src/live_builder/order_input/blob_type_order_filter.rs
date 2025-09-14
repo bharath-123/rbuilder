@@ -37,8 +37,10 @@ pub fn new_fusaka(
 ) -> BlobTypeOrderFilter<impl Fn(&BlobTransactionSidecarVariant) -> bool + Send + Sync> {
     BlobTypeOrderFilter::new(sink, |blob| {
         if blob.is_eip7594() {
+            tracing::info!("BHARATH: blobs are EIP-7594");
             true
         } else {
+            tracing::info!("BHARATH: blobs are EIP-4844");
             if blob.size() > 0 {
                 false
             } else {
