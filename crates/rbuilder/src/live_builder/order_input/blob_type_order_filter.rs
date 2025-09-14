@@ -44,7 +44,7 @@ pub fn new_fusaka(
                 // } else {
                 //     tracing::info!("BHARATH: EIP-4844 with no blobs (regular tx) should be allowed");
                 //     true   // EIP-4844 with no blobs (regular tx) should be allowed
-                if sidecar.versioned_hashes() > 0 {
+                if sidecar.versioned_hashes().len() > 0 {
                     false
                 } else {
                 // }
