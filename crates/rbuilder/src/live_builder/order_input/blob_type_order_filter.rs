@@ -30,7 +30,7 @@ pub fn new_pre_fusaka(
         if tx.is_eip4844() {
             matches!(tx.blobs_sidecar, BlobTransactionSidecarVariant::Eip4844(_))
         } else {
-            return
+            true
         }
     })
 }
