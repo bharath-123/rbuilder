@@ -36,10 +36,17 @@ pub fn new_fusaka(
     sink: Box<dyn ReplaceableOrderSink>,
 ) -> BlobTypeOrderFilter<impl Fn(&BlobTransactionSidecarVariant) -> bool + Send + Sync> {
     BlobTypeOrderFilter::new(sink, |blob| {
-        if blob.commitments().len() > 0 {
-            matches!(blob, BlobTransactionSidecarVariant::Eip7594(_))
-        } else {
-            true
+        match blob {
+            BlobTransactionSidecarVariant::Eip4844(sidecar) => {
+                if sidecar.blobs.len() > 0 {
+                    false  // EIP-4844 with blobs should be filtered out post-Osaka
+                } else {
+                    true   // EIP-4844 with no blobs (regular tx) should be allowed
+                }
+            }
+            BlobTransactionSidecarVariant::Eip7594(sidecar) => {
+                true  // EIP-7594 is always allowed post-Osaka
+            }
         }
     })
 }
