@@ -44,8 +44,12 @@ pub fn new_fusaka(
                 // } else {
                 //     tracing::info!("BHARATH: EIP-4844 with no blobs (regular tx) should be allowed");
                 //     true   // EIP-4844 with no blobs (regular tx) should be allowed
+                if sidecar.versioned_hashes() > 0 {
+                    false
+                } else {
                 // }
-                true
+                    true
+                }
             }
             BlobTransactionSidecarVariant::Eip7594(sidecar) => {
                 // tracing::info!("BHARATH: EIP-7594 is always allowed post-Osaka");
