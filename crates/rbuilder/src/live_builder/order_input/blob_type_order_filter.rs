@@ -36,7 +36,11 @@ pub fn new_fusaka(
     sink: Box<dyn ReplaceableOrderSink>,
 ) -> BlobTypeOrderFilter<impl Fn(&BlobTransactionSidecarVariant) -> bool + Send + Sync> {
     BlobTypeOrderFilter::new(sink, |blob| {
-        matches!(blob, BlobTransactionSidecarVariant::Eip7594(_))
+        if blob.commitments().len() > 0 {
+            matches!(blob, BlobTransactionSidecarVariant::Eip7594(_))
+        } else {
+            true
+        }
     })
 }
 
