@@ -1,8 +1,8 @@
-use alloy_eips::eip7594::BlobTransactionSidecarVariant;
+use alloy_eips::{eip7594::BlobTransactionSidecarVariant, Typed2718};
 
 use crate::{
     live_builder::order_input::replaceable_order_sink::ReplaceableOrderSink,
-    primitives::{BundleReplacementData, Order, ShareBundleReplacementKey},
+    primitives::{BundleReplacementData, Order, ShareBundleReplacementKey, TransactionSignedEcRecoveredWithBlobs},
 };
 
 /// Filters out Orders with incorrect blobs (pre/post fusaka).
@@ -25,42 +25,60 @@ impl<FilterFunc> std::fmt::Debug for BlobTypeOrderFilter<FilterFunc> {
 /// Filters out EIP-7594 style blobs, supports only EIP-4844 style.
 pub fn new_pre_fusaka(
     sink: Box<dyn ReplaceableOrderSink>,
-) -> BlobTypeOrderFilter<impl Fn(&BlobTransactionSidecarVariant) -> bool + Send + Sync> {
-    BlobTypeOrderFilter::new(sink, |blob| {
-        matches!(blob, BlobTransactionSidecarVariant::Eip4844(_))
+) -> BlobTypeOrderFilter<impl Fn(&TransactionSignedEcRecoveredWithBlobs) -> bool + Send + Sync> {
+    BlobTypeOrderFilter::new(sink, |tx| {
+        if tx.is_eip4844() {
+            matches!(blob, BlobTransactionSidecarVariant::Eip4844(_))
+        } else {
+            return
+        }
     })
 }
+
+// /// Filters out EIP-4844 style, supports only EIP-7594 style blobs.
+// pub fn new_fusaka(
+//     sink: Box<dyn ReplaceableOrderSink>,
+// ) -> BlobTypeOrderFilter<impl Fn(&TransactionSignedEcRecoveredWithBlobs) -> bool + Send + Sync> {
+//     BlobTypeOrderFilter::new(sink, |blob| match blob {
+//         BlobTransactionSidecarVariant::Eip4844(sidecar) => {
+//             if sidecar.blobs.len() > 0 {
+//                 false
+//             } else {
+//                 true
+//             }
+//         }
+//         BlobTransactionSidecarVariant::Eip7594(_sidecar) => true,
+//     })
+// }
 
 /// Filters out EIP-4844 style, supports only EIP-7594 style blobs.
 pub fn new_fusaka(
     sink: Box<dyn ReplaceableOrderSink>,
-) -> BlobTypeOrderFilter<impl Fn(&BlobTransactionSidecarVariant) -> bool + Send + Sync> {
-    BlobTypeOrderFilter::new(sink, |blob| match blob {
-        BlobTransactionSidecarVariant::Eip4844(sidecar) => {
-            if sidecar.blobs.len() > 0 {
-                false
-            } else {
-                true
-            }
+) -> BlobTypeOrderFilter<impl Fn(&TransactionSignedEcRecoveredWithBlobs) -> bool + Send + Sync> {
+    BlobTypeOrderFilter::new(sink, |tx| {
+        if tx.is_eip4844() {
+            matches!(blob, BlobTransactionSidecarVariant::Eip7594(_))
+        } else {
+            true
         }
-        BlobTransactionSidecarVariant::Eip7594(_sidecar) => true,
+    
     })
 }
 
-impl<FilterFunc: Fn(&BlobTransactionSidecarVariant) -> bool> BlobTypeOrderFilter<FilterFunc> {
+impl<FilterFunc: Fn(&TransactionSignedEcRecoveredWithBlobs) -> bool> BlobTypeOrderFilter<FilterFunc> {
     fn new(sink: Box<dyn ReplaceableOrderSink>, filter_func: FilterFunc) -> Self {
         Self { sink, filter_func }
     }
 }
 
-impl<FilterFunc: Fn(&BlobTransactionSidecarVariant) -> bool + Send + Sync> ReplaceableOrderSink
+impl<FilterFunc: Fn(&TransactionSignedEcRecoveredWithBlobs) -> bool + Send + Sync> ReplaceableOrderSink
     for BlobTypeOrderFilter<FilterFunc>
 {
     fn insert_order(&mut self, order: Order) -> bool {
         if order
             .list_txs()
             .iter()
-            .all(|(tx, _)| (self.filter_func)(tx.blobs_sidecar.as_ref()))
+            .all(|(tx, _)| (self.filter_func)(tx.as_ref()))
         {
             self.sink.insert_order(order)
         } else {
