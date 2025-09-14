@@ -31,22 +31,20 @@ pub fn new_pre_fusaka(
     })
 }
 
-/// Post-Osaka filter: Allow all transactions since EIP-7594 sidecars don't exist yet in practice.
-/// The reth library doesn't support EIP-7594 yet, so all blob sidecars are EIP-4844 format.
+/// Filters out EIP-4844 style, supports only EIP-7594 style blobs.
 pub fn new_fusaka(
     sink: Box<dyn ReplaceableOrderSink>,
 ) -> BlobTypeOrderFilter<impl Fn(&BlobTransactionSidecarVariant) -> bool + Send + Sync> {
     BlobTypeOrderFilter::new(sink, |blob| {
         match blob {
             BlobTransactionSidecarVariant::Eip4844(sidecar) => {
-                // Allow all EIP-4844 sidecars (both regular txs and blob txs) post-Osaka
-                // because reth doesn't support EIP-7594 format yet
-                tracing::info!("Allowing EIP-4844 sidecar");
-                true
+                if sidecar.blobs.len() > 0 {
+                    false
+                } else {
+                    true
+                }
             }
             BlobTransactionSidecarVariant::Eip7594(_sidecar) => {
-                // Allow EIP-7594 sidecars when they eventually exist
-                tracing::info!("Allowing EIP-7594 sidecar post-Osaka");
                 true
             }
         }
