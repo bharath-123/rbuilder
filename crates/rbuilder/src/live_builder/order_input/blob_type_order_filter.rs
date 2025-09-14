@@ -1,7 +1,7 @@
 use alloy_eips::eip7594::BlobTransactionSidecarVariant;
 
 use crate::{
-    live_builder::order_input::replaceable_order_sink::ReplaceableOrderSink,
+    live_builder::{block_output::true_value_bidding_service::NewTrueBlockValueBiddingService, order_input::replaceable_order_sink::ReplaceableOrderSink},
     primitives::{BundleReplacementData, Order, ShareBundleReplacementKey},
 };
 
@@ -38,16 +38,17 @@ pub fn new_fusaka(
     BlobTypeOrderFilter::new(sink, |blob| {
         match blob {
             BlobTransactionSidecarVariant::Eip4844(sidecar) => {
-                if sidecar.blobs.len() > 0 {
-                    tracing::info!("BHARATH: EIP-4844 with blobs should be filtered out post-Osaka");
-                    false  // EIP-4844 with blobs should be filtered out post-Osaka
-                } else {
-                    tracing::info!("BHARATH: EIP-4844 with no blobs (regular tx) should be allowed");
-                    true   // EIP-4844 with no blobs (regular tx) should be allowed
-                }
+                // if sidecar.blobs.len() > 0 {
+                //     tracing::info!("BHARATH: EIP-4844 with blobs should be filtered out post-Osaka");
+                //     false  // EIP-4844 with blobs should be filtered out post-Osaka
+                // } else {
+                //     tracing::info!("BHARATH: EIP-4844 with no blobs (regular tx) should be allowed");
+                //     true   // EIP-4844 with no blobs (regular tx) should be allowed
+                // }
+                true
             }
             BlobTransactionSidecarVariant::Eip7594(sidecar) => {
-                tracing::info!("BHARATH: EIP-7594 is always allowed post-Osaka");
+                // tracing::info!("BHARATH: EIP-7594 is always allowed post-Osaka");
                 true  // EIP-7594 is always allowed post-Osaka
             }
         }
