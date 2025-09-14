@@ -62,7 +62,15 @@ pub fn new_fusaka(
         //         true  // EIP-7594 is always allowed post-Osaka
         //     }
         // }
-        true
+        match blob {
+            BlobTransactionSidecarVariant::Eip4844(sidecar) => {
+                true
+            }
+            BlobTransactionSidecarVariant::Eip7594(sidecar) => {
+                tracing::info!("BHARATH: EIP-7594 is always allowed post-Osaka");
+                true  // EIP-7594 is always allowed post-Osaka
+            }
+        }
     })
 }
 
