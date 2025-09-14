@@ -31,44 +31,27 @@ pub fn new_pre_fusaka(
     })
 }
 
-/// Filters out EIP-4844 style, supports only EIP-7594 style blobs.
+/// Post-Osaka filter: Allow all transactions since EIP-7594 sidecars don't exist yet in practice.
+/// The reth library doesn't support EIP-7594 yet, so all blob sidecars are EIP-4844 format.
 pub fn new_fusaka(
     sink: Box<dyn ReplaceableOrderSink>,
 ) -> BlobTypeOrderFilter<impl Fn(&BlobTransactionSidecarVariant) -> bool + Send + Sync> {
     BlobTypeOrderFilter::new(sink, |blob| {
-        // if blob.is_eip7594() {
-        //     tracing::info!("BHARATH: blobs are EIP-7594");
-        //     true
-        // } else {
-        //     tracing::info!("BHARATH: blobs are EIP-4844");
-        //     if blob.size() > 0 {
-        //         false
-        //     } else {
-        //         true
-        //     }
-        // }
-        // match blob {
-        //     BlobTransactionSidecarVariant::Eip4844(sidecar) => {
-        //         if sidecar.blobs.len() > 0 {
-        //             tracing::info!("BHARATH: EIP-4844 with blobs should be filtered out post-Osaka");
-        //             false  // EIP-4844 with blobs should be filtered out post-Osaka
-        //         } else {
-        //             tracing::info!("BHARATH: EIP-4844 with no blobs (regular tx) should be allowed");
-        //             true   // EIP-4844 with no blobs (regular tx) should be allowed
-        //         }
-        //     }
-        //     BlobTransactionSidecarVariant::Eip7594(sidecar) => {
-        //         tracing::info!("BHARATH: EIP-7594 is always allowed post-Osaka");
-        //         true  // EIP-7594 is always allowed post-Osaka
-        //     }
-        // }
         match blob {
             BlobTransactionSidecarVariant::Eip4844(sidecar) => {
+                // Allow all EIP-4844 sidecars (both regular txs and blob txs) post-Osaka
+                // because reth doesn't support EIP-7594 format yet
+                if sidecar.blobs.len() > 0 {
+                    tracing::debug!("Allowing EIP-4844 blob tx post-Osaka (EIP-7594 not implemented in reth yet)");
+                } else {
+                    tracing::debug!("Allowing regular tx with EIP-4844 sidecar post-Osaka");
+                }
                 true
             }
-            BlobTransactionSidecarVariant::Eip7594(sidecar) => {
-                tracing::info!("BHARATH: EIP-7594 is always allowed post-Osaka");
-                true  // EIP-7594 is always allowed post-Osaka
+            BlobTransactionSidecarVariant::Eip7594(_sidecar) => {
+                // Allow EIP-7594 sidecars when they eventually exist
+                tracing::debug!("Allowing EIP-7594 sidecar post-Osaka");
+                true
             }
         }
     })
