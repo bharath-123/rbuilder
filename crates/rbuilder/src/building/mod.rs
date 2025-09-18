@@ -39,7 +39,6 @@ use jsonrpsee::core::Serialize;
 use reth::{
     payload::PayloadId,
     primitives::{Block, SealedBlock},
-    providers::ExecutionOutcome,
     revm::database::StateProviderDatabase,
 };
 use reth_chainspec::{ChainSpec, EthChainSpec, EthereumHardforks};
@@ -50,7 +49,6 @@ use reth_node_api::{EngineApiMessageVersion, PayloadBuilderAttributes};
 use reth_payload_builder::EthPayloadBuilderAttributes;
 use reth_primitives::BlockBody;
 use reth_primitives_traits::{proofs, Block as _};
-use reth_provider::StateProvider;
 use revm::{
     context::BlockEnv,
     context_interface::{block::BlobExcessGasAndPrice, result::InvalidTransaction},
@@ -62,7 +60,7 @@ use serde::Deserialize;
 use std::{
     collections::{hash_map, HashMap, HashSet},
     hash::Hash,
-    ops::{Add, AddAssign},
+    ops::{Add, AddAssign, SubAssign},
     str::FromStr,
     sync::Arc,
     time::{Duration, Instant},
@@ -469,38 +467,36 @@ impl PartialBlockForkExecutionTracer for NullPartialBlockExecutionTracer {
 }
 
 /// Models consumed/reserved space on a block to be able to insert payout tx when finished filling the block.
-/// @Pending: Add blob gas?
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]
 pub struct BlockSpace {
     pub gas: u64,
     /// EIP-7934 limits the size of the final rlp block.
     /// Estimation of the sum of the rlp txs sizes.
     pub rlp_length: usize,
+    pub blob_gas: u64,
 }
 
 impl BlockSpace {
-    pub fn new(gas: u64, rlp_length: usize) -> Self {
-        Self { gas, rlp_length }
+    pub fn new(gas: u64, rlp_length: usize, blob_gas: u64) -> Self {
+        Self {
+            gas,
+            rlp_length,
+            blob_gas,
+        }
     }
 
     pub const ZERO: Self = Self {
         gas: 0,
         rlp_length: 0,
+        blob_gas: 0,
     };
-
-    pub fn gas(&self) -> u64 {
-        self.gas
-    }
-
-    pub fn rlp_length(&self) -> usize {
-        self.rlp_length
-    }
 }
 
 impl AddAssign for BlockSpace {
     fn add_assign(&mut self, other: Self) {
         self.gas += other.gas;
         self.rlp_length += other.rlp_length;
+        self.blob_gas += other.blob_gas;
     }
 }
 
@@ -511,7 +507,16 @@ impl Add for BlockSpace {
         Self {
             gas: self.gas + other.gas,
             rlp_length: self.rlp_length + other.rlp_length,
+            blob_gas: self.blob_gas + other.blob_gas,
         }
+    }
+}
+
+impl SubAssign for BlockSpace {
+    fn sub_assign(&mut self, other: Self) {
+        self.gas = self.gas.checked_sub(other.gas).unwrap();
+        self.rlp_length = self.rlp_length.checked_sub(other.rlp_length).unwrap();
+        self.blob_gas = self.blob_gas.checked_sub(other.blob_gas).unwrap();
     }
 }
 
@@ -521,26 +526,19 @@ pub struct BlockBuildingSpaceState {
     space_used: BlockSpace,
     /// Reserved gas/size for later use (usually final payout tx). When simulating we subtract this from the block gas limit.
     reserved_block_space: BlockSpace,
-    blob_gas_used: u64,
 }
 
 impl BlockBuildingSpaceState {
-    pub fn new(
-        space_used: BlockSpace,
-        reserved_block_space: BlockSpace,
-        blob_gas_used: u64,
-    ) -> Self {
+    pub fn new(space_used: BlockSpace, reserved_block_space: BlockSpace) -> Self {
         Self {
             space_used,
             reserved_block_space,
-            blob_gas_used,
         }
     }
 
     pub const ZERO: Self = Self {
         space_used: BlockSpace::ZERO,
         reserved_block_space: BlockSpace::ZERO,
-        blob_gas_used: 0,
     };
 
     pub fn free_reserved_block_space(&mut self) {
@@ -557,11 +555,11 @@ impl BlockBuildingSpaceState {
     }
 
     pub fn gas_used(&self) -> u64 {
-        self.space_used.gas()
+        self.space_used.gas
     }
 
     pub fn blob_gas_used(&self) -> u64 {
-        self.blob_gas_used
+        self.space_used.blob_gas
     }
 
     pub fn space_used(&self) -> BlockSpace {
@@ -572,9 +570,12 @@ impl BlockBuildingSpaceState {
         self.reserved_block_space += space;
     }
 
-    pub fn use_space(&mut self, space: BlockSpace, blob_gas_used: u64) {
+    pub fn use_space(&mut self, space: BlockSpace) {
         self.space_used += space;
-        self.blob_gas_used += blob_gas_used;
+    }
+
+    pub fn free_used_state(&mut self, space: BlockSpace) {
+        self.space_used -= space;
     }
 }
 
@@ -702,6 +703,14 @@ impl FinalizeError {
     }
 }
 
+/// FinalizeRevertState accumulates data needed to revert state changes
+/// to run finalize on the same PartialBlock / BlockState again
+#[derive(Debug, Clone, Default)]
+pub struct FinalizeRevertState {
+    pub last_tx_block_space: BlockSpace,
+    pub state_reverts: usize,
+}
+
 impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExecutionTracer>
     PartialBlock<Tracer, PartialBlockExecutionTracerType>
 {
@@ -788,8 +797,7 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
             }
         }
 
-        self.space_state
-            .use_space(ok_result.space_used, ok_result.blob_gas_used);
+        self.space_state.use_space(ok_result.space_used);
         self.coinbase_profit += ok_result.coinbase_profit;
         self.executed_tx_infos.extend(ok_result.tx_infos.clone());
 
@@ -830,6 +838,7 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
 
     /// Inserts payout tx to ctx.attributes.suggested_fee_recipient (should be called at the end of the block)
     /// Returns the paid value (block profit after subtracting the burned basefee of the payout tx)
+    #[allow(clippy::too_many_arguments)]
     pub fn insert_refunds_and_proposer_payout_tx(
         &mut self,
         gas_limit: u64,
@@ -837,6 +846,8 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
         ctx: &BlockBuildingContext,
         local_ctx: &mut ThreadBlockBuildingContext,
         state: &mut BlockState,
+        adjust_finalized_block: bool,
+        finalize_revert_state: &mut FinalizeRevertState,
     ) -> Result<(), InsertPayoutTxErr> {
         let builder_signer = &ctx.builder_signer;
         self.free_reserved_block_space();
@@ -850,40 +861,42 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
 
         let mut fork = PartialBlockFork::new(state, ctx, local_ctx).with_tracer(&mut self.tracer);
 
-        for (refund_recipient, refund_amount) in &self.combined_refunds {
-            let refund_recipient_code_hash = fork
-                .state
-                .code_hash(
-                    *refund_recipient,
-                    &ctx.shared_cached_reads,
-                    &mut fork.local_ctx.cached_reads,
-                )
-                .map_err(CriticalCommitOrderError::Reth)?;
-            if refund_recipient_code_hash != KECCAK_EMPTY {
-                error!(%refund_recipient_code_hash, %refund_recipient, %refund_amount, "Refund recipient has code, skipping refund");
-                continue;
+        if !adjust_finalized_block {
+            for (refund_recipient, refund_amount) in &self.combined_refunds {
+                let refund_recipient_code_hash = fork
+                    .state
+                    .code_hash(
+                        *refund_recipient,
+                        &ctx.shared_cached_reads,
+                        &mut fork.local_ctx.cached_reads,
+                    )
+                    .map_err(CriticalCommitOrderError::Reth)?;
+                if refund_recipient_code_hash != KECCAK_EMPTY {
+                    error!(%refund_recipient_code_hash, %refund_recipient, %refund_amount, "Refund recipient has code, skipping refund");
+                    continue;
+                }
+
+                let refund_tx =
+                    TransactionSignedEcRecoveredWithBlobs::new_no_blobs(create_payout_tx(
+                        ctx.chain_spec.as_ref(),
+                        ctx.evm_env.block_env.basefee,
+                        builder_signer,
+                        nonce,
+                        *refund_recipient,
+                        BASE_TX_GAS,
+                        *refund_amount,
+                    )?)
+                    .unwrap();
+                let refund_result = fork.commit_tx(&refund_tx, self.space_state)??;
+                if !refund_result.tx_info.receipt.success {
+                    return Err(InsertPayoutTxErr::CombinedRefundTxReverted);
+                }
+
+                self.space_state.use_space(refund_result.space_used());
+                self.executed_tx_infos.push(refund_result.tx_info);
+
+                nonce += 1;
             }
-
-            let refund_tx = TransactionSignedEcRecoveredWithBlobs::new_no_blobs(create_payout_tx(
-                ctx.chain_spec.as_ref(),
-                ctx.evm_env.block_env.basefee,
-                builder_signer,
-                nonce,
-                *refund_recipient,
-                BASE_TX_GAS,
-                *refund_amount,
-            )?)
-            .unwrap();
-            let refund_result = fork.commit_tx(&refund_tx, self.space_state)??;
-            if !refund_result.tx_info.receipt.success {
-                return Err(InsertPayoutTxErr::CombinedRefundTxReverted);
-            }
-
-            self.space_state
-                .use_space(refund_result.space_used(), refund_result.blob_gas_used);
-            self.executed_tx_infos.push(refund_result.tx_info);
-
-            nonce += 1;
         }
 
         let tx = create_payout_tx(
@@ -902,12 +915,26 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
         if !ok_result.tx_info.receipt.success {
             return Err(InsertPayoutTxErr::PayoutTxReverted);
         }
-
-        self.space_state
-            .use_space(ok_result.space_used(), ok_result.blob_gas_used);
+        finalize_revert_state.last_tx_block_space = ok_result.space_used();
+        // add revert for commit_tx for the last payment transaction
+        finalize_revert_state.state_reverts += 1;
+        self.space_state.use_space(ok_result.space_used());
         self.executed_tx_infos.push(ok_result.tx_info);
 
         Ok(())
+    }
+
+    pub fn adjust_finalize_block_revert_to_prefinalized_state(
+        &mut self,
+        finalize_revert_state: FinalizeRevertState,
+        block_state: &mut BlockState,
+    ) {
+        self.space_state
+            .free_used_state(finalize_revert_state.last_tx_block_space);
+        self.executed_tx_infos.pop();
+        block_state
+            .bundle_state_mut()
+            .revert(finalize_revert_state.state_reverts);
     }
 
     /// returns (requests, withdrawals_root)
@@ -916,6 +943,7 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
         state: &mut BlockState,
         ctx: &BlockBuildingContext,
         local_ctx: &mut ThreadBlockBuildingContext,
+        finalize_revert_state: &mut FinalizeRevertState,
     ) -> Result<(Option<Requests>, Option<B256>), FinalizeError> {
         let mut db = state.new_db_ref(&ctx.shared_cached_reads, &mut local_ctx.cached_reads);
 
@@ -970,21 +998,26 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
         };
 
         db.db().merge_transitions(BundleRetention::Reverts);
+        // add one revert for processed requests
+        finalize_revert_state.state_reverts += 1;
 
         Ok((requests, withdrawals_root))
     }
 
     /// Mostly based on reth's (v1.2) default_ethereum_payload_builder.
     pub fn finalize(
-        self,
-        mut state: BlockState,
+        &mut self,
+        state: &mut BlockState,
         ctx: &BlockBuildingContext,
         local_ctx: &mut ThreadBlockBuildingContext,
+        adjust_finalize_block: bool,
+        finalize_revert_state: &mut FinalizeRevertState,
     ) -> Result<FinalizeResult, FinalizeError> {
         let start = Instant::now();
 
         let step_start = Instant::now();
-        let (requests, withdrawals_root) = self.process_requests(&mut state, ctx, local_ctx)?;
+        let (requests, withdrawals_root) =
+            self.process_requests(state, ctx, local_ctx, finalize_revert_state)?;
         let block_number = ctx.block();
 
         let request_processsing_time_ms = elapsed_ms(step_start);
@@ -1003,46 +1036,47 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
             &mut local_ctx.bloom_cache,
             &self.executed_tx_infos,
             ctx.faster_finalize,
+            adjust_finalize_block,
         );
 
         let bloom_time_ms = elapsed_ms(step_start);
         let step_start = Instant::now();
 
-        // calculate the state root
-        let (bundle, state_provider) = state.into_parts();
-        // we use execution outcome here only for interface compatibility, its just a wrapper around bundle
-        let mut execution_outcome =
-            ExecutionOutcome::new(bundle, Vec::new(), block_number, Vec::new());
-        let state_root = ctx.root_hasher.state_root(&execution_outcome, local_ctx)?;
+        let incremental_change = if adjust_finalize_block {
+            // get list of account that changed after finalize was called
+            let mut result = Vec::new();
+            state
+                .bundle_state()
+                .reverts
+                .iter()
+                .rev()
+                .take(finalize_revert_state.state_reverts)
+                .for_each(|r| r.iter().for_each(|c| result.push(c.0)));
+            result
+        } else {
+            Vec::new()
+        };
+
+        // // calculate the state root
+        let state_root =
+            ctx.root_hasher
+                .state_root(state.bundle_state(), &incremental_change, local_ctx)?;
         let root_hash_time = step_start.elapsed();
 
         let root_hash_time_ms = elapsed_ms(step_start);
         let step_start = Instant::now();
 
-        // create the block header
+        // // create the block header
         let (transactions_root, placeholder_transaction_proof) =
             calculate_tx_root_and_placeholder_proof(
                 &mut local_ctx.tx_root_cache,
                 &self.executed_tx_infos,
                 ctx.faster_finalize,
+                adjust_finalize_block,
             );
 
         let transactions_root_time_ms = elapsed_ms(step_start);
         let step_start = Instant::now();
-
-        // double check blocked txs
-        for tx_with_blob in self.executed_tx_infos.iter().map(|info| &info.tx) {
-            if ctx.blocklist.contains(&tx_with_blob.signer()) {
-                return Err(FinalizeError::Other(eyre::eyre!(
-                    "To from blocked address."
-                )));
-            }
-            if let Some(to) = tx_with_blob.to() {
-                if ctx.blocklist.contains(&to) {
-                    return Err(FinalizeError::Other(eyre::eyre!("Tx to blocked address")));
-                }
-            }
-        }
 
         let mut txs_blob_sidecars: Vec<Arc<BlobTransactionSidecarVariant>> = Vec::new();
         let (excess_blob_gas, blob_gas_used) = if ctx
@@ -1110,6 +1144,7 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
             body: BlockBody {
                 transactions: self
                     .executed_tx_infos
+                    .clone()
                     .into_iter()
                     .map(|t| t.tx.into_internal_tx_unsecure().into_inner())
                     .collect(),
@@ -1120,8 +1155,7 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
 
         let bid_adjustments = Self::generate_bid_adjustments(
             &block.header,
-            &state_provider,
-            &mut execution_outcome,
+            state,
             ctx,
             local_ctx,
             placeholder_transaction_proof,
@@ -1163,8 +1197,7 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
 
     fn generate_bid_adjustments(
         header: &Header,
-        state_provider: &impl StateProvider,
-        outcome: &mut ExecutionOutcome,
+        block_state: &mut BlockState,
         ctx: &BlockBuildingContext,
         local_ctx: &mut ThreadBlockBuildingContext,
         placeholder_transaction_proof: Vec<Bytes>,
@@ -1187,12 +1220,14 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
         // Pre-load all proof targets that are missing from the bundle state.
         // This is a requirement for accounts to become a part of the trie and be able to generate proofs for them.
         let mut cachedb = CachedDB::new(
-            StateProviderDatabase::new(state_provider),
+            StateProviderDatabase::new(block_state.state_provider()),
             &mut local_ctx.cached_reads,
             &ctx.shared_cached_reads,
         );
         for fee_payer in &ctx.adjustment_fee_payers {
-            if let hash_map::Entry::Vacant(entry) = outcome.bundle.state.entry(*fee_payer) {
+            if let hash_map::Entry::Vacant(entry) =
+                block_state.bundle_state_mut().state.entry(*fee_payer)
+            {
                 let account_info = cachedb
                     .basic(*fee_payer)
                     .map_err(|error| FinalizeError::Other(error.into()))?;
@@ -1205,9 +1240,11 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
             }
         }
 
-        let mut account_proofs =
-            ctx.root_hasher
-                .account_proofs(outcome, &proof_targets, local_ctx)?;
+        let mut account_proofs = ctx.root_hasher.account_proofs(
+            block_state.bundle_state(),
+            &proof_targets,
+            local_ctx,
+        )?;
 
         let Some(builder_proof) = account_proofs.remove(&builder_address) else {
             return Err(FinalizeError::Other(eyre::eyre!(
@@ -1259,13 +1296,11 @@ impl<Tracer: SimulationTracer, PartialBlockExecutionTracerType: PartialBlockExec
         state: &mut BlockState,
     ) -> eyre::Result<()> {
         // We "pre-use" the RLP overhead for the withdrawals and the block header.
-        self.space_state.use_space(
-            BlockSpace::new(
-                0,
-                ctx.attributes.withdrawals.length() + BLOCK_HEADER_RLP_OVERHEAD,
-            ),
+        self.space_state.use_space(BlockSpace::new(
             0,
-        );
+            ctx.attributes.withdrawals.length() + BLOCK_HEADER_RLP_OVERHEAD,
+            0,
+        ));
 
         let mut db = state.new_db_ref(&ctx.shared_cached_reads, &mut local_ctx.cached_reads);
         let mut system_caller = SystemCaller::new(ctx.chain_spec.clone());
@@ -1354,7 +1389,6 @@ pub fn create_sim_value(
         order_ok.coinbase_profit,
         non_mempool_coinbase_profit,
         order_ok.space_used,
-        order_ok.blob_gas_used,
         order_ok.paid_kickbacks.clone(),
     )
 }
@@ -1386,19 +1420,17 @@ mod test {
             coinbase_profit: Default::default(),
             space_used: Default::default(),
             cumulative_space_used: Default::default(),
-            blob_gas_used: Default::default(),
-            cumulative_blob_gas_used: Default::default(),
             tx_infos: vec![
                 TransactionExecutionInfo {
                     tx: tx1,
                     receipt: Default::default(),
-                    gas_used: Default::default(),
+                    space_used: Default::default(),
                     coinbase_profit: profit_1,
                 },
                 TransactionExecutionInfo {
                     tx: tx2,
                     receipt: Default::default(),
-                    gas_used: Default::default(),
+                    space_used: Default::default(),
                     coinbase_profit: profit_2,
                 },
             ],
@@ -1437,12 +1469,10 @@ mod test {
             coinbase_profit: profit.unsigned_abs(),
             space_used: Default::default(),
             cumulative_space_used: Default::default(),
-            blob_gas_used: Default::default(),
-            cumulative_blob_gas_used: Default::default(),
             tx_infos: vec![TransactionExecutionInfo {
                 tx,
                 receipt: Default::default(),
-                gas_used: Default::default(),
+                space_used: Default::default(),
                 coinbase_profit: profit,
             }],
             delayed_kickback: None,

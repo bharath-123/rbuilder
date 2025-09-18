@@ -182,7 +182,7 @@ where
         ordering_config,
         Arc::new(BuiltBlockCache::new()),
     );
-    let block_builder = builder.build_block_with_execution_tracer(
+    let mut block_builder = builder.build_block_with_execution_tracer(
         block_orders,
         CancellationToken::new(),
         partial_block_execution_tracer,
@@ -387,7 +387,7 @@ impl OrderingBuilderContext {
             let success = commit_result.is_ok();
             match commit_result {
                 Ok(res) => {
-                    gas_used = res.space_used.gas();
+                    gas_used = res.space_used.gas;
                     // This intermediate step is needed until we replace all (Address, u64) for AccountNonce
                     let nonces_updated: Vec<_> = res
                         .nonces_updated

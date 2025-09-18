@@ -1,19 +1,33 @@
-use std::{collections::VecDeque, time::Duration};
+/// Unfinished block processing handles blocks that are produced by block building algorithms.
+///
+/// 1. Block building algorithm produces unfinished blocks `BiddableUnfinishedBlock` and submits it to the `UnfinishedBuiltBlocksInput`
+/// 2. Block cache is updated from the last unfinished block. Its used to share data about built blocks between different algorithms.
+/// 3. Then we select next block to use for submission from the blocks built by different algorithms (`BestBlockFromAlgorithms`)
+/// 4. Then this block is finalized (`prefinalize_worker` thread)
+/// 5. We notify bidding service about new block.
+/// 6. Bidding service asks to finalize that block with concrete proposer value  
+/// 7. Finalized block is adjusted to pay chosen amount to the proposer (`finalize_worker` thread)
+/// 8. Resulting block is submitted to `BlockBuildingSink` (in running builder its used by a thread that submits block to relays).
+///
+/// Alternatively if configured (adjust_finalized_blocks = true) to run using old flow `prefinalize_worker` would not do anything with the block
+/// and `finalize_worker` would do full finalization instead of adjustment of the finalize block.
+use std::time::Duration;
 
 use alloy_primitives::{utils::format_ether, U256};
 use derivative::Derivative;
-use flume::RecvTimeoutError;
 use parking_lot::{Condvar, Mutex};
 use std::sync::Arc;
 
-use tracing::{error, info_span, trace, warn};
+use tracing::{error, trace, warn};
 
-use ahash::HashMap;
 use tokio_util::sync::CancellationToken;
 
 use crate::{
     building::{
-        builders::block_building_helper::{BiddableUnfinishedBlock, BlockBuildingHelper},
+        builders::block_building_helper::{
+            BiddableUnfinishedBlock, BlockBuildingHelper, BlockBuildingHelperError,
+            FinalizeBlockResult,
+        },
         ThreadBlockBuildingContext,
     },
     live_builder::{
@@ -23,6 +37,7 @@ use crate::{
 };
 
 use super::{
+    best_block_from_algorithms::BestBlockFromAlgorithms,
     bidding_service_interface::{
         BiddingService, BlockId, BlockSealInterfaceForSlotBidder,
         BuiltBlockDescriptorForSlotBidder, SlotBidder, SlotBidderSealBidCommand, SlotBlockId,
@@ -35,299 +50,12 @@ use crate::live_builder::building::built_block_cache::BuiltBlockCache;
 
 const THREAD_BLOCKING_DURATION: Duration = Duration::from_millis(100);
 
-#[derive(Debug, Clone)]
-struct FinalizeWorkerInput {
-    finalize_task: Arc<(Mutex<Option<FinalizeTask>>, Condvar)>,
-}
-
-impl FinalizeWorkerInput {
-    fn new() -> Self {
-        Self {
-            finalize_task: Arc::new((Mutex::new(None), Condvar::new())),
-        }
-    }
-
-    fn new_finalize_task(&self, finalize_task: FinalizeTask) {
-        let (lock, cvar) = &*self.finalize_task;
-        let mut guard = lock.lock();
-        *guard = Some(finalize_task);
-        cvar.notify_one();
-    }
-
-    fn wait_for_task(&self) -> Option<FinalizeTask> {
-        let (lock, cvar) = &*self.finalize_task;
-        let mut guard = lock.lock();
-        while guard.is_none() {
-            let timeout_result = cvar.wait_for(&mut guard, THREAD_BLOCKING_DURATION);
-            if timeout_result.timed_out() {
-                return None;
-            }
-        }
-        guard.take()
-    }
-}
-
-pub struct FinalizeWorker {
-    slot_data: MevBoostSlotData,
-    finalize_task: FinalizeWorkerInput,
-    finalized_blocks: Box<dyn BlockBuildingSink>,
-    cancellation_token: CancellationToken,
-}
-
-impl FinalizeWorker {
-    pub fn run(self) {
-        let slot_span = info_span!(
-            "slot_data",
-            payload_id = self.slot_data.payload_id,
-            block = self.slot_data.block(),
-            slot = self.slot_data.slot()
-        );
-        let _span_guard = slot_span.enter();
-
-        let mut local_ctx = ThreadBlockBuildingContext::default();
-        loop {
-            if self.cancellation_token.is_cancelled() {
-                break;
-            }
-
-            let finalize_task = if let Some(task) = self.finalize_task.wait_for_task() {
-                task
-            } else {
-                continue;
-            };
-            let FinalizeTask {
-                block,
-                payout_tx_val,
-                seen_competition_bid,
-            } = finalize_task;
-            trace!(payout_tx_val = ?format_ether(payout_tx_val),
-		   seen_competition_bid = ?seen_competition_bid.map(format_ether),
-		   "Started block finalization");
-            match block.finalize_block(&mut local_ctx, payout_tx_val, seen_competition_bid) {
-                Ok(result) => {
-                    self.finalized_blocks.new_block(result.block);
-                }
-                Err(err) => {
-                    error!(?err, "Error finalizing block");
-                }
-            }
-        }
-        trace!("Shutting down finalize worker");
-    }
-}
-
-enum BlockSealSlotWorkerCommands {
-    NewBuiltBlock(BiddableUnfinishedBlock),
-    SealBid(SlotBidderSealBidCommand),
-}
-
-#[derive(Clone, Debug)]
-pub struct UnfinishedBuiltBlocksInput {
-    command_queue: flume::Sender<BlockSealSlotWorkerCommands>,
-}
-
-pub struct BlockSealSlotWorkerOutput {
-    command_queue: flume::Receiver<BlockSealSlotWorkerCommands>,
-}
-
-impl BlockSealInterfaceForSlotBidder for UnfinishedBuiltBlocksInput {
-    fn seal_bid(&self, bid: SlotBidderSealBidCommand) {
-        self.command_queue
-            .send(BlockSealSlotWorkerCommands::SealBid(bid))
-            .map_err(|err| warn!(?err, "Failed to send bid command"))
-            .unwrap_or_default();
-    }
-}
-
-impl UnfinishedBuiltBlocksInput {
-    pub fn new_block(&self, block: BiddableUnfinishedBlock) {
-        self.command_queue
-            .send(BlockSealSlotWorkerCommands::NewBuiltBlock(block))
-            .map_err(|err| warn!(?err, "Failed to send new block command"))
-            .unwrap_or_default();
-    }
-}
-
-fn create_slot_seal_worker() -> (UnfinishedBuiltBlocksInput, BlockSealSlotWorkerOutput) {
-    let (sender, receiver) = flume::unbounded();
-    (
-        UnfinishedBuiltBlocksInput {
-            command_queue: sender,
-        },
-        BlockSealSlotWorkerOutput {
-            command_queue: receiver,
-        },
-    )
-}
-
-fn start_slot_seal_worker(
-    slot_data: MevBoostSlotData,
-    slot_bidder: Arc<dyn SlotBidder>,
-    finalized_blocks: Box<dyn BlockBuildingSink>,
-    output: BlockSealSlotWorkerOutput,
-    built_block_cache: Arc<BuiltBlockCache>,
-    cancellation_token: CancellationToken,
-) {
-    let finalize_task = FinalizeWorkerInput::new();
-    let finalize_worker = FinalizeWorker {
-        finalize_task: finalize_task.clone(),
-        finalized_blocks,
-        cancellation_token: cancellation_token.clone(),
-        slot_data: slot_data.clone(),
-    };
-
-    let worker = UnfinishedBlocksSlotWorker {
-        slot_data,
-        cancellation_token,
-        command_queue: output.command_queue,
-        built_block_cache,
-        last_block_by_algorithm: HashMap::default(),
-        last_best_block_hash: 0,
-        slot_bidder,
-        pending_blocks_last_id: 0,
-        pending_blocks: VecDeque::new(),
-        finalize_worker: finalize_task.clone(),
-    };
-    std::thread::Builder::new()
-        .name("unfinished_built_blocks_worker".into())
-        .spawn(move || {
-            if let Err(err) = worker.run() {
-                error!(?err, "unfinished_built_blocks_worker exited with error");
-            }
-        })
-        .expect("spawn block_seal_slot_worker");
-    std::thread::Builder::new()
-        .name("finalize_worker".into())
-        .spawn(move || {
-            finalize_worker.run();
-        })
-        .expect("spawn finalize_worker");
-}
-
-pub struct UnfinishedBlocksSlotWorker {
-    slot_data: MevBoostSlotData,
-    cancellation_token: CancellationToken,
-
-    command_queue: flume::Receiver<BlockSealSlotWorkerCommands>,
-
-    built_block_cache: Arc<BuiltBlockCache>,
-
-    last_block_by_algorithm: HashMap<String, BiddableUnfinishedBlock>,
-    last_best_block_hash: u64,
-
-    slot_bidder: Arc<dyn SlotBidder>,
-
-    // bidding service was notified about these blocks
-    pending_blocks_last_id: u64,
-    pending_blocks: VecDeque<(BlockId, Box<dyn BlockBuildingHelper>)>,
-
-    finalize_worker: FinalizeWorkerInput,
-}
-
-#[derive(Derivative)]
-#[derivative(Debug)]
-struct FinalizeTask {
-    #[derivative(Debug = "ignore")]
-    block: Box<dyn BlockBuildingHelper>,
-    payout_tx_val: U256,
-    seen_competition_bid: Option<U256>,
-}
-
-impl UnfinishedBlocksSlotWorker {
-    fn run(mut self) -> eyre::Result<()> {
-        let slot_span = info_span!(
-            "slot_data",
-            payload_id = self.slot_data.payload_id,
-            block = self.slot_data.block(),
-            slot = self.slot_data.slot()
-        );
-        let _span_guard = slot_span.enter();
-
-        loop {
-            if self.cancellation_token.is_cancelled() {
-                break;
-            }
-            let command = match self.command_queue.recv_timeout(THREAD_BLOCKING_DURATION) {
-                Ok(command) => command,
-                Err(RecvTimeoutError::Timeout) => {
-                    continue;
-                }
-                Err(RecvTimeoutError::Disconnected) => {
-                    break;
-                }
-            };
-            match command {
-                BlockSealSlotWorkerCommands::NewBuiltBlock(unfinished_block) => {
-                    trace!(
-                        builder_name = unfinished_block.block().builder_name(),
-                        true_block_value = format_ether(unfinished_block.true_block_value),
-                        "New unfinished block"
-                    );
-
-                    self.built_block_cache
-                        .update_from_new_unfinished_block(unfinished_block.block());
-
-                    self.last_block_by_algorithm.insert(
-                        unfinished_block.block.builder_name().to_string(),
-                        unfinished_block,
-                    );
-                    let last_best_block = self
-                        .last_block_by_algorithm
-                        .values()
-                        .max_by_key(|bb| bb.true_block_value)
-                        .unwrap();
-                    let best_block_hash = last_best_block
-                        .block
-                        .built_block_trace()
-                        .transactions_hash();
-                    if self.last_best_block_hash == best_block_hash {
-                        continue;
-                    }
-                    self.last_best_block_hash = best_block_hash;
-                    let new_block_id = BlockId(self.pending_blocks_last_id);
-                    self.pending_blocks_last_id += 1;
-                    self.pending_blocks
-                        .push_back((new_block_id, last_best_block.block.box_clone()));
-                    let block_descriptor =
-                        BuiltBlockDescriptorForSlotBidder::new(new_block_id, last_best_block);
-                    self.slot_bidder.notify_new_built_block(block_descriptor);
-                }
-                BlockSealSlotWorkerCommands::SealBid(slot_bidder_seal_bid_command) => {
-                    trace!(?slot_bidder_seal_bid_command, "New seal bid command");
-                    // prune blocks that are no longer useful
-                    self.pending_blocks
-                        .retain(|(id, _)| id.0 >= slot_bidder_seal_bid_command.block_id.0);
-                    let block_to_seal = self.pending_blocks.iter().find_map(|(id, block)| {
-                        if id == &slot_bidder_seal_bid_command.block_id {
-                            Some(block)
-                        } else {
-                            None
-                        }
-                    });
-                    let block = if let Some(block) = block_to_seal {
-                        block.box_clone()
-                    } else {
-                        continue;
-                    };
-                    let finalize_task = FinalizeTask {
-                        block,
-                        payout_tx_val: slot_bidder_seal_bid_command.payout_tx_value,
-                        seen_competition_bid: slot_bidder_seal_bid_command.seen_competition_bid,
-                    };
-                    self.finalize_worker.new_finalize_task(finalize_task);
-                }
-            }
-        }
-        trace!("Finished UnfinishedBuiltBlocksSlotWorker");
-
-        Ok(())
-    }
-}
-
-/// UnfinishedBlockBuildingSinkFactory to bid blocks against the competition.
-/// Blocks are given to a slot bidder (UnfinishedBlockBuildingSink created per block by the BiddingService).
-/// Slot bidder bids using a SequentialSealerBidMaker (created per block).
-/// SequentialSealerBidMaker sends the bids to a BlockBuildingSink (created per block).
+/// UnfinishedBlockBuildingSinkFactory creates UnfinishedBuiltBlocksInput
+/// and related workers for each slot
+/// For each slot it creates:
+/// 1. UnfinishedBuiltBlocksInput and starts `prefinalize_worker` and `finalize_worker` threads.
+/// 2. SlotBidder from BiddingService to manage bidding values for the sealed blocks
+/// 3. BlockBuildingSink to send finished blocks for relay submission
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct UnfinishedBuiltBlocksInputFactory<P> {
@@ -337,6 +65,9 @@ pub struct UnfinishedBuiltBlocksInputFactory<P> {
     /// Factory for the final destination for blocks.
     block_sink_factory: RelaySubmitSinkFactory,
     wallet_balance_watcher: WalletBalanceWatcher<P>,
+    /// If set to true blocks will be finalized before notifying BiddingService
+    /// This reduces latency for creating block with concrete proposer payout value.
+    adjust_finalized_blocks: bool,
 }
 
 impl<P: StateProviderFactory> UnfinishedBuiltBlocksInputFactory<P> {
@@ -344,11 +75,13 @@ impl<P: StateProviderFactory> UnfinishedBuiltBlocksInputFactory<P> {
         bidding_service: Arc<dyn BiddingService>,
         block_sink_factory: RelaySubmitSinkFactory,
         wallet_balance_watcher: WalletBalanceWatcher<P>,
+        adjust_finalized_blocks: bool,
     ) -> Self {
         Self {
             bidding_service,
             block_sink_factory,
             wallet_balance_watcher,
+            adjust_finalized_blocks,
         }
     }
 
@@ -375,7 +108,13 @@ impl<P: StateProviderFactory> UnfinishedBuiltBlocksInputFactory<P> {
         let finished_block_sink = self
             .block_sink_factory
             .create_builder_sink(slot_data.clone(), cancel.clone());
-        let (input, output) = create_slot_seal_worker();
+
+        let input = UnfinishedBuiltBlocksInput::new(
+            built_block_cache,
+            finished_block_sink,
+            self.adjust_finalized_blocks,
+            cancel.clone(),
+        );
 
         let slot_bidder = self.bidding_service.create_slot_bidder(
             SlotBlockId::new(
@@ -388,15 +127,355 @@ impl<P: StateProviderFactory> UnfinishedBuiltBlocksInputFactory<P> {
             cancel.clone(),
         );
 
-        start_slot_seal_worker(
-            slot_data,
-            slot_bidder,
-            finished_block_sink,
-            output,
-            built_block_cache,
-            cancel,
-        );
+        let input_clone = input.clone();
+        std::thread::Builder::new()
+            .name("prefinalize_worker".into())
+            .spawn(move || input_clone.run_prefinalize_thread(slot_bidder))
+            .unwrap();
+
+        let input_clone = input.clone();
+        std::thread::Builder::new()
+            .name("finalize_worker".into())
+            .spawn(move || input_clone.run_finalize_thread())
+            .unwrap();
 
         input
     }
+}
+
+/// Prefinalized blocks must carry ThreadBlockBuildingContext with them because
+/// it contains cached state that would be used in adjust_finalized_block
+#[derive(Derivative)]
+#[derivative(Debug)]
+struct PrefinalizedBlockInner {
+    #[derivative(Debug = "ignore")]
+    block_building_helper: Box<dyn BlockBuildingHelper>,
+    local_ctx: Option<ThreadBlockBuildingContext>,
+}
+
+impl PrefinalizedBlockInner {
+    fn finalize_block(
+        &mut self,
+        value: U256,
+        seen_competition_bid: Option<U256>,
+        adjust_finalized_blocks: bool,
+    ) -> Result<Option<FinalizeBlockResult>, BlockBuildingHelperError> {
+        if let Some(local_ctx) = self.local_ctx.as_mut() {
+            if adjust_finalized_blocks {
+                self.block_building_helper
+                    .adjust_finalized_block(local_ctx, value, seen_competition_bid)
+                    .map(Some)
+            } else {
+                self.block_building_helper
+                    .finalize_block(local_ctx, value, seen_competition_bid)
+                    .map(Some)
+            }
+        } else {
+            Ok(None)
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+struct PrefinalizedBlock {
+    block_id: BlockId,
+    inner: Arc<Mutex<PrefinalizedBlockInner>>,
+}
+
+impl PrefinalizedBlock {
+    fn new(
+        block_id: BlockId,
+        block_building_helper: Box<dyn BlockBuildingHelper>,
+        local_ctx: ThreadBlockBuildingContext,
+    ) -> Self {
+        Self {
+            block_id,
+            inner: Arc::new(Mutex::new(PrefinalizedBlockInner {
+                block_building_helper,
+                local_ctx: Some(local_ctx),
+            })),
+        }
+    }
+}
+
+#[derive(Debug)]
+struct FinalizeCommand {
+    prefinalized_block: PrefinalizedBlock,
+    value: U256,
+    seen_competition_bid: Option<U256>,
+}
+
+#[derive(Derivative, Clone)]
+#[derivative(Debug)]
+pub struct UnfinishedBuiltBlocksInput {
+    built_block_cache: Arc<BuiltBlockCache>,
+
+    best_block_from_algorithms: Arc<Mutex<BestBlockFromAlgorithms>>,
+
+    #[derivative(Debug = "ignore")]
+    last_unfinalized_block: Arc<(Mutex<Option<BiddableUnfinishedBlock>>, Condvar)>,
+
+    unused_prefinalized_blocks: Arc<Mutex<Vec<PrefinalizedBlock>>>,
+    last_block_id: Arc<Mutex<u64>>,
+    finalized_blocks: Arc<Mutex<Vec<PrefinalizedBlock>>>,
+
+    last_finalize_command: Arc<(Mutex<Option<FinalizeCommand>>, Condvar)>,
+
+    cancellation_token: CancellationToken,
+    #[derivative(Debug = "ignore")]
+    block_building_sink: Arc<Mutex<Box<dyn BlockBuildingSink>>>,
+    adjust_finalized_blocks: bool,
+}
+
+impl UnfinishedBuiltBlocksInput {
+    fn new(
+        built_block_cache: Arc<BuiltBlockCache>,
+        block_building_sink: Box<dyn BlockBuildingSink>,
+        adjust_finalized_blocks: bool,
+        cancellation_token: CancellationToken,
+    ) -> Self {
+        Self {
+            built_block_cache,
+            best_block_from_algorithms: Arc::new(Mutex::new(BestBlockFromAlgorithms::default())),
+            last_unfinalized_block: Arc::new((Mutex::new(None), Condvar::new())),
+            unused_prefinalized_blocks: Arc::new(Mutex::new(Vec::new())),
+            last_block_id: Arc::new(Mutex::new(0)),
+            finalized_blocks: Arc::new(Mutex::new(Vec::new())),
+            last_finalize_command: Arc::new((Mutex::new(None), Condvar::new())),
+            cancellation_token,
+            block_building_sink: Arc::new(Mutex::new(block_building_sink)),
+            adjust_finalized_blocks,
+        }
+    }
+
+    pub fn new_block(&self, block: BiddableUnfinishedBlock) {
+        self.built_block_cache
+            .update_from_new_unfinished_block(block.block());
+
+        let block = if let Some(block) = self
+            .best_block_from_algorithms
+            .lock()
+            .update_with_new_block(block)
+        {
+            block
+        } else {
+            return;
+        };
+
+        let log_span = create_logging_span(block.block());
+        let _guard = log_span.enter();
+
+        trace!("New unfinalized block");
+
+        // update last_unfinalized_block
+        let (lock, cvar) = &*self.last_unfinalized_block;
+        let mut guard = lock.lock();
+        *guard = Some(block);
+        cvar.notify_one();
+    }
+
+    fn seal_command(&self, bid: SlotBidderSealBidCommand) {
+        let id_span = tracing::info_span!("block_id", block_id = bid.block_id.0);
+        let _guard_id_span = id_span.enter();
+
+        trace!(?bid, "Received seal command");
+
+        let mut unused_blocks = Vec::new();
+        let mut found_block: Option<PrefinalizedBlock> = None;
+        {
+            let mut finalized_blocks = self.finalized_blocks.lock();
+            let mut i = 0;
+            while i < finalized_blocks.len() {
+                if finalized_blocks[i].block_id.0 < bid.block_id.0 {
+                    unused_blocks.push(finalized_blocks.remove(i));
+                    continue;
+                }
+                if finalized_blocks[i].block_id == bid.block_id {
+                    found_block = Some(finalized_blocks[i].clone());
+                    break;
+                }
+                i += 1;
+            }
+        }
+        self.unused_prefinalized_blocks
+            .lock()
+            .append(&mut unused_blocks);
+        if let Some(prefinalized_block) = found_block {
+            let finalize_command = FinalizeCommand {
+                prefinalized_block,
+                value: bid.payout_tx_value,
+                seen_competition_bid: bid.seen_competition_bid,
+            };
+            let (lock, cvar) = &*self.last_finalize_command;
+            let mut guard = lock.lock();
+            *guard = Some(finalize_command);
+            cvar.notify_one();
+        } else {
+            warn!("Seal command discarded, prefinalized block was not found");
+        }
+    }
+}
+
+// prefinalize_worker
+impl UnfinishedBuiltBlocksInput {
+    fn take_last_unfinalized_block(&self) -> Option<BiddableUnfinishedBlock> {
+        let (lock, cvar) = &*self.last_unfinalized_block;
+        let mut guard = lock.lock();
+        while guard.is_none() {
+            let timeout_result = cvar.wait_for(&mut guard, THREAD_BLOCKING_DURATION);
+            if timeout_result.timed_out() {
+                return None;
+            }
+        }
+        guard.take()
+    }
+
+    fn create_new_block_id(&self) -> BlockId {
+        let mut last_id = self.last_block_id.lock();
+        let id = BlockId(*last_id);
+        *last_id += 1;
+        id
+    }
+
+    fn local_ctx(&self) -> ThreadBlockBuildingContext {
+        // we try to reuse ThreadBlockBuildingContext from previously built blocks (as they contain useful caches)
+        if let Some(last_prefin_block) = self.unused_prefinalized_blocks.lock().pop() {
+            let mut inner = last_prefin_block.inner.lock();
+            inner.local_ctx.take().unwrap_or_default()
+        } else {
+            ThreadBlockBuildingContext::default()
+        }
+    }
+
+    fn run_prefinalize_thread(self, slot_bidder: Arc<dyn SlotBidder>) {
+        loop {
+            if self.cancellation_token.is_cancelled() {
+                break;
+            }
+            let next_block = if let Some(block) = self.take_last_unfinalized_block() {
+                block
+            } else {
+                continue;
+            };
+
+            let log_span = create_logging_span(next_block.block());
+            let _guard = log_span.enter();
+
+            let block_id = self.create_new_block_id();
+            let id_span = tracing::info_span!("block_id", block_id = block_id.0);
+            let _guard_id_span = id_span.enter();
+            let block_descriptor = BuiltBlockDescriptorForSlotBidder::new(block_id, &next_block);
+
+            let mut local_ctx = self.local_ctx();
+            let mut block_building_helper = next_block.into_building_helper();
+            if self.adjust_finalized_blocks {
+                let value = if block_building_helper
+                    .true_block_value()
+                    .unwrap_or_default()
+                    .is_zero()
+                {
+                    U256::ZERO
+                } else {
+                    // set value to 1 so that some contracts do not revert
+                    U256::ONE
+                };
+                match block_building_helper.finalize_block(&mut local_ctx, value, None) {
+                    Ok(_) => {
+                        trace!("Prefinalized block");
+                    }
+                    Err(err) => {
+                        error!(?err, "Failed to prefinalize block");
+                        continue;
+                    }
+                };
+            }
+            let prefinalized_result =
+                PrefinalizedBlock::new(block_id, block_building_helper, local_ctx);
+            self.finalized_blocks.lock().push(prefinalized_result);
+            slot_bidder.notify_new_built_block(block_descriptor);
+            trace!("Notified bidding service");
+        }
+        trace!("Finished prefinalize_worker");
+    }
+}
+
+// finalize_worker
+impl UnfinishedBuiltBlocksInput {
+    fn take_next_finalize_command(&self) -> Option<FinalizeCommand> {
+        let (lock, cvar) = &*self.last_finalize_command;
+        let mut guard = lock.lock();
+        while guard.is_none() {
+            let timeout_result = cvar.wait_for(&mut guard, THREAD_BLOCKING_DURATION);
+            if timeout_result.timed_out() {
+                return None;
+            }
+        }
+        guard.take()
+    }
+
+    fn run_finalize_thread(self) {
+        loop {
+            if self.cancellation_token.is_cancelled() {
+                break;
+            }
+            let finalize_command = if let Some(command) = self.take_next_finalize_command() {
+                command
+            } else {
+                continue;
+            };
+
+            let mut command = finalize_command.prefinalized_block.inner.lock();
+
+            let id_span = tracing::info_span!(
+                "block_id",
+                block_id = finalize_command.prefinalized_block.block_id.0
+            );
+            let _guard_id_span = id_span.enter();
+
+            let log_span = create_logging_span(command.block_building_helper.as_ref());
+            let _guard = log_span.enter();
+
+            let result = match command.finalize_block(
+                finalize_command.value,
+                finalize_command.seen_competition_bid,
+                self.adjust_finalized_blocks,
+            ) {
+                Ok(Some(result)) => {
+                    trace!("Finalized block");
+                    result
+                }
+                Ok(None) => {
+                    warn!("Prefinalized block was discarded");
+                    continue;
+                }
+                Err(err) => {
+                    error!(?err, "Failed to finalize prefinalized block");
+                    continue;
+                }
+            };
+            self.block_building_sink.lock().new_block(result.block);
+        }
+    }
+}
+
+impl BlockSealInterfaceForSlotBidder for UnfinishedBuiltBlocksInput {
+    fn seal_bid(&self, bid: SlotBidderSealBidCommand) {
+        self.seal_command(bid)
+    }
+}
+
+fn create_logging_span(block_helper: &dyn BlockBuildingHelper) -> tracing::Span {
+    let ctx = block_helper.building_context();
+    let block = ctx.block();
+    let payload_id = ctx.payload_id;
+    let builder_name = block_helper.builder_name();
+    let true_block_value = format_ether(block_helper.true_block_value().unwrap_or_default());
+
+    tracing::info_span!(
+        "unfinished_block",
+        block,
+        payload_id,
+        builder_name,
+        true_block_value
+    )
 }
