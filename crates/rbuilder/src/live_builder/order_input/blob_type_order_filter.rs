@@ -44,7 +44,13 @@ pub fn new_fusaka(
 ) -> BlobTypeOrderFilter<impl Fn(&TransactionSignedEcRecoveredWithBlobs) -> bool + Send + Sync> {
     BlobTypeOrderFilter::new(sink, |tx| {
         if tx.is_eip4844() {
-            matches!(*tx.blobs_sidecar, BlobTransactionSidecarVariant::Eip7594(_))
+            if matches!(*tx.blobs_sidecar, BlobTransactionSidecarVariant::Eip7594(_)) {
+                tracing::info!("BHARATH: matched with a eip-7594 sidecar!")
+                true
+            } else {
+                tracing::info!("BHARATH: matched with a eip-4844 sidecar!")
+                false
+            }
         } else {
             true
         }
