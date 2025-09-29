@@ -31,9 +31,7 @@ use crate::{
         },
         PartialBlockExecutionTracer, Sorting,
     },
-    live_builder::{
-        base_config::EnvOrValue, cli::LiveBuilderConfig, payload_events::MevBoostSlotDataGenerator,
-    },
+    live_builder::{cli::LiveBuilderConfig, payload_events::MevBoostSlotDataGenerator},
     mev_boost::{
         bloxroute_grpc, BLSBlockSigner, MevBoostRelayBidSubmitter, MevBoostRelaySlotInfoProvider,
         RelayClient, RelayConfig, RelaySubmitConfig,
@@ -54,6 +52,7 @@ use ethereum_consensus::{
 };
 use eyre::Context;
 use lazy_static::lazy_static;
+use rbuilder_config::EnvOrValue;
 use rbuilder_primitives::mev_boost::{MevBoostRelayID, RelayMode};
 use reth_chainspec::{Chain, ChainSpec, NamedChain};
 use reth_db::DatabaseEnv;
@@ -174,7 +173,7 @@ impl Default for L1Config {
 
 impl L1Config {
     pub fn resolve_cl_node_urls(&self) -> eyre::Result<Vec<String>> {
-        crate::live_builder::base_config::resolve_env_or_values::<String>(&self.cl_node_url)
+        rbuilder_config::resolve_env_or_values::<String>(&self.cl_node_url)
     }
 
     pub fn beacon_clients(&self) -> eyre::Result<Vec<Client>> {
@@ -1012,8 +1011,8 @@ where
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::live_builder::base_config::load_config_toml_and_env;
     use alloy_primitives::{address, fixed_bytes};
+    use rbuilder_config::load_toml_config;
     use std::env;
     use url::Url;
 
@@ -1030,7 +1029,7 @@ mod test {
         let mut p = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         p.push("../../config-live-example.toml");
 
-        let config: Config = load_config_toml_and_env(p.clone()).expect("Config load");
+        let config: Config = load_toml_config(p.clone()).expect("Config load");
 
         assert_eq!(
             config
@@ -1048,7 +1047,7 @@ mod test {
 
         env::set_var("CL_NODE_URL", "http://localhost:3500");
 
-        let config: Config = load_config_toml_and_env(p).expect("Config load");
+        let config: Config = load_toml_config(p).expect("Config load");
 
         assert_eq!(
             config
@@ -1071,7 +1070,7 @@ mod test {
         let mut p = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         p.push("./src/live_builder/testdata/config_with_relay_override.toml");
 
-        let config: Config = load_config_toml_and_env(p.clone()).expect("Config load");
+        let config: Config = load_toml_config(p.clone()).expect("Config load");
 
         let (_, slot_info_providers) = config.l1_config.create_relays().unwrap();
         assert_eq!(slot_info_providers.len(), 1);
@@ -1083,7 +1082,7 @@ mod test {
         let mut p = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         p.push("../../config-backtest-example.toml");
 
-        load_config_toml_and_env::<Config>(p).expect("Config load");
+        load_toml_config::<Config>(p).expect("Config load");
     }
 
     #[test]
