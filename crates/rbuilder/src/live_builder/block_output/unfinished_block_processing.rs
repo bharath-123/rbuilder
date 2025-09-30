@@ -17,16 +17,20 @@ use alloy_primitives::{utils::format_ether, U256};
 use derivative::Derivative;
 use parking_lot::{Condvar, Mutex};
 use std::sync::Arc;
+use time::OffsetDateTime;
 
-use tracing::{error, trace, warn};
+use tracing::{error, info, trace, warn};
 
 use tokio_util::sync::CancellationToken;
 
 use crate::{
     building::{
-        builders::block_building_helper::{
-            BiddableUnfinishedBlock, BlockBuildingHelper, BlockBuildingHelperError,
-            FinalizeBlockResult,
+        builders::{
+            block_building_helper::{
+                BiddableUnfinishedBlock, BlockBuildingHelper, BlockBuildingHelperError,
+                FinalizeBlockResult,
+            },
+            BuiltBlockId,
         },
         InsertPayoutTxErr, ThreadBlockBuildingContext,
     },
@@ -40,8 +44,8 @@ use crate::{
 use super::{
     best_block_from_algorithms::BestBlockFromAlgorithms,
     bidding_service_interface::{
-        BiddingService, BlockId, BlockSealInterfaceForSlotBidder,
-        BuiltBlockDescriptorForSlotBidder, SlotBidder, SlotBidderSealBidCommand, SlotBlockId,
+        BiddingService, BlockSealInterfaceForSlotBidder, BuiltBlockDescriptorForSlotBidder,
+        SlotBidder, SlotBidderSealBidCommand, SlotBlockId,
     },
     relay_submit::RelaySubmitSinkFactory,
 };
@@ -181,13 +185,16 @@ impl PrefinalizedBlockInner {
 
 #[derive(Debug, Clone)]
 struct PrefinalizedBlock {
-    block_id: BlockId,
+    block_id: BuiltBlockId,
     inner: Arc<Mutex<PrefinalizedBlockInner>>,
+    pub sent_to_bidder: OffsetDateTime,
+    pub chosen_as_best_at: OffsetDateTime,
 }
 
 impl PrefinalizedBlock {
     fn new(
-        block_id: BlockId,
+        block_id: BuiltBlockId,
+        chosen_as_best_at: OffsetDateTime,
         block_building_helper: Box<dyn BlockBuildingHelper>,
         local_ctx: ThreadBlockBuildingContext,
     ) -> Self {
@@ -197,6 +204,8 @@ impl PrefinalizedBlock {
                 block_building_helper,
                 local_ctx: Some(local_ctx),
             })),
+            sent_to_bidder: OffsetDateTime::now_utc(),
+            chosen_as_best_at,
         }
     }
 }
@@ -206,6 +215,10 @@ struct FinalizeCommand {
     prefinalized_block: PrefinalizedBlock,
     value: U256,
     seen_competition_bid: Option<U256>,
+    /// Bid received from the bidder (UnfinishedBuiltBlocksInput::seal_command)
+    bid_received_at: OffsetDateTime,
+    /// Bid sent to the sealer thread
+    sent_to_sealer: OffsetDateTime,
 }
 
 #[derive(Derivative, Clone)]
@@ -255,7 +268,7 @@ impl UnfinishedBuiltBlocksInput {
         self.built_block_cache
             .update_from_new_unfinished_block(block.block());
 
-        let block = if let Some(block) = self
+        let mut block = if let Some(block) = self
             .best_block_from_algorithms
             .lock()
             .update_with_new_block(block)
@@ -264,6 +277,8 @@ impl UnfinishedBuiltBlocksInput {
         } else {
             return;
         };
+        block.chosen_as_best_at = OffsetDateTime::now_utc();
+        info!(block_id=block.id().0,true_block_value = ?block.true_block_value,chosen_as_best_at=?block.chosen_as_best_at,algo=block.block.builder_name(), "New best block chosen");
 
         let log_span = create_logging_span(block.block());
         let _guard = log_span.enter();
@@ -278,14 +293,18 @@ impl UnfinishedBuiltBlocksInput {
     }
 
     fn seal_command(&self, bid: SlotBidderSealBidCommand) {
-        let id_span = tracing::info_span!("block_id", block_id = bid.block_id.0);
-        let _guard_id_span = id_span.enter();
-
         if let Some(trigger_creation_time) = bid.trigger_creation_time {
             let now = time::OffsetDateTime::now_utc();
             let roundtrip = now - trigger_creation_time;
             add_trigger_to_bid_round_trip_time(roundtrip);
         }
+        self.do_seal_command(bid);
+    }
+
+    fn do_seal_command(&self, bid: SlotBidderSealBidCommand) {
+        let bid_received_at = OffsetDateTime::now_utc();
+        let id_span = tracing::info_span!("block_id", block_id = bid.block_id.0);
+        let _guard_id_span = id_span.enter();
 
         trace!(?bid, "Received seal command");
 
@@ -310,10 +329,13 @@ impl UnfinishedBuiltBlocksInput {
             .lock()
             .append(&mut unused_blocks);
         if let Some(prefinalized_block) = found_block {
+            let sent_to_sealer = OffsetDateTime::now_utc();
             let finalize_command = FinalizeCommand {
                 prefinalized_block,
                 value: bid.payout_tx_value,
                 seen_competition_bid: bid.seen_competition_bid,
+                bid_received_at,
+                sent_to_sealer,
             };
             let (lock, cvar) = &*self.last_finalize_command;
             let mut guard = lock.lock();
@@ -337,13 +359,6 @@ impl UnfinishedBuiltBlocksInput {
             }
         }
         guard.take()
-    }
-
-    fn create_new_block_id(&self) -> BlockId {
-        let mut last_id = self.last_block_id.lock();
-        let id = BlockId(*last_id);
-        *last_id += 1;
-        id
     }
 
     fn local_ctx(&self) -> ThreadBlockBuildingContext {
@@ -370,12 +385,13 @@ impl UnfinishedBuiltBlocksInput {
             let log_span = create_logging_span(next_block.block());
             let _guard = log_span.enter();
 
-            let block_id = self.create_new_block_id();
+            let block_id = next_block.block.built_block_trace().build_block_id;
             let id_span = tracing::info_span!("block_id", block_id = block_id.0);
             let _guard_id_span = id_span.enter();
             let block_descriptor = BuiltBlockDescriptorForSlotBidder::new(block_id, &next_block);
 
             let mut local_ctx = self.local_ctx();
+            let chosen_as_best_at = next_block.chosen_as_best_at;
             let mut block_building_helper = next_block.into_building_helper();
             if self.adjust_finalized_blocks {
                 let value = match block_building_helper.true_block_value() {
@@ -403,8 +419,12 @@ impl UnfinishedBuiltBlocksInput {
                     }
                 };
             }
-            let prefinalized_result =
-                PrefinalizedBlock::new(block_id, block_building_helper, local_ctx);
+            let prefinalized_result = PrefinalizedBlock::new(
+                block_id,
+                chosen_as_best_at,
+                block_building_helper,
+                local_ctx,
+            );
             self.finalized_blocks.lock().push(prefinalized_result);
             slot_bidder.notify_new_built_block(block_descriptor);
             trace!("Notified bidding service");
@@ -437,7 +457,7 @@ impl UnfinishedBuiltBlocksInput {
             } else {
                 continue;
             };
-
+            let picked_by_sealer_at = OffsetDateTime::now_utc();
             let mut command = finalize_command.prefinalized_block.inner.lock();
 
             let id_span = tracing::info_span!(
@@ -449,7 +469,7 @@ impl UnfinishedBuiltBlocksInput {
             let log_span = create_logging_span(command.block_building_helper.as_ref());
             let _guard = log_span.enter();
 
-            let result = match command.finalize_block(
+            let mut result = match command.finalize_block(
                 finalize_command.value,
                 finalize_command.seen_competition_bid,
                 self.adjust_finalized_blocks,
@@ -483,6 +503,12 @@ impl UnfinishedBuiltBlocksInput {
                     continue;
                 }
             };
+            result.block.trace.bid_received_at = finalize_command.bid_received_at;
+            result.block.trace.sent_to_sealer = finalize_command.sent_to_sealer;
+            result.block.trace.picked_by_sealer_at = picked_by_sealer_at;
+            result.block.trace.chosen_as_best_at =
+                finalize_command.prefinalized_block.chosen_as_best_at;
+            result.block.trace.sent_to_bidder = finalize_command.prefinalized_block.sent_to_bidder;
             self.block_building_sink.new_block(result.block);
         }
     }

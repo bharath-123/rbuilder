@@ -1,3 +1,5 @@
+use crate::building::builders::BuiltBlockId;
+
 use super::ExecutionResult;
 use ahash::{AHasher, HashMap, HashSet};
 use alloy_primitives::{Address, TxHash, U256};
@@ -12,6 +14,7 @@ use time::OffsetDateTime;
 
 #[derive(Debug, Clone)]
 pub struct BuiltBlockTrace {
+    pub build_block_id: BuiltBlockId,
     pub included_orders: Vec<ExecutionResult>,
     /// How much we bid (pay to the validator)
     pub bid_value: U256,
@@ -21,8 +24,19 @@ pub struct BuiltBlockTrace {
     pub true_bid_value: U256,
     /// Timestamp of the moment we stopped considering new orders for this block.
     pub orders_closed_at: OffsetDateTime,
+    /// UnfinishedBuiltBlocksInput chose this block as the best block and sent it downstream
+    pub chosen_as_best_at: OffsetDateTime,
+    /// Block was sent to the bidder (SlotBidder::notify_new_built_block)
+    pub sent_to_bidder: OffsetDateTime,
+    /// Bid received from the bidder (UnfinishedBuiltBlocksInput::seal_command)
+    pub bid_received_at: OffsetDateTime,
+    /// Bid sent to the sealer thread
+    pub sent_to_sealer: OffsetDateTime,
+    /// Sealer picked by sealer thread
+    pub picked_by_sealer_at: OffsetDateTime,
     /// Timestamp when this block was fully sealed and ready for submission.
     pub orders_sealed_at: OffsetDateTime,
+
     pub fill_time: Duration,
     pub finalize_time: Duration,
     pub finalize_adjust_time: Duration,
@@ -42,12 +56,6 @@ pub struct BuiltBlockTrace {
     pub filtered_build_failed_orders_statistics: OrderStatistics,
 }
 
-impl Default for BuiltBlockTrace {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 #[derive(thiserror::Error, Debug)]
 pub enum BuiltBlockTraceError {
     #[error("More than one order is included with the same replacement data: {0:?}")]
@@ -61,7 +69,7 @@ pub enum BuiltBlockTraceError {
 }
 
 impl BuiltBlockTrace {
-    pub fn new() -> Self {
+    pub fn new(build_block_id: BuiltBlockId) -> Self {
         Self {
             included_orders: Vec::new(),
             bid_value: U256::from(0),
@@ -79,6 +87,12 @@ impl BuiltBlockTrace {
             available_orders_statistics: Default::default(),
             filtered_build_considered_orders_statistics: Default::default(),
             filtered_build_failed_orders_statistics: Default::default(),
+            chosen_as_best_at: OffsetDateTime::now_utc(),
+            sent_to_bidder: OffsetDateTime::now_utc(),
+            bid_received_at: OffsetDateTime::now_utc(),
+            sent_to_sealer: OffsetDateTime::now_utc(),
+            picked_by_sealer_at: OffsetDateTime::now_utc(),
+            build_block_id,
         }
     }
 
