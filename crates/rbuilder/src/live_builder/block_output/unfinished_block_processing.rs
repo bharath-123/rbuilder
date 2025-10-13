@@ -44,7 +44,7 @@ use super::{
     best_block_from_algorithms::BestBlockFromAlgorithms,
     bidding_service_interface::{
         BiddingService, BlockSealInterfaceForSlotBidder, BuiltBlockDescriptorForSlotBidder,
-        SlotBidder, SlotBidderSealBidCommand, SlotBlockId,
+        SlotBidder, SlotBidderSealBidCommand,
     },
     relay_submit::RelaySubmitSinkFactory,
 };
@@ -119,11 +119,7 @@ impl<P: StateProviderFactory> UnfinishedBuiltBlocksInputFactory<P> {
         );
 
         let slot_bidder = self.bidding_service.create_slot_bidder(
-            SlotBlockId::new(
-                slot_data.slot(),
-                slot_data.block(),
-                slot_data.parent_block_hash(),
-            ),
+            slot_data.slot_block_id(),
             slot_data.timestamp(),
             Box::new(input.clone()),
             cancel.clone(),
