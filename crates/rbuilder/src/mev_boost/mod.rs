@@ -3,7 +3,6 @@ use alloy_primitives::{utils::parse_ether, Address, BlockHash, U256};
 use alloy_rpc_types_beacon::BlsPublicKey;
 use flate2::{write::GzEncoder, Compression};
 use governor::{DefaultDirectRateLimiter, Quota, RateLimiter};
-use itertools::Itertools;
 use rbuilder_primitives::mev_boost::{
     HeaderSubmissionOptimisticV3, KnownRelay, MevBoostRelayID, RelayMode,
     SubmitBlockRequestNoBlobs, SubmitBlockRequestWithMetadata, ValidatorRegistration,
@@ -749,35 +748,29 @@ impl RelayClient {
             if let Some(top_competitor_bid) = metadata.value.top_competitor_bid {
                 builder = builder.header(TOP_BID_HEADER, top_competitor_bid.to_string());
             }
-            if !metadata.order_ids.is_empty() {
-                const MAX_BUNDLE_IDS: usize = 150;
-                let bundle_ids: Vec<_> = metadata
-                    .order_ids
-                    .iter()
-                    .filter_map(|order| match order {
-                        rbuilder_primitives::OrderId::Tx(_fixed_bytes) => None,
-                        rbuilder_primitives::OrderId::Bundle(uuid) => Some(uuid),
-                        rbuilder_primitives::OrderId::ShareBundle(_fixed_bytes) => None,
-                    })
-                    .collect();
-                let total_bundles = bundle_ids.len();
-                let mut bundle_ids = bundle_ids
-                    .iter()
-                    .take(MAX_BUNDLE_IDS)
-                    .map(|uuid| format!("{uuid:?}"));
-                let bundle_ids = if total_bundles > MAX_BUNDLE_IDS {
-                    bundle_ids.join(",") + ",CAPPED"
-                } else {
-                    bundle_ids.join(",")
-                };
-                builder = builder.header(BUNDLE_HASHES_HEADER, bundle_ids);
 
-                let sent_at = std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .unwrap_or_default()
-                    .as_secs_f64();
-                builder = builder.header("X-BuilderNet-SentAt", sent_at.to_string());
+            const MAX_BUNDLE_HASHES: usize = 150;
+            if !metadata.bundle_hashes.is_empty() {
+                let bundle_hashes: Vec<_> = metadata
+                    .bundle_hashes
+                    .iter()
+                    .take(MAX_BUNDLE_HASHES)
+                    .map(|h| format!("{h:?}"))
+                    .collect();
+
+                let bundle_hashes = if bundle_hashes.len() > MAX_BUNDLE_HASHES {
+                    bundle_hashes.join(",") + ",CAPPED"
+                } else {
+                    bundle_hashes.join(",")
+                };
+                builder = builder.header(BUNDLE_HASHES_HEADER, bundle_hashes);
             }
+
+            let sent_at = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap_or_default()
+                .as_secs_f64();
+            builder = builder.header("X-BuilderNet-SentAt", sent_at.to_string());
         }
 
         let response = builder
@@ -1260,6 +1253,7 @@ mod tests {
                     top_competitor_bid: None,
                 },
                 order_ids: vec![],
+                bundle_hashes: vec![],
             },
         };
         let registration = ValidatorSlotData {
